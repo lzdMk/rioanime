@@ -1,0 +1,298 @@
+CRITICAL - 2025-07-04 03:30:12 --> CodeIgniter\HTTP\Exceptions\BadRequestException: The URI you submitted has disallowed characters: "toradora!"
+[Method: GET, Route: watch/toradora%21]
+in SYSTEMPATH\Router\Router.php on line 741.
+ 1 SYSTEMPATH\Router\Router.php(207): CodeIgniter\Router\Router->checkDisallowedChars('watch/toradora!')
+ 2 SYSTEMPATH\CodeIgniter.php(832): CodeIgniter\Router\Router->handle('watch/toradora!')
+ 3 SYSTEMPATH\CodeIgniter.php(455): CodeIgniter\CodeIgniter->tryToRouteIt(Object(CodeIgniter\Router\RouteCollection))
+ 4 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-07-04 03:37:00 --> mysqli_sql_exception: Unknown column 'id' in 'field list' in D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `id`, `t...', 0)
+#1 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `id`, `t...')
+#2 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `id`, `t...')
+#3 D:\xampp\htdocs\rioanime\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `id`, `t...', Array, false)
+#4 D:\xampp\htdocs\rioanime\app\Models\AnimeModel.php(171): CodeIgniter\Database\BaseBuilder->get()
+#5 D:\xampp\htdocs\rioanime\app\Controllers\Watch.php(21): App\Models\AnimeModel->getAnimeBySlug('test-anime')
+#6 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(933): App\Controllers\Watch->index('test-anime')
+#7 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Watch))
+#8 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 D:\xampp\htdocs\rioanime\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#10 D:\xampp\htdocs\rioanime\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 D:\xampp\htdocs\rioanime\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2025-07-04 03:37:00 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'id' in 'field list'
+[Method: GET, Route: watch/test-anime]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`', [], false)
+ 2 APPPATH\Models\AnimeModel.php(171): CodeIgniter\Database\BaseBuilder->get()
+ 3 APPPATH\Controllers\Watch.php(21): App\Models\AnimeModel->getAnimeBySlug('test-anime')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Watch->index('test-anime')
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Watch))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-07-04 03:37:00 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'id' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`', [], false)
+ 4 APPPATH\Models\AnimeModel.php(171): CodeIgniter\Database\BaseBuilder->get()
+ 5 APPPATH\Controllers\Watch.php(21): App\Models\AnimeModel->getAnimeBySlug('test-anime')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Watch->index('test-anime')
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Watch))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-07-04 03:37:00 --> [Caused by] mysqli_sql_exception: Unknown column 'id' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`', [], false)
+ 5 APPPATH\Models\AnimeModel.php(171): CodeIgniter\Database\BaseBuilder->get()
+ 6 APPPATH\Controllers\Watch.php(21): App\Models\AnimeModel->getAnimeBySlug('test-anime')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Watch->index('test-anime')
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Watch))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-07-04 03:37:11 --> ErrorException: Cannot redeclare createSlug() (previously declared in D:\xampp\htdocs\rioanime\app\Helpers\url_helper.php:7)
+[Method: GET, Route: /]
+in APPPATH\Views\homepage.php on line 26.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2025-07-04 03:37:18 --> ErrorException: Cannot redeclare createSlug() (previously declared in D:\xampp\htdocs\rioanime\app\Helpers\url_helper.php:7)
+[Method: GET, Route: /]
+in APPPATH\Views\homepage.php on line 26.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2025-07-04 03:39:18 --> ErrorException: Cannot redeclare createSlug() (previously declared in D:\xampp\htdocs\rioanime\app\Helpers\url_helper.php:7)
+[Method: GET, Route: /]
+in APPPATH\Views\homepage.php on line 26.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+ERROR - 2025-07-04 03:40:46 --> mysqli_sql_exception: Unknown column 'id' in 'field list' in D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `id`, `t...', 0)
+#1 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `id`, `t...')
+#2 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `id`, `t...')
+#3 D:\xampp\htdocs\rioanime\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `id`, `t...', Array, false)
+#4 D:\xampp\htdocs\rioanime\app\Models\AnimeModel.php(171): CodeIgniter\Database\BaseBuilder->get()
+#5 D:\xampp\htdocs\rioanime\app\Controllers\Watch.php(21): App\Models\AnimeModel->getAnimeBySlug('weathering-with...')
+#6 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(933): App\Controllers\Watch->index('weathering-with...')
+#7 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Watch))
+#8 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 D:\xampp\htdocs\rioanime\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#10 D:\xampp\htdocs\rioanime\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 D:\xampp\htdocs\rioanime\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2025-07-04 03:40:46 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'id' in 'field list'
+[Method: GET, Route: watch/weathering-with-you]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`', [], false)
+ 2 APPPATH\Models\AnimeModel.php(171): CodeIgniter\Database\BaseBuilder->get()
+ 3 APPPATH\Controllers\Watch.php(21): App\Models\AnimeModel->getAnimeBySlug('weathering-with-you')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Watch->index('weathering-with-you')
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Watch))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-07-04 03:40:46 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'id' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`', [], false)
+ 4 APPPATH\Models\AnimeModel.php(171): CodeIgniter\Database\BaseBuilder->get()
+ 5 APPPATH\Controllers\Watch.php(21): App\Models\AnimeModel->getAnimeBySlug('weathering-with-you')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Watch->index('weathering-with-you')
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Watch))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-07-04 03:40:46 --> [Caused by] mysqli_sql_exception: Unknown column 'id' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`', [], false)
+ 5 APPPATH\Models\AnimeModel.php(171): CodeIgniter\Database\BaseBuilder->get()
+ 6 APPPATH\Controllers\Watch.php(21): App\Models\AnimeModel->getAnimeBySlug('weathering-with-you')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Watch->index('weathering-with-you')
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Watch))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-07-04 03:41:51 --> mysqli_sql_exception: Unknown column 'id' in 'field list' in D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `id`, `t...', 0)
+#1 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `id`, `t...')
+#2 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `id`, `t...')
+#3 D:\xampp\htdocs\rioanime\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `id`, `t...', Array, false)
+#4 D:\xampp\htdocs\rioanime\app\Models\AnimeModel.php(171): CodeIgniter\Database\BaseBuilder->get()
+#5 D:\xampp\htdocs\rioanime\app\Controllers\Watch.php(21): App\Models\AnimeModel->getAnimeBySlug('weathering-with...')
+#6 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(933): App\Controllers\Watch->index('weathering-with...')
+#7 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Watch))
+#8 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 D:\xampp\htdocs\rioanime\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#10 D:\xampp\htdocs\rioanime\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 D:\xampp\htdocs\rioanime\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2025-07-04 03:41:51 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'id' in 'field list'
+[Method: GET, Route: watch/weathering-with-you]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`', [], false)
+ 2 APPPATH\Models\AnimeModel.php(171): CodeIgniter\Database\BaseBuilder->get()
+ 3 APPPATH\Controllers\Watch.php(21): App\Models\AnimeModel->getAnimeBySlug('weathering-with-you')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Watch->index('weathering-with-you')
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Watch))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-07-04 03:41:51 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'id' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`', [], false)
+ 4 APPPATH\Models\AnimeModel.php(171): CodeIgniter\Database\BaseBuilder->get()
+ 5 APPPATH\Controllers\Watch.php(21): App\Models\AnimeModel->getAnimeBySlug('weathering-with-you')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Watch->index('weathering-with-you')
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Watch))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-07-04 03:41:51 --> [Caused by] mysqli_sql_exception: Unknown column 'id' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `id`, `title`, `backgroundImage`, `type`, `status`, `description`, `urls`, `rating`, `year`, `studio`, `genre`
+FROM `anime_data`', [], false)
+ 5 APPPATH\Models\AnimeModel.php(171): CodeIgniter\Database\BaseBuilder->get()
+ 6 APPPATH\Controllers\Watch.php(21): App\Models\AnimeModel->getAnimeBySlug('weathering-with-you')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Watch->index('weathering-with-you')
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Watch))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-07-04 05:57:33 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it in D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'rioanime', 3306, '', 0)
+#1 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#3 D:\xampp\htdocs\rioanime\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `anime_i...', Array, false)
+#4 D:\xampp\htdocs\rioanime\app\Models\AnimeModel.php(206): CodeIgniter\Database\BaseBuilder->get()
+#5 D:\xampp\htdocs\rioanime\app\Controllers\Watch.php(47): App\Models\AnimeModel->getAnimeBySlug('haikyu')
+#6 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(933): App\Controllers\Watch->episode('haikyu', '18')
+#7 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Watch))
+#8 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 D:\xampp\htdocs\rioanime\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#10 D:\xampp\htdocs\rioanime\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 D:\xampp\htdocs\rioanime\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it in D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php:246
+Stack trace:
+#0 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#2 D:\xampp\htdocs\rioanime\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `anime_i...', Array, false)
+#3 D:\xampp\htdocs\rioanime\app\Models\AnimeModel.php(206): CodeIgniter\Database\BaseBuilder->get()
+#4 D:\xampp\htdocs\rioanime\app\Controllers\Watch.php(47): App\Models\AnimeModel->getAnimeBySlug('haikyu')
+#5 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(933): App\Controllers\Watch->episode('haikyu', '18')
+#6 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Watch))
+#7 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 D:\xampp\htdocs\rioanime\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 D:\xampp\htdocs\rioanime\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 D:\xampp\htdocs\rioanime\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2025-07-04 05:57:33 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it
+[Method: GET, Route: watch/haikyu/18]
+in SYSTEMPATH\Database\BaseConnection.php on line 467.
+ 1 SYSTEMPATH\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `anime_id`, `title`, `backgroundImage`, `type`, `status`, `synopsis`, `urls`, `ratings`, `studios`, `genres`
+FROM `anime_data`', [], false)
+ 3 APPPATH\Models\AnimeModel.php(206): CodeIgniter\Database\BaseBuilder->get()
+ 4 APPPATH\Controllers\Watch.php(47): App\Models\AnimeModel->getAnimeBySlug('haikyu')
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Watch->episode('haikyu', '18')
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Watch))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-07-04 05:57:50 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it in D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'rioanime', 3306, '', 0)
+#1 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#3 D:\xampp\htdocs\rioanime\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `anime_i...', Array, false)
+#4 D:\xampp\htdocs\rioanime\app\Models\AnimeModel.php(206): CodeIgniter\Database\BaseBuilder->get()
+#5 D:\xampp\htdocs\rioanime\app\Controllers\Watch.php(47): App\Models\AnimeModel->getAnimeBySlug('haikyu')
+#6 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(933): App\Controllers\Watch->episode('haikyu', '18')
+#7 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Watch))
+#8 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 D:\xampp\htdocs\rioanime\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#10 D:\xampp\htdocs\rioanime\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 D:\xampp\htdocs\rioanime\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it in D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php:246
+Stack trace:
+#0 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#2 D:\xampp\htdocs\rioanime\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `anime_i...', Array, false)
+#3 D:\xampp\htdocs\rioanime\app\Models\AnimeModel.php(206): CodeIgniter\Database\BaseBuilder->get()
+#4 D:\xampp\htdocs\rioanime\app\Controllers\Watch.php(47): App\Models\AnimeModel->getAnimeBySlug('haikyu')
+#5 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(933): App\Controllers\Watch->episode('haikyu', '18')
+#6 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Watch))
+#7 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 D:\xampp\htdocs\rioanime\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 D:\xampp\htdocs\rioanime\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 D:\xampp\htdocs\rioanime\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2025-07-04 05:57:50 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it
+[Method: GET, Route: watch/haikyu/18]
+in SYSTEMPATH\Database\BaseConnection.php on line 467.
+ 1 SYSTEMPATH\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `anime_id`, `title`, `backgroundImage`, `type`, `status`, `synopsis`, `urls`, `ratings`, `studios`, `genres`
+FROM `anime_data`', [], false)
+ 3 APPPATH\Models\AnimeModel.php(206): CodeIgniter\Database\BaseBuilder->get()
+ 4 APPPATH\Controllers\Watch.php(47): App\Models\AnimeModel->getAnimeBySlug('haikyu')
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Watch->episode('haikyu', '18')
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Watch))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

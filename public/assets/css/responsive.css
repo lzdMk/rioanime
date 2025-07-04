@@ -1,0 +1,186 @@
+/* Large Desktop Responsive Styles */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
+    
+    .content-section {
+        padding: 2rem 2.5rem;
+        margin: 0 auto;
+        max-width: 1400px;
+    }
+    
+    .hero-section {
+        padding: 2rem 2.5rem;
+        margin: 0 auto;
+        max-width: 1400px;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+    .container {
+        max-width: 1140px;
+    }
+    
+    .content-section {
+        padding: 2rem 2rem;
+        margin: 0 auto;
+    }
+    
+    .hero-section {
+        padding: 2rem 2rem;
+        margin: 0 auto;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .content-section {
+        padding: 2rem 1.5rem;
+        margin: 0 1rem;
+    }
+    
+    .hero-section {
+        padding: 2rem 1.5rem;
+        margin: 0 1rem;
+    }
+    
+    .section-filters {
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    /* Header Responsive */
+    .search-container {
+        margin: 0 1rem;
+        max-width: none;
+    }
+
+    .header-actions {
+        gap: 0.5rem;
+    }
+
+    .filter-btn, .safe-btn, .info-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    /* Hero Section Responsive */
+    .hero-section {
+        padding: 1.5rem 1rem;
+        margin: 0 0.5rem;
+    }
+
+    /* Carousel Responsive */
+    .carousel-title {
+        font-size: 1.5rem;
+    }
+
+    .carousel-description {
+        font-size: 0.9rem;
+    }
+
+    .carousel-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    /* Content Sections Responsive */
+    .content-section {
+        padding: 2rem 1rem;
+        margin: 0 0.5rem;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    .section-filters {
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+    }
+
+    .filter-tab {
+        flex-shrink: 0;
+        font-size: 0.8rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .top-anime-item {
+        padding: 0.75rem;
+    }
+
+    .anime-name {
+        font-size: 0.9rem;
+    }
+
+    .genre-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .genre-card {
+        padding: 1.5rem 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-actions {
+        flex-wrap: wrap;
+    }
+
+    .carousel-overlay {
+        padding: 1rem;
+    }
+
+    .section-filters, .section-nav {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        width: 100%;
+        padding-bottom: 0.5rem;
+    }
+    
+    .section-filters::-webkit-scrollbar,
+    .section-nav::-webkit-scrollbar {
+        height: 4px;
+    }
+    
+    .section-filters::-webkit-scrollbar-track,
+    .section-nav::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+    }
+    
+    .section-filters::-webkit-scrollbar-thumb,
+    .section-nav::-webkit-scrollbar-thumb {
+        background: var(--primary-purple);
+        border-radius: 2px;
+    }
+    
+    .filter-tab, .nav-tab {
+        flex-shrink: 0;
+        font-size: 0.75rem;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    .anime-title {
+        font-size: 0.85rem;
+    }
+    
+    .anime-info {
+        height: 70px;
+        padding: 0.6rem;
+    }
+    
+    .anime-meta {
+        font-size: 0.75rem;
+    }
+}

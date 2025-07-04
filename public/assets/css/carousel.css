@@ -1,0 +1,137 @@
+/* Hero Carousel */
+.hero-section {
+    padding: 2rem 1.5rem;
+    background: linear-gradient(180deg, var(--darker-bg) 0%, var(--dark-bg) 100%);
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.carousel-container {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    height: 400px;
+}
+
+.carousel-item {
+    height: 400px;
+    position: relative;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carousel-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    padding: 2rem;
+    color: white;
+}
+
+.carousel-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.carousel-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+    max-width: 600px;
+}
+
+.carousel-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-watch, .btn-more {
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-watch {
+    background: var(--primary-purple);
+    color: white;
+}
+
+.btn-watch:hover {
+    background: var(--accent-color);
+    transform: translateY(-2px);
+}
+
+.btn-more {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.btn-more:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+/* Navigation Arrows */
+.carousel-control-prev, .carousel-control-next {
+    width: 50px;
+    height: 50px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.carousel-control-prev {
+    left: 1rem;
+}
+
+.carousel-control-next {
+    right: 1rem;
+}
+
+.carousel-control-prev:hover, .carousel-control-next:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+/* Additional Sections */
+.bottom-section {
+    background: var(--card-bg);
+    padding: 1rem;
+    margin-top: 2rem;
+    border-radius: 8px;
+}
+
+.nsfw-toggle {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.top-anime-link {
+    color: var(--primary-purple);
+    text-decoration: none;
+}
+
+.top-anime-link:hover {
+    text-decoration: underline;
+}

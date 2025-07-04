@@ -1,0 +1,24 @@
+/* CSS Variables */
+:root {
+    --primary-purple: #8B5CF6;
+    --dark-bg: #0f0f23;
+    --darker-bg: #0a0a1a;
+    --card-bg: #1a1a2e;
+    --text-primary: #ffffff;
+    --text-secondary: #b8b8b8;
+    --accent-color: #7c3aed;
+}
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--dark-bg);
+    color: var(--text-primary);
+    font-family: 'Lexend Deca', sans-serif;
+    line-height: 1.6;
+}

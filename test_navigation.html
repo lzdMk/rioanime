@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; }
+        .episode-navigation { margin: 10px 0; }
+        .nav-episode-btn { 
+            display: inline-block; 
+            padding: 10px 15px; 
+            margin: 5px; 
+            background: #007bff; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 5px; 
+        }
+        .nav-episode-btn:hover { background: #0056b3; }
+        .episode-btn { 
+            display: inline-block; 
+            padding: 8px 12px; 
+            margin: 2px; 
+            background: #6c757d; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 3px; 
+        }
+        .episode-btn.active { background: #28a745; }
+        .log { background: #f8f9fa; padding: 10px; margin: 10px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Navigation Button Test</h1>
+    
+    <div class="test-section">
+        <h2>Current State</h2>
+        <p>Current Episode: <span id="currentEpisode">1</span></p>
+        <p>Total Episodes: <span id="totalEpisodes">24</span></p>
+    </div>
+
+    <div class="test-section">
+        <h2>Navigation Buttons</h2>
+        <div class="episode-navigation">
+            <!-- Navigation buttons will be inserted here -->
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Episode Grid</h2>
+        <div class="episodes-grid">
+            <!-- Episode buttons will be inserted here -->
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Log</h2>
+        <div id="log" class="log"></div>
+    </div>
+
+    <script>
+        // Mock anime data similar to the real application
+        window.animeData = {
+            title: 'Demon Slayer: Kimetsu no Yaiba',
+            slug: 'demon-slayer-kimetsu-no-yaiba',
+            currentEpisode: 1,
+            totalEpisodes: 24,
+            baseUrl: 'http://localhost:8080/'
+        };
+
+        // Mock the fetch function for testing
+        window.originalFetch = window.fetch;
+        window.fetch = function(url, options) {
+            const body = options.body;
+            const episodeMatch = body.match(/episode=(\d+)/);
+            const episode = episodeMatch ? parseInt(episodeMatch[1]) : 1;
+            
+            log(`Mock API call: Fetching episode ${episode}`);
+            
+            return Promise.resolve({
+                json: () => Promise.resolve({
+                    success: true,
+                    url: `http://example.com/episode-${episode}.mp4`
+                })
+            });
+        };
+
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        // Mock player object
+        const player = {
+            source: null,
+            once: function(event, callback) {
+                setTimeout(callback, 100); // Simulate loading
+            }
+        };
+
+        function fetchAndPlayEpisode(episodeNumber) {
+            log(`fetchAndPlayEpisode called with episode: ${episodeNumber}`);
+            
+            if (episodeNumber === window.animeData.currentEpisode) {
+                log(`Episode ${episodeNumber} is already current, skipping.`);
+                return;
+            }
+
+            // Mock the API call
+            fetch(`${window.animeData.baseUrl}api/episode-url`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: `title=${encodeURIComponent(window.animeData.title)}&episode=${encodeURIComponent(episodeNumber)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.url) {
+                    log(`Successfully loaded episode ${episodeNumber}: ${data.url}`);
+                    
+                    // Update player source (mock)
+                    player.source = {
+                        type: 'video',
+                        sources: [{
+                            src: data.url,
+                            type: 'video/mp4'
+                        }]
+                    };
+
+                    // Update UI
+                    updateEpisodeUI(episodeNumber);
+
+                    // Simulate video loading
+                    player.once('loadeddata', () => {
+                        log(`Episode ${episodeNumber} loaded and ready to play.`);
+                    });
+                } else {
+                    log(`Error: Episode ${episodeNumber} not available`);
+                }
+            })
+            .catch(error => {
+                log(`Error loading episode ${episodeNumber}: ${error.message}`);
+            });
+        }
+
+        function updateEpisodeUI(episodeNumber) {
+            log(`Updating UI for episode ${episodeNumber}`);
+
+            // Update episode buttons
+            document.querySelectorAll('.episode-btn').forEach(btn => {
+                if (parseInt(btn.textContent.trim()) === episodeNumber) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // Update current episode display
+            document.getElementById('currentEpisode').textContent = episodeNumber;
+            
+            // Update page title (mock)
+            document.title = `${window.animeData.title} - Episode ${episodeNumber} | Test`;
+
+            // Update current episode in data
+            window.animeData.currentEpisode = episodeNumber;
+
+            // Update navigation buttons
+            updateNavigationButtons(episodeNumber);
+            
+            log(`UI updated for episode ${episodeNumber}`);
+        }
+
+        function updateNavigationButtons(currentEpisode) {
+            log(`Updating navigation buttons for episode ${currentEpisode}`);
+            
+            const episodeNavigation = document.querySelector('.episode-navigation');
+            if (!episodeNavigation) return;
+
+            // Clear existing buttons
+            episodeNavigation.innerHTML = '';
+
+            // Add previous button if not first episode
+            if (currentEpisode > 1) {
+                const prevBtn = document.createElement('a');
+                prevBtn.href = `${window.animeData.baseUrl}watch/${window.animeData.slug}/${currentEpisode - 1}`;
+                prevBtn.className = 'nav-episode-btn prev-btn';
+                prevBtn.innerHTML = '← Previous';
+                episodeNavigation.appendChild(prevBtn);
+                log(`Added Previous button for episode ${currentEpisode - 1}`);
+            }
+
+            // Add next button if not last episode
+            if (currentEpisode < window.animeData.totalEpisodes) {
+                const nextBtn = document.createElement('a');
+                nextBtn.href = `${window.animeData.baseUrl}watch/${window.animeData.slug}/${currentEpisode + 1}`;
+                nextBtn.className = 'nav-episode-btn next-btn';
+                nextBtn.innerHTML = 'Next →';
+                episodeNavigation.appendChild(nextBtn);
+                log(`Added Next button for episode ${currentEpisode + 1}`);
+            }
+        }
+
+        // Use event delegation for navigation buttons
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.nav-episode-btn')) {
+                e.preventDefault();
+                
+                const btn = e.target.closest('.nav-episode-btn');
+                const url = btn.href;
+                const episodeNumber = url.match(/\/(\d+)$/)?.[1];
+                
+                log(`Navigation button clicked: ${btn.className} -> Episode ${episodeNumber}`);
+                
+                if (episodeNumber && parseInt(episodeNumber) !== window.animeData.currentEpisode) {
+                    fetchAndPlayEpisode(parseInt(episodeNumber));
+                }
+            }
+        });
+
+        // Handle episode grid clicks
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.episode-btn')) {
+                e.preventDefault();
+                
+                const btn = e.target.closest('.episode-btn');
+                const episodeNumber = parseInt(btn.textContent.trim());
+                
+                log(`Episode button clicked: Episode ${episodeNumber}`);
+                
+                if (episodeNumber !== window.animeData.currentEpisode) {
+                    fetchAndPlayEpisode(episodeNumber);
+                }
+            }
+        });
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            log('Page loaded, initializing...');
+            
+            // Create episode grid
+            const episodesGrid = document.querySelector('.episodes-grid');
+            for (let i = 1; i <= window.animeData.totalEpisodes; i++) {
+                const btn = document.createElement('a');
+                btn.href = `${window.animeData.baseUrl}watch/${window.animeData.slug}/${i}`;
+                btn.className = `episode-btn ${i === window.animeData.currentEpisode ? 'active' : ''}`;
+                btn.textContent = i;
+                episodesGrid.appendChild(btn);
+            }
+            
+            // Initialize navigation buttons
+            updateNavigationButtons(window.animeData.currentEpisode);
+            
+            log('Initialization complete. Try clicking episode buttons and navigation buttons!');
+        });
+    </script>
+</body>
+</html>
