@@ -100,7 +100,7 @@
                     </div>
 
                     <!-- Episodes Grid -->
-                    <?php if (!empty($episodes) && count($episodes) > 1): ?>
+                    <?php if (!empty($episodes)): ?>
                         <div class="episodes-section">
                             <h4 class="section-title">Episodes</h4>
                             <div class="episodes-scroll-container">
