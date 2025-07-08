@@ -18,7 +18,9 @@ helper('url');
             <div class="search-container">
                 <i class="fas fa-search search-icon"></i>
                 <input type="text" class="search-input" placeholder="Search anime..." id="searchInput" autocomplete="off">
-                <div class="search-results" id="searchResults"></div>
+                <div class="search-results" id="searchResults" style="display: none;">
+                    <!-- Search results will be populated by JavaScript -->
+                </div>
             </div>
 
             <!-- Header Actions -->
@@ -36,4 +38,7 @@ helper('url');
 </header>
 
 <!-- Search JavaScript -->
+<script>
+    window.baseUrl = '<?= base_url() ?>';
+</script>
 <script src="<?= base_url('assets/js/search.js') ?>"></script>
