@@ -21,11 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return bloggerPattern.test(url);
     }
 
-    // Function to detect if URL needs iframe (YouTube, Google Drive, or Blogger)
-    function needsIframe(url) {
-        return isYouTubeURL(url) || isGoogleDriveURL(url) || isBloggerURL(url);
-    }
-
     // Function to extract YouTube video ID from URL
     function extractYouTubeID(url) {
         const patterns = [
@@ -233,70 +228,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Initialize player with current episode URL
-    let player;
-    if (window.animeData && window.animeData.currentEpisodeUrl) {
-        player = initializePlayer(window.animeData.currentEpisodeUrl);
-    } else {
-        // Fallback to default player initialization
-        player = new Plyr('#player', {
-            controls: [
-                'play-large',
-                'restart',
-                'rewind',
-                'play',
-                'fast-forward',
-                'progress',
-                'current-time',
-                'duration',
-                'mute',
-                'volume',
-                'captions',
-                'settings',
-                'pip',
-                'airplay',
-                'fullscreen'
-            ],
-            settings: ['quality', 'speed', 'loop'],
-            quality: {
-                default: 720,
-                options: [1080, 720, 480, 360],
-                forced: true,
-                onChange: (quality) => {
-                    console.log('Quality changed to:', quality);
-                }
-            },
-            speed: {
-                selected: 1,
-                options: [0.5, 0.75, 1, 1.25, 1.5, 2]
-            },
-            ratio: '16:9',
-            fullscreen: {
-                enabled: true,
-                fallback: true,
-                iosNative: true
-            },
-            storage: {
-                enabled: true,
-                key: 'plyr'
-            }
-        });
-    }
-
-    // Ensure controls are visible and properly styled
-    player.on('ready', () => {
-        console.log('Player is ready');
-        // Force controls to be visible
-        const controls = document.querySelector('.plyr__controls');
-        if (controls) {
-            controls.style.opacity = '1';
-            controls.style.visibility = 'visible';
-            controls.style.zIndex = '10';
-        }
-    });
-
-    player.on('error', (event) => {
-        console.error('Player error:', event);
-    });
+    let player = (window.animeData && window.animeData.currentEpisodeUrl)
+        ? initializePlayer(window.animeData.currentEpisodeUrl)
+        : null;
 
     // Handle theater mode toggle
     const theaterBtn = document.querySelector('[title="Toggle Theater Mode"]');
@@ -337,27 +271,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Auto-play next episode when current ends
-    player.on('ended', function() {
-        if (autoNext && window.animeData) {
-            const currentEp = window.animeData.currentEpisode;
-            const totalEps = window.animeData.totalEpisodes;
-            
-            if (currentEp < totalEps) {
-                // Fetch and play next episode
-                fetchAndPlayEpisode(currentEp + 1);
-            }
-        }
-    });
 
-    // Handle source change
-    const changeSourceBtn = document.querySelector('.change-source-btn');
-    if (changeSourceBtn) {
-        changeSourceBtn.addEventListener('click', function() {
-            // Show source selection modal (placeholder)
-            alert('Source selection feature coming soon!');
-        });
-    }
+
+
 
     // Handle favorite button
     const favoriteBtn = document.querySelector('.action-btn-full');
@@ -628,19 +544,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Function to preload episode data if missing URLs
-    function ensureEpisodeData() {
-        // Check if any episodes are missing URLs
-        const missingUrls = window.animeData.episodes.filter(ep => !ep.url);
-        
-        if (missingUrls.length > 0) {
-            console.warn('Some episodes are missing URLs:', missingUrls);
-            // You might want to fetch this data via AJAX if needed
-        }
-    }
 
-    // Initialize episode data check
-    if (window.animeData && window.animeData.episodes) {
-        ensureEpisodeData();
-    }
 });
