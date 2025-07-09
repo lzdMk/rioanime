@@ -20,6 +20,7 @@ helper('url');
     <!-- Custom CSS Files -->
     <link href="<?= base_url('assets/css/variables.css') ?>" rel="stylesheet">
     <link href="<?= base_url('assets/css/header.css') ?>" rel="stylesheet">
+    <link href="<?= base_url('assets/css/search.css') ?>" rel="stylesheet">
     <link href="<?= base_url('assets/css/carousel.css') ?>" rel="stylesheet">
     <link href="<?= base_url('assets/css/components.css') ?>" rel="stylesheet">
     <link href="<?= base_url('assets/css/responsive.css') ?>" rel="stylesheet">

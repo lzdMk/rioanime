@@ -9,6 +9,8 @@ $routes->get('/', 'Home::index');
 
 // Search routes
 $routes->get('search', 'Search::index');
+$routes->post('search/ajax', 'Search::ajax');
+$routes->get('search/ajax', 'Search::ajax');
 
 // Watch routes
 $routes->get('watch/(:segment)', 'Watch::index/$1');
