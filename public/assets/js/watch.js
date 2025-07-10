@@ -1,26 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    
-    // Function to detect if URL is YouTube
-    function isYouTubeURL(url) {
-        if (!url) return false;
-        const youtubePattern = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|m\.youtube\.com)/i;
-        return youtubePattern.test(url);
-    }
-
-    // Function to detect if URL is Google Drive
-    function isGoogleDriveURL(url) {
-        if (!url) return false;
-        const googleDrivePattern = /^(https?:\/\/)?(www\.)?drive\.google\.com/i;
-        return googleDrivePattern.test(url);
-    }
-
-    // Function to detect if URL is Blogger
-    function isBloggerURL(url) {
-        if (!url) return false;
-        const bloggerPattern = /^(https?:\/\/)?(www\.)?blogger\.com/i;
-        return bloggerPattern.test(url);
-    }
-
     // Function to extract YouTube video ID from URL
     function extractYouTubeID(url) {
         const patterns = [
@@ -39,9 +17,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Function to generate appropriate player HTML
-    function generatePlayerHTML(url) {
-        if (isYouTubeURL(url)) {
-            // Generate YouTube iframe player
+    function generatePlayerHTML(url, sourceType) {
+        // Use sourceType to determine player
+        if (sourceType === 'YouTube') {
             const videoId = extractYouTubeID(url);
             if (videoId) {
                 const currentOrigin = window.location.origin;
@@ -57,8 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 `;
             }
-        } else if (isGoogleDriveURL(url) || isBloggerURL(url)) {
-            // Generate default iframe for Google Drive and Blogger URLs
+        } else if (sourceType === 'Gdrive' || sourceType === 'Blogger') {
             return `
                 <div class="custom-iframe-container" id="player">
                     <iframe
@@ -70,7 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             `;
         } else {
-            // Generate regular video player
             const posterUrl = window.animeData && window.animeData.poster ? window.animeData.poster : '';
             return `
                 <video 
@@ -88,32 +64,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Function to initialize player based on URL type
-    function initializePlayer(url) {
+    function initializePlayer(url, sourceType) {
         const playerContainer = document.querySelector('.player-container');
-        
-        // Clear existing player
         playerContainer.innerHTML = '';
-        
-        // Generate and insert new player HTML
-        const playerHTML = generatePlayerHTML(url);
+        const playerHTML = generatePlayerHTML(url, sourceType);
         playerContainer.innerHTML = playerHTML;
-        
-        // Only initialize Plyr for supported URL types
-        if (isGoogleDriveURL(url) || isBloggerURL(url)) {
-            // For Google Drive and Blogger, return a simple object that mimics player interface
+        if (sourceType === 'Gdrive' || sourceType === 'Blogger') {
             return {
                 on: function(event, callback) {
-                    if (event === 'ready') {
-                        // Call ready callback immediately for iframe players
-                        setTimeout(callback, 100);
-                    }
+                    if (event === 'ready') setTimeout(callback, 100);
                 },
                 once: function(event, callback) {
-                    if (event === 'ready') {
-                        setTimeout(callback, 100);
-                    }
+                    if (event === 'ready') setTimeout(callback, 100);
                 },
-                // Add stub methods for compatibility
                 togglePlay: function() {},
                 rewind: function() {},
                 forward: function() {},
@@ -121,18 +84,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 muted: false
             };
         } else {
-            // Initialize Plyr for YouTube and regular video
-            const player = new Plyr('#player', getPlayerConfig(url));
-            
-            // Set up player event listeners
+            const player = new Plyr('#player', getPlayerConfig(url, sourceType));
             setupPlayerEvents(player);
-            
             return player;
         }
     }
 
     // Function to get player configuration based on URL type
-    function getPlayerConfig(url) {
+    function getPlayerConfig(url, sourceType) {
         const baseConfig = {
             controls: [
                 'play-large',
@@ -168,8 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         };
 
-        if (isYouTubeURL(url)) {
-            // YouTube-specific configuration
+        if (sourceType === 'YouTube') {
             return {
                 ...baseConfig,
                 youtube: {
@@ -181,7 +139,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             };
         } else {
-            // Regular video configuration
             return {
                 ...baseConfig,
                 quality: {
@@ -229,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize player with current episode URL
     let player = (window.animeData && window.animeData.currentEpisodeUrl)
-        ? initializePlayer(window.animeData.currentEpisodeUrl)
+        ? initializePlayer(window.animeData.currentEpisodeUrl, window.animeData.sourceType)
         : null;
 
     // Handle theater mode toggle
@@ -320,11 +277,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Keyboard shortcuts
     document.addEventListener('keydown', function(e) {
         // Only apply keyboard shortcuts if player supports them (not for Google Drive/Blogger)
-        if (window.animeData && window.animeData.currentEpisodeUrl && 
-            (isGoogleDriveURL(window.animeData.currentEpisodeUrl) || isBloggerURL(window.animeData.currentEpisodeUrl))) {
+        if (window.animeData && window.animeData.sourceType && (window.animeData.sourceType === 'Gdrive' || window.animeData.sourceType === 'Blogger')) {
             return; // Skip keyboard shortcuts for iframe players
         }
-        
+        // ...existing code for keyboard shortcuts...
         // Space bar to play/pause
         if (e.code === 'Space' && !e.target.matches('input, textarea')) {
             e.preventDefault();
@@ -332,7 +288,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 player.togglePlay();
             }
         }
-        
         // Arrow keys for seeking
         if (e.code === 'ArrowLeft') {
             e.preventDefault();
@@ -340,14 +295,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 player.rewind(10);
             }
         }
-        
         if (e.code === 'ArrowRight') {
             e.preventDefault();
             if (player && player.forward) {
                 player.forward(10);
             }
         }
-        
         // F key for fullscreen
         if (e.code === 'KeyF') {
             e.preventDefault();
@@ -355,7 +308,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 player.fullscreen.toggle();
             }
         }
-        
         // M key for mute
         if (e.code === 'KeyM') {
             e.preventDefault();
@@ -392,11 +344,8 @@ document.addEventListener('DOMContentLoaded', function() {
             font-size: 1rem;
         `;
         loadingOverlay.innerHTML = '<div class="spinner-border me-2"></div>Loading Episode ' + episodeNumber + '...';
-        
         const playerContainer = document.querySelector('.player-container');
         playerContainer.appendChild(loadingOverlay);
-
-        // Fetch episode URL
         fetch(`${window.animeData.baseUrl}api/episode-url`, {
             method: 'POST',
             headers: {
@@ -408,24 +357,18 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success && data.url) {
-                // Initialize new player based on URL type (YouTube or regular video)
-                player = initializePlayer(data.url);
-
-                // Update UI
+                // Use data.sourceType if available, fallback to 'Unknown SourceType'
+                const sourceType = data.sourceType || 'Unknown SourceType';
+                player = initializePlayer(data.url, sourceType);
                 updateEpisodeUI(episodeNumber);
-
-                // Remove loading when player is ready
                 player.once('ready', () => {
                     if (loadingOverlay && loadingOverlay.parentNode) {
                         loadingOverlay.remove();
                     }
                 });
-
-                // Update current episode URL in window data
                 window.animeData.currentEpisodeUrl = data.url;
-
+                window.animeData.sourceType = sourceType;
             } else {
-                // Remove loading and show error
                 if (loadingOverlay && loadingOverlay.parentNode) {
                     loadingOverlay.remove();
                 }
@@ -437,7 +380,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (loadingOverlay && loadingOverlay.parentNode) {
                 loadingOverlay.remove();
             }
-            // Fallback to page reload
             window.location.href = `${window.animeData.baseUrl}watch/${window.animeData.slug}/${episodeNumber}`;
         });
     }
