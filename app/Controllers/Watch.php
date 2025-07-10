@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controllers;
 
 class Watch extends BaseController
@@ -11,6 +10,30 @@ class Watch extends BaseController
         $this->animeModel = new \App\Models\AnimeModel();
     }
 
+    /**
+     * Detect the source of a video URL
+     */
+    private function urlSource($url)
+    {
+        $lowerUrl = strtolower($url);
+        if (strpos($lowerUrl, 'youtube.com') !== false) {
+            return 'YouTube';
+        } elseif (strpos($lowerUrl, 'blogger') !== false) {
+            return 'Blogger';
+        } elseif (strpos($lowerUrl, 'drive.google.com') !== false) {
+            return 'Gdrive';
+        } elseif (strpos($lowerUrl, 'terabox') !== false) {
+            return 'Terabox';
+        } elseif (strpos($lowerUrl, 'archive.org') !== false || strpos($lowerUrl, 'pub') !== false) {
+            return 'Malupet';
+        } else {
+            return 'Unknown SourceType';
+        }
+    }
+
+     /**
+     * Display the watch page for an anime
+     */
     public function index($slug = null)
     {
         if (!$slug) {
@@ -27,37 +50,25 @@ class Watch extends BaseController
         // Parse URLs to get episodes
         $episodes = $this->parseEpisodes($anime['urls']);
 
-        $data = [
-            'anime' => $anime,
-            'episodes' => $episodes,
-            'currentEpisode' => 1, // Default to first episode
-            'slug' => $slug
+        // Prepare JavaScript data
+        $jsData = [
+            'title' => $anime['title'],
+            'slug' => $slug,
+            'currentEpisode' => 1,
+            'totalEpisodes' => count($episodes),
+            'baseUrl' => base_url(),
+            'currentEpisodeUrl' => !empty($episodes) ? $episodes[0]['url'] : '',
+            'sourceType' => !empty($episodes) ? $episodes[0]['sourceType'] : ''
         ];
 
-        return view('watch', $data);
-    }
-
-    public function episode($slug = null, $episode = 1)
-    {
-        if (!$slug) {
-            return redirect()->to('/');
-        }
-
-        // Get anime by slug
-        $anime = $this->animeModel->getAnimeBySlug($slug);
-        
-        if (!$anime) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-        }
-
-        // Parse URLs to get episodes
-        $episodes = $this->parseEpisodes($anime['urls']);
-
         $data = [
             'anime' => $anime,
             'episodes' => $episodes,
-            'currentEpisode' => (int)$episode,
-            'slug' => $slug
+            'currentEpisode' => 1,
+            'currentEpisodeUrl' => !empty($episodes) ? $episodes[0]['url'] : '',
+            'slug' => $slug,
+            'sourceType' => !empty($episodes) ? $episodes[0]['sourceType'] : '',
+            'jsData' => $jsData
         ];
 
         return view('watch', $data);
@@ -73,10 +84,8 @@ class Watch extends BaseController
         }
 
         $episodes = [];
-        
         // Split URLs by newline or comma
         $urlLines = preg_split('/[\r\n,]+/', $urlsString);
-        
         $episodeCounter = 1;
         foreach ($urlLines as $url) {
             $url = trim($url);
@@ -84,12 +93,12 @@ class Watch extends BaseController
                 $episodes[] = [
                     'episode_number' => $episodeCounter,
                     'url' => $url,
-                    'title' => 'Episode ' . $episodeCounter
+                    'title' => 'Episode ' . $episodeCounter,
+                    'sourceType' => $this->urlSource($url)
                 ];
                 $episodeCounter++;
             }
         }
-
         return $episodes;
     }
 
@@ -119,16 +128,67 @@ class Watch extends BaseController
 
         $episodes = $this->parseEpisodes($anime['urls']);
         
+
         foreach ($episodes as $ep) {
             if ($ep['episode_number'] == $episode) {
                 return $this->response->setJSON([
                     'success' => true,
                     'url' => $ep['url'],
-                    'episode' => $episode
+                    'episode' => $episode,
+                    'sourceType' => $ep['sourceType']
                 ]);
             }
         }
 
         return $this->response->setJSON(['error' => 'Episode not found']);
+    }
+
+    /**
+     * Display a specific episode of an anime
+     */
+    public function episode($slug = null, $episodeNumber = 1)
+    {
+        if (!$slug) {
+            return redirect()->to('/');
+        }
+
+        // Get anime by slug
+        $anime = $this->animeModel->getAnimeBySlug($slug);
+        
+        if (!$anime) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        // Parse URLs to get episodes
+        $episodes = $this->parseEpisodes($anime['urls']);
+        
+        // Validate episode number
+        $episodeNumber = (int)$episodeNumber;
+        if ($episodeNumber < 1 || $episodeNumber > count($episodes)) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        // Prepare JavaScript data
+        $jsData = [
+            'title' => $anime['title'],
+            'slug' => $slug,
+            'currentEpisode' => $episodeNumber,
+            'totalEpisodes' => count($episodes),
+            'baseUrl' => base_url(),
+            'currentEpisodeUrl' => !empty($episodes) ? $episodes[$episodeNumber - 1]['url'] : '',
+            'sourceType' => !empty($episodes) ? $episodes[$episodeNumber - 1]['sourceType'] : ''
+        ];
+
+        $data = [
+            'anime' => $anime,
+            'episodes' => $episodes,
+            'currentEpisode' => $episodeNumber,
+            'currentEpisodeUrl' => !empty($episodes) ? $episodes[$episodeNumber - 1]['url'] : '',
+            'slug' => $slug,
+            'sourceType' => !empty($episodes) ? $episodes[$episodeNumber - 1]['sourceType'] : '',
+            'jsData' => $jsData
+        ];
+
+        return view('watch', $data);
     }
 }

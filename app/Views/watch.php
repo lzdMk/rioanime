@@ -131,38 +131,8 @@
     <script src="<?= base_url('assets/js/watch.js') ?>"></script>
     
     <script>
-        // Pass minimal data to JavaScript
-        window.animeData = {
-            title: '<?= esc($anime['title']) ?>',
-            slug: '<?= $slug ?>',
-            currentEpisode: <?= $currentEpisode ?>,
-            totalEpisodes: <?= count($episodes) ?>,
-            baseUrl: '<?= base_url() ?>',
-            currentEpisodeUrl: '<?= !empty($episodes) && isset($episodes[$currentEpisode - 1]) ? esc($episodes[$currentEpisode - 1]['url']) : '' ?>'
-        };
+        // Pass data from PHP to JavaScript
+        window.animeData = <?= json_encode($jsData)?>;
     </script>
 </body>
 </html>
-
-<?php
-// Helper function to get badge class based on anime type
-function getBadgeClass($type) {
-    $class = strtolower(trim($type));
-    switch ($class) {
-        case 'tv':
-            return 'badge-tv';
-        case 'movie':
-            return 'badge-movie';
-        case 'ova':
-            return 'badge-ova';
-        case 'ona':
-            return 'badge-ona';
-        case 'special':
-            return 'badge-special';
-        case 'completed':
-            return 'badge-completed';
-        default:
-            return 'badge-default';
-    }
-}
-?>
