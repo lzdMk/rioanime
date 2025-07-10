@@ -346,13 +346,17 @@ document.addEventListener('DOMContentLoaded', function() {
         loadingOverlay.innerHTML = '<div class="spinner-border me-2"></div>Loading Episode ' + episodeNumber + '...';
         const playerContainer = document.querySelector('.player-container');
         playerContainer.appendChild(loadingOverlay);
+
+        const animetitle = document.querySelector('.anime-title').textContent.trim();
+        const episodeNum = document.querySelector('.episode-indicator').textContent.match(/Episode (\d+)/)[1];
+
         fetch(`${window.animeData.baseUrl}api/episode-url`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'X-Requested-With': 'XMLHttpRequest'
             },
-            body: `title=${encodeURIComponent(window.animeData.title)}&episode=${encodeURIComponent(episodeNumber)}`
+            body: `title=${animetitle}&episode=${episodeNum}`
         })
         .then(response => response.json())
         .then(data => {
