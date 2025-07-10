@@ -228,10 +228,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-
-
-
-
     // Handle favorite button
     const favoriteBtn = document.querySelector('.action-btn-full');
     if (favoriteBtn && favoriteBtn.textContent.includes('Favorites')) {
