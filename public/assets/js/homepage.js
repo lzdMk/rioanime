@@ -136,24 +136,9 @@ function filterAnimeCards(filterType) {
 
 // Function to load top anime by period
 function loadTopAnime(period) {
-    console.log('Loading top anime for period:', period);
-    // Here you would typically make an AJAX call to load different data
-    // For now, we'll just log the action
-    
-    // Example AJAX call structure:
-    /*
-    fetch(`/api/top-anime/${period}`)
-        .then(response => response.json())
-        .then(data => {
-            updateTopAnimeList(data);
-        })
-        .catch(error => console.error('Error loading top anime:', error));
-    */
-}
-
-// Function to update top anime list (placeholder)
-function updateTopAnimeList(data) {
-    const topAnimeList = document.getElementById('topAnimeList');
-    // Update the list with new data
-    console.log('Updating top anime list with:', data);
+    const periods = ['today', 'week', 'month'];
+    periods.forEach(p => {
+        const el = document.querySelector(`#topAnimeList${p.charAt(0).toUpperCase() + p.slice(1)}`);
+        if (el) el.style.display = (p === period) ? 'block' : 'none';
+    });
 }
