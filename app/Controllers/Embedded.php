@@ -16,6 +16,22 @@ class Embedded extends BaseController
 
     public function watch($animeId, $episodeNumber = 1)
     {
+        // Security: Only allow requests from your domain or localhost
+        $allowedDomains = [
+            'http://localhost/rioanime',
+        ];
+        $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+        $allowed = false;
+        foreach ($allowedDomains as $domain) {
+            if (!empty($referer) && strpos($referer, $domain) === 0) {
+                $allowed = true;
+                break;
+            }
+        }
+        if (!$allowed) {
+            return $this->response->setStatusCode(403)->setBody('Forbidden - Access is restricted.');
+        }
+
         // Get anime data from database
         $query = $this->db->query("SELECT * FROM anime_data WHERE anime_id = ?", [$animeId]);
         $anime = $query->getRowArray();
