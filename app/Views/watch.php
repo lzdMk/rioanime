@@ -129,7 +129,7 @@
             currentEpisode: <?= json_encode($jsData['currentEpisode']) ?>,
             totalEpisodes: <?= json_encode($jsData['totalEpisodes']) ?>,
             slug: <?= json_encode($jsData['slug']) ?>,
-            baseUrl: <?= json_encode($jsData['baseUrl']) ?>
+            baseUrl: <?= json_encode(base_url()) ?>
         };
     </script>
 </body>
