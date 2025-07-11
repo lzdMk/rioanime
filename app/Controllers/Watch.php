@@ -52,6 +52,7 @@ class Watch extends BaseController
 
         // Prepare JavaScript data
         $jsData = [
+            'animeId' => $anime['anime_id'],
             'title' => $anime['title'],
             'slug' => $slug,
             'currentEpisode' => 1,
@@ -170,6 +171,7 @@ class Watch extends BaseController
 
         // Prepare JavaScript data
         $jsData = [
+            'animeId' => $anime['anime_id'],
             'title' => $anime['title'],
             'slug' => $slug,
             'currentEpisode' => $episodeNumber,

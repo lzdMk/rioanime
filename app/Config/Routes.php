@@ -15,4 +15,7 @@ $routes->get('search/ajax', 'Search::ajax');
 // Watch routes
 $routes->get('watch/(:segment)', 'Watch::index/$1');
 $routes->get('watch/(:segment)/(:num)', 'Watch::episode/$1/$2');
-$routes->post('api/episode-url', 'Watch::getEpisodeUrl');
+
+// Embedded player routes
+$routes->get('embeded/watch/(:num)/(:num)', 'Embedded::watch/$1/$2');
+

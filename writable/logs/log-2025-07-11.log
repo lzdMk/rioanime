@@ -1,0 +1,162 @@
+ERROR - 2025-07-11 02:23:27 --> mysqli_sql_exception: Duplicate key name 'proxy_token' in D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php(327): mysqli->query()
+#1 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute()
+#2 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery()
+#3 D:\xampp\htdocs\rioanime\system\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query()
+#4 D:\xampp\htdocs\rioanime\app\Database\Migrations\2025-07-11-000001_CreateProxyUrlsTable.php(73): CodeIgniter\Database\Forge->createTable()
+#5 D:\xampp\htdocs\rioanime\system\Database\MigrationRunner.php(876): App\Database\Migrations\CreateProxyUrlsTable->up()
+#6 D:\xampp\htdocs\rioanime\system\Database\MigrationRunner.php(182): CodeIgniter\Database\MigrationRunner->migrate()
+#7 D:\xampp\htdocs\rioanime\system\Commands\Database\Migrate.php(85): CodeIgniter\Database\MigrationRunner->latest()
+#8 D:\xampp\htdocs\rioanime\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run()
+#9 D:\xampp\htdocs\rioanime\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run()
+#10 D:\xampp\htdocs\rioanime\system\Boot.php(360): CodeIgniter\CLI\Console->run()
+#11 D:\xampp\htdocs\rioanime\system\Boot.php(104): CodeIgniter\Boot::runCommand()
+#12 D:\xampp\htdocs\rioanime\spark(87): CodeIgniter\Boot::bootSpark()
+#13 {main}
+ERROR - 2025-07-11 02:34:50 --> mysqli_sql_exception: Unknown column 'id' in 'where clause' in D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php(327): mysqli->query()
+#1 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute()
+#2 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery()
+#3 D:\xampp\htdocs\rioanime\app\Controllers\Embedded.php(16): CodeIgniter\Database\BaseConnection->query()
+#4 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(933): App\Controllers\Embedded->watch()
+#5 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController()
+#6 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest()
+#7 D:\xampp\htdocs\rioanime\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#8 D:\xampp\htdocs\rioanime\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+#9 D:\xampp\htdocs\rioanime\public\index.php(59): CodeIgniter\Boot::bootWeb()
+#10 D:\xampp\htdocs\rioanime\system\rewrite.php(44): require_once('...')
+#11 {main}
+CRITICAL - 2025-07-11 02:34:50 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'id' in 'where clause'
+[Method: GET, Route: embeded/watch/1/1]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Controllers\Embedded.php(16): CodeIgniter\Database\BaseConnection->query()
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Embedded->watch()
+ 3 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController()
+ 4 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest()
+ 5 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb()
+ 8 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\rioanime\\public\\index.php')
+CRITICAL - 2025-07-11 02:34:50 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute()
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery()
+ 3 APPPATH\Controllers\Embedded.php(16): CodeIgniter\Database\BaseConnection->query()
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Embedded->watch()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController()
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest()
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb()
+10 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\rioanime\\public\\index.php')
+CRITICAL - 2025-07-11 02:34:50 --> [Caused by] mysqli_sql_exception: Unknown column 'id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query()
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute()
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery()
+ 4 APPPATH\Controllers\Embedded.php(16): CodeIgniter\Database\BaseConnection->query()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Embedded->watch()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController()
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest()
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb()
+11 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\rioanime\\public\\index.php')
+ERROR - 2025-07-11 02:42:59 --> mysqli_sql_exception: Unknown column 'id' in 'where clause' in D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php(327): mysqli->query()
+#1 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute()
+#2 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery()
+#3 D:\xampp\htdocs\rioanime\app\Controllers\Embedded.php(16): CodeIgniter\Database\BaseConnection->query()
+#4 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(933): App\Controllers\Embedded->watch()
+#5 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController()
+#6 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest()
+#7 D:\xampp\htdocs\rioanime\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#8 D:\xampp\htdocs\rioanime\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+#9 D:\xampp\htdocs\rioanime\public\index.php(59): CodeIgniter\Boot::bootWeb()
+#10 D:\xampp\htdocs\rioanime\system\rewrite.php(44): require_once('...')
+#11 {main}
+CRITICAL - 2025-07-11 02:42:59 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'id' in 'where clause'
+[Method: GET, Route: embeded/watch/1/1]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Controllers\Embedded.php(16): CodeIgniter\Database\BaseConnection->query()
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Embedded->watch()
+ 3 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController()
+ 4 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest()
+ 5 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb()
+ 8 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\rioanime\\public\\index.php')
+CRITICAL - 2025-07-11 02:42:59 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute()
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery()
+ 3 APPPATH\Controllers\Embedded.php(16): CodeIgniter\Database\BaseConnection->query()
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Embedded->watch()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController()
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest()
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb()
+10 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\rioanime\\public\\index.php')
+CRITICAL - 2025-07-11 02:42:59 --> [Caused by] mysqli_sql_exception: Unknown column 'id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query()
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute()
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery()
+ 4 APPPATH\Controllers\Embedded.php(16): CodeIgniter\Database\BaseConnection->query()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Embedded->watch()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController()
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest()
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb()
+11 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\rioanime\\public\\index.php')
+ERROR - 2025-07-11 04:41:51 --> mysqli_sql_exception: Unknown column 'id' in 'where clause' in D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 D:\xampp\htdocs\rioanime\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT * FROM a...', 0)
+#1 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT * FROM a...')
+#2 D:\xampp\htdocs\rioanime\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT * FROM a...')
+#3 D:\xampp\htdocs\rioanime\app\Controllers\Embedded.php(20): CodeIgniter\Database\BaseConnection->query('SELECT * FROM a...', Array)
+#4 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(933): App\Controllers\Embedded->watch('5', '3')
+#5 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Embedded))
+#6 D:\xampp\htdocs\rioanime\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 D:\xampp\htdocs\rioanime\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#8 D:\xampp\htdocs\rioanime\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 D:\xampp\htdocs\rioanime\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 {main}
+CRITICAL - 2025-07-11 04:41:51 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'id' in 'where clause'
+[Method: GET, Route: embeded/watch/5/3]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Controllers\Embedded.php(20): CodeIgniter\Database\BaseConnection->query('SELECT * FROM anime_data WHERE id = ?', [...])
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Embedded->watch('5', '3')
+ 3 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Embedded))
+ 4 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-07-11 04:41:51 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT * FROM anime_data WHERE id = \'5\'')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT * FROM anime_data WHERE id = \'5\'')
+ 3 APPPATH\Controllers\Embedded.php(20): CodeIgniter\Database\BaseConnection->query('SELECT * FROM anime_data WHERE id = ?', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Embedded->watch('5', '3')
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Embedded))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-07-11 04:41:51 --> [Caused by] mysqli_sql_exception: Unknown column 'id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT * FROM anime_data WHERE id = \'5\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT * FROM anime_data WHERE id = \'5\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT * FROM anime_data WHERE id = \'5\'')
+ 4 APPPATH\Controllers\Embedded.php(20): CodeIgniter\Database\BaseConnection->query('SELECT * FROM anime_data WHERE id = ?', [...])
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Embedded->watch('5', '3')
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Embedded))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
