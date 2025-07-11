@@ -27,6 +27,7 @@ helper('url');
 </head>
 
 <body>
+    <!-- Header -->
     <?= $this->include('partials/header') ?>
 
     <?php
@@ -338,131 +339,13 @@ helper('url');
                 </div>
 
                 <!-- Sidebar Column - Top Anime -->
-                <div class="col-lg-3">
-                    <div class="sidebar">
-                        <!-- Top Anime Section -->
-                        <div class="sidebar-section">
-                            <div class="sidebar-header">
-                                <div class="sidebar-title-wrapper">
-                                    <h3 class="sidebar-title">
-                                        <i class="fas fa-trophy me-2" style="color: #FFD700;"></i>
-                                        Top Anime
-                                    </h3>
-                                </div>
-                                <div class="sidebar-nav">
-                                    <button class="nav-tab active" data-period="today">Today</button>
-                                    <button class="nav-tab" data-period="week">Week</button>
-                                    <button class="nav-tab" data-period="month">Month</button>
-                                </div>
-                            </div>
-
-                            <div class="sidebar-list" id="topAnimeList">
-                                <?php if (!empty($trendingAnime)): ?>
-                                    <?php foreach ($trendingAnime as $index => $anime): ?>
-                                        <div class="sidebar-item">
-                                            <div class="rank-number"><?= $index + 1 ?></div>
-                                            <div class="item-thumbnail">
-                                                <img src="<?= !empty($anime['backgroundImage']) ? esc($anime['backgroundImage']) : 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=50&h=70&fit=crop' ?>" alt="<?= esc($anime['title']) ?>">
-                                            </div>
-                                            <div class="item-details">
-                                                <h5 class="item-title"><?= esc(strlen($anime['title']) > 25 ? substr($anime['title'], 0, 25) . '...' : $anime['title']) ?></h5>
-                                                <div class="item-meta">
-                                                    <span class="item-type"><?= esc($anime['type']) ?></span>
-                                                    <span class="item-rating">★ <?= !empty($anime['ratings']) ? esc($anime['ratings']) : 'N/A' ?></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <div class="sidebar-item">
-                                        <div class="item-details">
-                                            <p class="text-muted">No trending anime available.</p>
-                                        </div>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-
-                        <!-- Recommended Section -->
-                        <div class="sidebar-section">
-                            <div class="sidebar-header">
-                                <h3 class="sidebar-title">
-                                    <i class="fas fa-thumbs-up me-2"></i>
-                                    Recommended
-                                </h3>
-                            </div>
-
-                            <div class="sidebar-list" id="recommendedList">
-                                <?php if (!empty($recommendedAnime)): ?>
-                                    <?php foreach ($recommendedAnime as $anime): ?>
-                                        <a href="<?= base_url('watch/' . createSlug($anime['title'])) ?>" class="sidebar-item recommended" style="text-decoration: none; color: inherit;">
-                                            <div class="item-thumbnail">
-                                                <img src="<?= !empty($anime['backgroundImage']) ? esc($anime['backgroundImage']) : 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=50&h=70&fit=crop' ?>" alt="<?= esc($anime['title']) ?>">
-                                            </div>
-                                            <div class="item-details">
-                                                <h5 class="item-title"><?= esc(strlen($anime['title']) > 25 ? substr($anime['title'], 0, 25) . '...' : $anime['title']) ?></h5>
-                                                <div class="item-meta">
-                                                    <span class="item-type"><?= !empty($anime['total_ep']) ? 'Ep ' . esc($anime['total_ep']) : esc($anime['type']) ?></span>
-                                                    <span class="item-genre">• <?= !empty($anime['genres']) ? esc(explode(',', $anime['genres'])[0]) : 'Unknown' ?> • <?= esc($anime['type']) ?></span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <div class="sidebar-item recommended">
-                                        <div class="item-details">
-                                            <p class="text-muted">No recommendations available.</p>
-                                        </div>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?= $this->include('partials/sidebar') ?>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="footer-brand">
-                        <a href="<?= base_url('/') ?>" class="footer-logo" style="text-decoration: none; color: inherit;">
-                            <div class="logo-icon">
-                                <i class="fas fa-play"></i>
-                            </div>
-                            <span>rio<span style="color: var(--primary-purple);">wave</span></span>
-                        </a>
-                        <p class="footer-description">
-                            Copyright riowave. All Rights Reserved.<br>
-                            You can view our <a href="#">FAQ</a> and our <a href="#">terms of service</a>. All content are provided by non-affiliated third parties.
-                        </p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="footer-section">
-                        <h4 class="footer-title">LINKS</h4>
-                        <ul class="footer-links">
-                            <li><a href="#">A-Z List</a></li>
-                            <li><a href="#">FAQ</a></li>
-                            <li><a href="#">Bookmark</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="footer-section">
-                        <h4 class="footer-title">HELP</h4>
-                        <ul class="footer-links">
-                            <li><a href="#">Contact</a></li>
-                            <li><a href="#">Request</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?= $this->include('partials/footer') ?>
 
     <!-- Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
