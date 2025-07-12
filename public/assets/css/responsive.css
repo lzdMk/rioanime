@@ -51,136 +51,792 @@
         justify-content: center;
         width: 100%;
     }
+
+    /* Tablet-specific header styles */
+    .header {
+        padding: 0.8rem 0;
+    }
+
+    .header .container {
+        padding: 0 1.5rem;
+    }
+
+    .navbar-brand {
+        font-size: 1.4rem;
+    }
+
+    .logo-icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    .search-container {
+        max-width: 350px;
+        margin: 0 1.5rem;
+    }
+
+    .search-input {
+        padding: 0.65rem 1rem 0.65rem 2.8rem;
+        font-size: 0.9rem;
+    }
+
+    .header-actions {
+        gap: 0.8rem;
+    }
+
+    .filter-btn, .safe-btn, .info-btn {
+        padding: 0.45rem 0.9rem;
+        font-size: 0.8rem;
+        border-radius: 18px;
+    }
+
+    .user-avatar {
+        width: 34px;
+        height: 34px;
+    }
+
+    /* Tablet search results */
+    .search-results {
+        max-height: 350px;
+        border-radius: 12px;
+    }
 }
 
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
-    /* Header Responsive */
-    .search-container {
-        margin: 0 1rem;
-        max-width: none;
+    /* Header Responsive - Simplified Mobile Layout */
+    .header {
+        padding: 0.75rem 0;
+        background: var(--darker-bg);
+        border-bottom: 1px solid #2a2a3e;
     }
 
-    .header-actions {
+    .header .container {
+        padding: 0 1rem;
+    }
+
+    .header .d-flex {
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    /* Logo adjustments */
+    .navbar-brand {
+        font-size: 1.3rem;
         gap: 0.5rem;
+        flex-shrink: 0;
+        order: 1;
     }
 
-    .filter-btn, .safe-btn, .info-btn {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.8rem;
+    .logo-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
+    }
+
+    /* Search container - full width on mobile */
+    .search-container {
+        order: 3;
+        width: 100%;
+        margin: 0;
+        max-width: none;
+        flex-grow: 1;
+        position: relative;
+    }
+
+    .search-input {
+        padding: 0.75rem 1rem 0.75rem 2.8rem;
+        font-size: 0.9rem;
+        border-radius: 25px;
+        background: var(--card-bg);
+        border: 1px solid #2a2a3e;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+        border-color: var(--primary-purple);
+        box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.15);
+        background: var(--darker-bg);
+    }
+
+    .search-input::placeholder {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .search-icon {
+        left: 1rem;
+        color: var(--text-secondary);
+        font-size: 1rem;
+    }
+
+    /* Enhanced search results for mobile */
+    .search-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--card-bg);
+        border: 1px solid #2a2a3e;
+        border-radius: 15px;
+        margin-top: 0.5rem;
+        max-height: 300px;
+        overflow-y: auto;
+        z-index: 1001;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(10px);
+    }
+
+    .search-results::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .search-results::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+    }
+
+    .search-results::-webkit-scrollbar-thumb {
+        background: var(--primary-purple);
+        border-radius: 2px;
+    }
+
+    /* Header actions - ONLY show user avatar on mobile */
+    .header-actions {
+        order: 2;
+        gap: 0;
+        flex-wrap: nowrap;
+        flex-shrink: 0;
+        justify-content: flex-end;
+    }
+
+    /* Hide all buttons except user avatar on mobile */
+    .header-actions .filter-btn,
+    .header-actions .safe-btn,
+    .header-actions .info-btn {
+        display: none;
+    }
+
+    .user-avatar {
+        width: 34px;
+        height: 34px;
+        border: 2px solid var(--primary-purple);
+        border-radius: 50%;
+        flex-shrink: 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .user-avatar:hover {
+        border-color: var(--accent-color);
+        transform: scale(1.05);
+    }
+
+    /* Ensure proper layout structure */
+    .header .d-flex.align-items-center.justify-content-between {
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
     }
 
     /* Hero Section Responsive */
     .hero-section {
-        padding: 1.5rem 1rem;
-        margin: 0 0.5rem;
+        padding: 1rem;
+        margin: 0;
     }
 
-    /* Carousel Responsive */
-    .carousel-title {
-        font-size: 1.5rem;
-    }
-
-    .carousel-description {
-        font-size: 0.9rem;
-    }
-
-    .carousel-actions {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    /* Content Sections Responsive */
-    .content-section {
-        padding: 2rem 1rem;
-        margin: 0 0.5rem;
-    }
-
-    .section-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1.5rem;
-    }
-
-    .section-filters {
-        width: 100%;
-        justify-content: flex-start;
-        overflow-x: auto;
-        padding-bottom: 0.5rem;
-    }
-
-    .filter-tab {
-        flex-shrink: 0;
-        font-size: 0.8rem;
-        padding: 0.5rem 1rem;
-    }
-
-    .top-anime-item {
-        padding: 0.75rem;
-    }
-
-    .anime-name {
-        font-size: 0.9rem;
-    }
-
-    .genre-grid {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    }
-
-    .genre-card {
-        padding: 1.5rem 0.75rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .header-actions {
-        flex-wrap: wrap;
+    .carousel-container {
+        border-radius: 12px;
+        overflow: hidden;
     }
 
     .carousel-overlay {
         padding: 1rem;
     }
 
-    .section-filters, .section-nav {
-        flex-wrap: nowrap;
-        overflow-x: auto;
+    .carousel-title {
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .carousel-description {
+        font-size: 0.85rem;
+        line-height: 1.4;
+        margin-bottom: 1rem;
+    }
+
+    .carousel-actions {
+        flex-direction: row;
+        gap: 0.8rem;
+        justify-content: flex-start;
+    }
+
+    .btn-watch, .btn-more {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.85rem;
+        border-radius: 20px;
+    }
+
+    .btn-watch {
+        min-width: 120px;
+    }
+
+    .btn-more {
+        min-width: 80px;
+    }
+
+    /* Content Sections Responsive */
+    .content-section {
+        padding: 1.5rem 1rem;
+        margin: 0;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+    }
+
+    .section-nav-tabs {
         width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
         padding-bottom: 0.5rem;
+        gap: 0.4rem;
     }
-    
-    .section-filters::-webkit-scrollbar,
-    .section-nav::-webkit-scrollbar {
-        height: 4px;
+
+    .section-nav-tabs::-webkit-scrollbar {
+        height: 3px;
     }
-    
-    .section-filters::-webkit-scrollbar-track,
-    .section-nav::-webkit-scrollbar-track {
+
+    .section-nav-tabs::-webkit-scrollbar-track {
         background: rgba(255, 255, 255, 0.1);
         border-radius: 2px;
     }
-    
-    .section-filters::-webkit-scrollbar-thumb,
-    .section-nav::-webkit-scrollbar-thumb {
+
+    .section-nav-tabs::-webkit-scrollbar-thumb {
         background: var(--primary-purple);
         border-radius: 2px;
     }
-    
-    .filter-tab, .nav-tab {
+
+    .filter-tab {
         flex-shrink: 0;
         font-size: 0.75rem;
-        padding: 0.4rem 0.8rem;
+        padding: 0.5rem 1rem;
+        border-radius: 16px;
+        white-space: nowrap;
     }
-    
-    .anime-title {
+
+    /* Sidebar becomes full width on mobile */
+    .col-lg-3 {
+        order: 2;
+        margin-top: 2rem;
+    }
+
+    .col-lg-9 {
+        order: 1;
+    }
+
+    .sidebar {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .sidebar-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .sidebar-nav {
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+    }
+
+    .sidebar-nav::-webkit-scrollbar {
+        height: 3px;
+    }
+
+    .sidebar-nav::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+    }
+
+    .sidebar-nav::-webkit-scrollbar-thumb {
+        background: var(--primary-purple);
+        border-radius: 2px;
+    }
+
+    .nav-tab {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.8rem;
+        border-radius: 16px;
+        flex-shrink: 0;
+    }
+
+    .sidebar-item {
+        padding: 0.8rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+    }
+
+    .item-thumbnail img {
+        border-radius: 6px;
+    }
+
+    .item-title {
+        font-size: 0.9rem;
+        line-height: 1.3;
+    }
+
+    .item-meta {
+        font-size: 0.75rem;
+    }
+
+    /* Bottom section adjustments */
+    .bottom-section {
+        margin-top: 2rem !important;
+    }
+
+    .bottom-section .row {
+        gap: 1rem;
+    }
+
+    .nsfw-toggle {
+        font-size: 0.85rem;
+        padding: 0.6rem 1rem;
+        border-radius: 20px;
+        background: var(--card-bg);
+        border: 1px solid #2a2a3e;
+        text-align: center;
+    }
+
+    .view-more-container {
+        margin: 1.5rem 0;
+    }
+
+    .view-more-btn {
+        padding: 0.7rem 1.8rem;
+        font-size: 0.85rem;
+        border-radius: 20px;
+    }
+
+    /* Genre grid adjustments */
+    .genre-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 0.8rem;
+    }
+
+    .genre-card {
+        padding: 1.2rem 0.6rem;
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Ultra-compact header for very small screens */
+    .header {
+        padding: 0.5rem 0;
+        background: var(--darker-bg);
+    }
+
+    .header .container {
+        padding: 0 0.8rem;
+    }
+
+    .header .d-flex {
+        flex-wrap: wrap;
+        gap: 0.6rem;
+    }
+
+    /* Logo - more compact */
+    .navbar-brand {
+        font-size: 1.2rem;
+        gap: 0.3rem;
+        flex-shrink: 0;
+    }
+
+    .logo-icon {
+        width: 26px;
+        height: 26px;
+        border-radius: 5px;
+    }
+
+    .logo-icon i {
+        font-size: 0.9rem;
+    }
+
+    /* Search container - full width, more compact */
+    .search-container {
+        order: 3;
+        width: 100%;
+        margin: 0;
+        max-width: none;
+    }
+
+    .search-input {
+        padding: 0.6rem 0.8rem 0.6rem 2.5rem;
+        font-size: 0.85rem;
+        border-radius: 20px;
+        background: var(--card-bg);
+        border: 1px solid #2a2a3e;
+    }
+
+    .search-input::placeholder {
+        color: var(--text-secondary);
         font-size: 0.85rem;
     }
-    
-    .anime-info {
-        height: 70px;
-        padding: 0.6rem;
+
+    .search-icon {
+        left: 0.8rem;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
     }
-    
+
+    /* Header actions - ONLY show user avatar on ultra-small screens */
+    .header-actions {
+        order: 2;
+        gap: 0;
+        flex-wrap: nowrap;
+        flex-shrink: 0;
+        justify-content: flex-end;
+    }
+
+    /* Hide ALL buttons except user avatar on ultra-small screens */
+    .header-actions .filter-btn,
+    .header-actions .safe-btn,
+    .header-actions .info-btn {
+        display: none;
+    }
+
+    .user-avatar {
+        width: 32px;
+        height: 32px;
+        border: 2px solid var(--primary-purple);
+        border-radius: 50%;
+        flex-shrink: 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .user-avatar:hover {
+        border-color: var(--accent-color);
+        transform: scale(1.05);
+    }
+
+    /* Enhanced search results for ultra-small screens */
+    .search-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--card-bg);
+        border: 1px solid #2a2a3e;
+        border-radius: 12px;
+        margin-top: 0.4rem;
+        max-height: 250px;
+        overflow-y: auto;
+        z-index: 1001;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(8px);
+    }
+
+    .search-results::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    .search-results::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 1px;
+    }
+
+    .search-results::-webkit-scrollbar-thumb {
+        background: var(--primary-purple);
+        border-radius: 1px;
+    }
+
+    /* Hide some buttons on very small screens if needed */
+    .header-actions .safe-btn:last-of-type {
+        display: none;
+    }
+
+    /* Ensure proper spacing and alignment */
+    .header .d-flex.align-items-center.justify-content-between {
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    /* Search results positioning */
+    .search-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--card-bg);
+        border: 1px solid #2a2a3e;
+        border-radius: 10px;
+        margin-top: 0.5rem;
+        max-height: 250px;
+        overflow-y: auto;
+        z-index: 1001;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Hero section for very small screens */
+    .hero-section {
+        padding: 0.8rem;
+    }
+
+    .carousel-overlay {
+        padding: 0.8rem;
+    }
+
+    .carousel-title {
+        font-size: 1.1rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .carousel-description {
+        font-size: 0.8rem;
+        line-height: 1.3;
+        margin-bottom: 0.8rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-clamp: 3;
+    }
+
+    .carousel-actions {
+        gap: 0.6rem;
+    }
+
+    .btn-watch, .btn-more {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        border-radius: 18px;
+    }
+
+    .btn-watch {
+        min-width: 100px;
+    }
+
+    .btn-more {
+        min-width: 70px;
+    }
+
+    /* Content sections for very small screens */
+    .content-section {
+        padding: 1rem 0.8rem;
+    }
+
+    .section-title {
+        font-size: 1.2rem;
+    }
+
+    .section-title i {
+        font-size: 1rem;
+    }
+
+    .section-nav-tabs {
+        gap: 0.3rem;
+    }
+
+    .filter-tab {
+        font-size: 0.7rem;
+        padding: 0.4rem 0.8rem;
+        border-radius: 14px;
+    }
+
+    /* Anime grid optimizations */
+    .anime-grid {
+        gap: 0.6rem;
+        grid-auto-rows: 280px;
+    }
+
+    .anime-poster {
+        height: 180px;
+        min-height: 180px;
+        max-height: 180px;
+    }
+
+    .anime-info {
+        padding: 0.6rem;
+        height: 90px;
+        min-height: 90px;
+        max-height: 90px;
+    }
+
+    .anime-title {
+        font-size: 0.8rem;
+        line-height: 1.2;
+        margin-bottom: 0.4rem;
+    }
+
     .anime-meta {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
+    }
+
+    .anime-badge {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.6rem;
+        top: 6px;
+        left: 6px;
+        border-radius: 3px;
+    }
+
+    .episode-count {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.65rem;
+        bottom: 6px;
+        right: 6px;
+        border-radius: 4px;
+    }
+
+    .play-button {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+
+    /* Sidebar optimizations */
+    .sidebar {
+        padding: 1.2rem;
+        border-radius: 10px;
+    }
+
+    .sidebar-title {
+        font-size: 1.1rem;
+    }
+
+    .sidebar-item {
+        padding: 0.6rem;
+        border-radius: 6px;
+        margin-bottom: 0.4rem;
+    }
+
+    .item-thumbnail {
+        width: 45px;
+        height: 60px;
+        min-width: 45px;
+        flex-shrink: 0;
+    }
+
+    .item-thumbnail img {
+        border-radius: 4px;
+    }
+
+    .item-title {
+        font-size: 0.8rem;
+        line-height: 1.2;
+        margin-bottom: 0.3rem;
+    }
+
+    .item-meta {
+        font-size: 0.7rem;
+    }
+
+    .item-type {
+        font-size: 0.65rem;
+    }
+
+    .item-genre {
+        font-size: 0.65rem;
+    }
+
+    /* Bottom section for very small screens */
+    .bottom-section {
+        margin-top: 1.5rem !important;
+    }
+
+    .nsfw-toggle {
+        font-size: 0.8rem;
+        padding: 0.5rem 0.8rem;
+        border-radius: 16px;
+    }
+
+    .view-more-btn {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.8rem;
+        border-radius: 18px;
+    }
+
+    /* Navigation controls */
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 35px;
+        height: 35px;
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 50%;
+        border: none;
+        color: white;
+        font-size: 0.9rem;
+        margin: 0 0.5rem;
+    }
+
+    .carousel-indicators {
+        bottom: 10px;
+    }
+
+    .carousel-indicators button {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin: 0 3px;
+    }
+
+    /* Horizontal scroll improvements */
+    .section-nav-tabs::-webkit-scrollbar,
+    .sidebar-nav::-webkit-scrollbar {
+        height: 2px;
+    }
+
+    .section-nav-tabs::-webkit-scrollbar-thumb,
+    .sidebar-nav::-webkit-scrollbar-thumb {
+        background: var(--primary-purple);
+        border-radius: 1px;
+    }
+
+    /* Loading states */
+    .anime-card.loading {
+        transform: translateY(10px);
+    }
+
+    /* Hover effects adjustments for mobile */
+    .anime-card:hover {
+        transform: translateY(-2px);
+    }
+
+    /* Touch-friendly spacing */
+    .anime-card-link {
+        touch-action: manipulation;
+    }
+
+    /* Text truncation improvements */
+    .anime-title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 100%;
+    }
+
+    .item-title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 100%;
     }
 }
