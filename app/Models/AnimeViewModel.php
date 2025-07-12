@@ -45,35 +45,40 @@ class AnimeViewModel extends Model
     public function getTrendingByPeriod($period = 'today', $limit = 10)
     {
         $db = \Config\Database::connect();
+        // Define periods in fallback order
+        $periodOrder = ['today', 'week', 'month', 'all'];
         $periods = [
             'today' => date('Y-m-d 00:00:00'),
             'week' => date('Y-m-d H:i:s', strtotime('-7 days')),
             'month' => date('Y-m-d H:i:s', strtotime('-1 month')),
+            'all' => null // all-time
         ];
+        // Start with the selected period, then fallback to next periods
+        $startIndex = array_search($period, $periodOrder);
+        $orderedPeriods = array_slice($periodOrder, $startIndex);
         $result = [];
-        foreach ($periods as $p => $start) {
+        $animeIds = [];
+        // For each period in order, fill up to $limit unique anime
+        foreach ($orderedPeriods as $p) {
             $builder = $db->table('anime_views');
             $builder->select('anime_views.anime_id, anime_data.title, anime_data.type, anime_data.ratings, anime_data.backgroundImage, anime_data.genres, anime_data.total_ep, anime_data.status, anime_data.studios, anime_data.synopsis, SUM(anime_views.views) as total_views')
                 ->join('anime_data', 'anime_data.anime_id = anime_views.anime_id')
-                ->where('anime_views.viewed_at >=', $start)
                 ->groupBy('anime_views.anime_id')
-                ->orderBy('total_views', 'DESC')
-                ->limit($limit);
-            $result = $builder->get()->getResultArray();
-            if (!empty($result)) {
-                break;
+                ->orderBy('total_views', 'DESC');
+            if ($periods[$p] !== null) {
+                $builder->where('anime_views.viewed_at >=', $periods[$p]);
             }
+            $rows = $builder->get()->getResultArray();
+            foreach ($rows as $row) {
+                if (count($result) >= $limit) break;
+                if (!in_array($row['anime_id'], $animeIds)) {
+                    $result[] = $row;
+                    $animeIds[] = $row['anime_id'];
+                }
+            }
+            if (count($result) >= $limit) break;
         }
-        // If still empty, fallback to all-time top 10
-        if (empty($result)) {
-            $builder = $db->table('anime_views');
-            $builder->select('anime_views.anime_id, anime_data.title, anime_data.type, anime_data.ratings, anime_data.backgroundImage, anime_data.genres, anime_data.total_ep, anime_data.status, anime_data.studios, anime_data.synopsis, SUM(anime_views.views) as total_views')
-                ->join('anime_data', 'anime_data.anime_id = anime_views.anime_id')
-                ->groupBy('anime_views.anime_id')
-                ->orderBy('total_views', 'DESC')
-                ->limit($limit);
-            $result = $builder->get()->getResultArray();
-        }
-        return $result;
+        // Return up to $limit unique anime, prioritizing the selected period, then fallback
+        return array_slice($result, 0, $limit);
     }
 }
