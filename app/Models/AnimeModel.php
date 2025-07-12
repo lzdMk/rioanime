@@ -4,6 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
+
 class AnimeModel extends Model
 {
     protected $table = 'anime_data';
@@ -23,6 +24,18 @@ class AnimeModel extends Model
     ];
 
     protected $returnType = 'array';
+
+    /**
+     * Get a random anime
+     */
+    public function getRandomAnime()
+    {
+        return $this->builder()
+            ->orderBy('RAND()')
+            ->limit(1)
+            ->get()
+            ->getRowArray();
+    }
 
     /**
      * Get recently updated anime

@@ -27,3 +27,6 @@ $routes->group('admin', function ($routes) {
     $routes->get('anime-manage', 'Admin::animeManage');
 });
 
+// Random anime route
+$routes->get('random', 'Home::randomAnime');
+

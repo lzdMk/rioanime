@@ -28,10 +28,13 @@ helper('url');
                 <button class="filter-btn">
                     <i class="fas fa-filter me-1"></i>Filter
                 </button>
-                <button class="safe-btn">SAFE</button>
-                <button class="safe-btn">NSFW</button>
-                <button class="info-btn">Info</button>
-                <img src="https://via.placeholder.com/36x36/8B5CF6/ffffff?text=U" alt="User" class="user-avatar">
+                <a href="<?= base_url('random') ?>" class="random-btn" style="text-decoration:none;">
+                    <i class="fas fa-random me-1"></i>Random
+                </a>
+                <button class="login-btn">
+                    <i class="fas fa-user me-1"></i>Login
+                </button>
+                <!-- <img src="https://via.placeholder.com/36x36/8B5CF6/ffffff?text=U" alt="User" class="user-avatar"> -->
             </div>
         </div>
     </div>

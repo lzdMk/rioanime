@@ -45,12 +45,13 @@ CREATE TABLE `user_accounts` (
   `password` varchar(255) NOT NULL,
   `type` enum('viewer','moderator','admin') NOT NULL DEFAULT 'viewer',
   `followed_anime` text DEFAULT NULL,
+  `user_profile` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=100001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+ ) ENGINE=InnoDB AUTO_INCREMENT=100001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Sample insert for user_accounts
-INSERT INTO `user_accounts` (`username`, `display_name`, `email`, `password`, `type`, `followed_anime`, `created_at`) VALUES
-('sampleuser', 'Sample User', 'sample@example.com', '$2y$10$wH6QJQwQwQwQwQwQwQwQwOeQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', 'viewer', '', NOW());
+INSERT INTO `user_accounts` (`username`, `display_name`, `email`, `password`, `type`, `followed_anime`, `user_profile`, `created_at`) VALUES
+('sampleuser', 'Sample User', 'sample@example.com', '$2y$10$wH6QJQwQwQwQwQwQwQwQwOeQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', 'viewer', '', 'https://example.com/profile.jpg', NOW());

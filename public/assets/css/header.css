@@ -66,7 +66,7 @@
     gap: 1rem;
 }
 
-.filter-btn, .safe-btn, .info-btn {
+.filter-btn, .random-btn, .login-btn {
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 20px;
@@ -81,15 +81,16 @@
     color: white;
 }
 
-.safe-btn {
+.random-btn {
     background: var(--card-bg);
     color: var(--text-primary);
     border: 1px solid #2a2a3e;
 }
 
-.info-btn {
-    background: var(--primary-purple);
+.login-btn {
+    background: linear-gradient(135deg, var(--primary-purple), #7c4dff);
     color: white;
+    box-shadow: 0 2px 4px rgba(139, 92, 246, 0.3);
 }
 
 .user-avatar {
@@ -132,11 +133,16 @@
         gap: 0.5rem;
     }
     
-    /* Hide all header action buttons on mobile except img tags */
+    /* Hide filter and random buttons on mobile */
     .header-actions .filter-btn,
-    .header-actions .safe-btn,
-    .header-actions .info-btn {
+    .header-actions .random-btn {
         display: none;
+    }
+    
+    /* Keep login button visible on mobile */
+    .header-actions .login-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
     }
     
     /* Keep user avatar visible on mobile */

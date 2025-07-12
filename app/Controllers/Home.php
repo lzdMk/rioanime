@@ -25,4 +25,19 @@ class Home extends BaseController
 
         return view('homepage', $data);
     }
+
+    /**
+     * Redirect to a random anime page
+     */
+    public function randomAnime()
+    {
+        $animeModel = new AnimeModel();
+        $randomAnime = $animeModel->getRandomAnime();
+        if ($randomAnime && isset($randomAnime['title'])) {
+            $slug = createSlug($randomAnime['title']);
+            return redirect()->to(base_url('watch/' . $slug));
+        }
+        // Fallback: redirect to homepage if no anime found
+        return redirect()->to(base_url());
+    }
 }

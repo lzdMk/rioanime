@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Registration modal trigger
-    const userAvatar = document.querySelector('.user-avatar');
+    const userAvatar = document.querySelector('.login-btn');
     if (userAvatar) {
         userAvatar.addEventListener('click', function() {
             // Use the already defined registerModal instance
