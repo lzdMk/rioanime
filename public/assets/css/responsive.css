@@ -82,7 +82,7 @@
     }
 
     .carousel-description {
-        font-size: 0.9rem;
+        display: none;
     }
 
     .carousel-actions {
@@ -94,6 +94,15 @@
     .content-section {
         padding: 2rem 1rem;
         margin: 0 0.5rem;
+    }
+
+    /* Watch Page Responsive */
+    .watch-section .container {
+        padding: 0 1rem;
+    }
+    
+    .video-player-section {
+        margin-bottom: 1rem;
     }
 
     .section-header {
@@ -129,6 +138,14 @@
 
     .genre-card {
         padding: 1.5rem 0.75rem;
+    }
+
+    /* Anime Grid Responsive */
+    .anime-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
     }
 }
 
@@ -182,5 +199,21 @@
     
     .anime-meta {
         font-size: 0.75rem;
+    }
+
+    /* Watch Page Extra Small Responsive */
+    .watch-section .container {
+        padding: 0 0.5rem;
+    }
+    
+    .video-player-section {
+        margin-bottom: 0.8rem;
+    }
+
+    /* Anime Grid for Extra Small Devices */
+    .anime-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+        margin-bottom: 1rem;
     }
 }

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title><?= esc($anime['title']) ?> - Watch Online | RioWave</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -11,9 +11,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Plyr.io CSS -->
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     
     <!-- Custom CSS Files -->
     <link href="<?= base_url('assets/css/variables.css') ?>" rel="stylesheet">
@@ -37,7 +34,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <!-- Main Content -->
-                <div class="col-lg-9 col-xl-10">
+                <div class="col-12 col-lg-9 col-xl-10">
                     <!-- Video Player Container -->
                     <div class="video-player-section">
                         <!-- Player Header -->
@@ -61,18 +58,15 @@
 
                         <!-- Video Player -->
                         <div class="player-container">
-                            <video 
-                                id="player" 
-                                playsinline 
-                                controls 
-                                data-poster="<?= !empty($anime['backgroundImage']) ? esc($anime['backgroundImage']) : '' ?>"
-                                crossorigin="anonymous"
-                                class="plyr-video">
-                                <?php if (!empty($episodes) && isset($episodes[$currentEpisode - 1])): ?>
-                                    <source src="<?= esc($episodes[$currentEpisode - 1]['url']) ?>" type="video/mp4" />
-                                <?php endif; ?>
-                                <p>Your browser doesn't support HTML5 video.</p>
-                            </video>
+                            <iframe 
+                                id="embedded-player"
+                                src="<?= base_url('embeded/watch/' . $anime['anime_id'] . '/' . $currentEpisode) ?>"
+                                allowfullscreen
+                                allowtransparency
+                                allow="autoplay; encrypted-media"
+                                frameborder="0"
+                                style="width: 100%; height: 100%; border: none;">
+                            </iframe>
                         </div>
 
                         <!-- Player Footer -->
@@ -124,15 +118,19 @@
     <!-- Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- Plyr.io JavaScript -->
-    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
-    
     <!-- Custom JavaScript -->
     <script src="<?= base_url('assets/js/watch.js') ?>"></script>
     
     <script>
         // Pass data from PHP to JavaScript
-        window.animeData = <?= json_encode($jsData)?>;
+        window.animeData = {
+            animeId: <?= json_encode($anime['anime_id']) ?>,
+            title: <?= json_encode($jsData['title']) ?>,
+            currentEpisode: <?= json_encode($jsData['currentEpisode']) ?>,
+            totalEpisodes: <?= json_encode($jsData['totalEpisodes']) ?>,
+            slug: <?= json_encode($jsData['slug']) ?>,
+            baseUrl: <?= json_encode(base_url()) ?>
+        };
     </script>
 </body>
 </html>

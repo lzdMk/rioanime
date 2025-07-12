@@ -9,7 +9,8 @@ class Home extends BaseController
     public function index(): string
     {
         $animeModel = new AnimeModel();
-        
+        $animeViewModel = new \App\Models\AnimeViewModel();
+
         $data = [
             'featuredAnime' => $animeModel->getFeaturedAnime(3),
             'recentlyUpdated' => $animeModel->getRecentlyUpdated(12),
@@ -17,9 +18,11 @@ class Home extends BaseController
             'movieAnime' => $animeModel->getAnimeByType('Movie', 6),
             'completedAnime' => $animeModel->getAnimeByStatus('Finished Airing', 6),
             'recommendedAnime' => $animeModel->getRecommendedAnime(10),
-            'trendingAnime' => $animeModel->getTrendingAnime(6)
+            'trendingAnimeToday' => $animeViewModel->getTrendingByPeriod('today', 10),
+            'trendingAnimeWeek' => $animeViewModel->getTrendingByPeriod('week', 10),
+            'trendingAnimeMonth' => $animeViewModel->getTrendingByPeriod('month', 10)
         ];
-        
+
         return view('homepage', $data);
     }
 }

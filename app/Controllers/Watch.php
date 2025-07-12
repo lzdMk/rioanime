@@ -4,10 +4,12 @@ namespace App\Controllers;
 class Watch extends BaseController
 {
     protected $animeModel;
+    protected $animeViewModel;
 
     public function __construct()
     {
         $this->animeModel = new \App\Models\AnimeModel();
+        $this->animeViewModel = new \App\Models\AnimeViewModel();
     }
 
     /**
@@ -42,16 +44,20 @@ class Watch extends BaseController
 
         // Get anime by slug
         $anime = $this->animeModel->getAnimeBySlug($slug);
-        
         if (!$anime) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
+
+        // Increment view count for this anime and user IP
+        $user_ip = $this->request->getIPAddress();
+        $this->animeViewModel->incrementView($anime['anime_id'], $anime['title'], $user_ip);
 
         // Parse URLs to get episodes
         $episodes = $this->parseEpisodes($anime['urls']);
 
         // Prepare JavaScript data
         $jsData = [
+            'animeId' => $anime['anime_id'],
             'title' => $anime['title'],
             'slug' => $slug,
             'currentEpisode' => 1,
@@ -154,14 +160,17 @@ class Watch extends BaseController
 
         // Get anime by slug
         $anime = $this->animeModel->getAnimeBySlug($slug);
-        
         if (!$anime) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
+        // Increment view count for this anime and user IP
+        $user_ip = $this->request->getIPAddress();
+        $this->animeViewModel->incrementView($anime['anime_id'], $anime['title'], $user_ip);
+
         // Parse URLs to get episodes
         $episodes = $this->parseEpisodes($anime['urls']);
-        
+
         // Validate episode number
         $episodeNumber = (int)$episodeNumber;
         if ($episodeNumber < 1 || $episodeNumber > count($episodes)) {
@@ -170,6 +179,7 @@ class Watch extends BaseController
 
         // Prepare JavaScript data
         $jsData = [
+            'animeId' => $anime['anime_id'],
             'title' => $anime['title'],
             'slug' => $slug,
             'currentEpisode' => $episodeNumber,

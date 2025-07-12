@@ -1,5 +1,11 @@
 // Homepage JavaScript functionality
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize modal instances first
+    const registerModalEl = document.getElementById('registerModal');
+    const loginModalEl = document.getElementById('loginModal');
+    const registerModal = registerModalEl ? new bootstrap.Modal(registerModalEl) : null;
+    const loginModal = loginModalEl ? new bootstrap.Modal(loginModalEl) : null;
+    
     // Auto-play carousel with custom timing
     const carousel = new bootstrap.Carousel(document.querySelector('#animeCarousel'), {
         interval: 5000,
@@ -101,6 +107,60 @@ document.addEventListener('DOMContentLoaded', function() {
             // window.location.href = `/genre/${genreName.toLowerCase()}`;
         });
     });
+
+    // Registration modal trigger
+    const userAvatar = document.querySelector('.user-avatar');
+    if (userAvatar) {
+        userAvatar.addEventListener('click', function() {
+            // Use the already defined registerModal instance
+            if (registerModal) {
+                registerModal.show();
+            } else {
+                // Fallback if the instance wasn't created yet
+                const tempRegisterModal = new bootstrap.Modal(document.getElementById('registerModal'));
+                tempRegisterModal.show();
+            }
+        });
+    }
+
+    // Modal switching between Register and Login
+    // Show login modal when clicking 'Login' in registration modal
+    document.querySelectorAll('.login-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (registerModal) {
+                registerModal.hide();
+                // Wait for modal to be fully hidden before showing login
+                registerModalEl.addEventListener('hidden.bs.modal', function handler() {
+                    if (loginModal) loginModal.show();
+                    // Remove any leftover backdrop
+                    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                    registerModalEl.removeEventListener('hidden.bs.modal', handler);
+                });
+            } else if (loginModal) {
+                loginModal.show();
+            }
+        });
+    });
+
+    // Show registration modal when clicking 'Register' in login modal
+    document.querySelectorAll('.register-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (loginModal) {
+                loginModal.hide();
+                // Wait for modal to be fully hidden before showing registration
+                loginModalEl.addEventListener('hidden.bs.modal', function handler() {
+                    if (registerModal) registerModal.show();
+                    // Remove any leftover backdrop
+                    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                    loginModalEl.removeEventListener('hidden.bs.modal', handler);
+                });
+            } else if (registerModal) {
+                registerModal.show();
+            }
+        });
+    });
 });
 
 // Function to filter anime cards by type
@@ -136,24 +196,9 @@ function filterAnimeCards(filterType) {
 
 // Function to load top anime by period
 function loadTopAnime(period) {
-    console.log('Loading top anime for period:', period);
-    // Here you would typically make an AJAX call to load different data
-    // For now, we'll just log the action
-    
-    // Example AJAX call structure:
-    /*
-    fetch(`/api/top-anime/${period}`)
-        .then(response => response.json())
-        .then(data => {
-            updateTopAnimeList(data);
-        })
-        .catch(error => console.error('Error loading top anime:', error));
-    */
-}
-
-// Function to update top anime list (placeholder)
-function updateTopAnimeList(data) {
-    const topAnimeList = document.getElementById('topAnimeList');
-    // Update the list with new data
-    console.log('Updating top anime list with:', data);
+    const periods = ['today', 'week', 'month'];
+    periods.forEach(p => {
+        const el = document.querySelector(`#topAnimeList${p.charAt(0).toUpperCase() + p.slice(1)}`);
+        if (el) el.style.display = (p === period) ? 'block' : 'none';
+    });
 }

@@ -15,6 +15,16 @@
     max-width: 1100px;
     margin-left: auto;
     margin-right: auto;
+    position: relative;
+}
+
+/* Mobile specific positioning */
+@media (max-width: 768px) {
+    .video-player-section {
+        margin: 0 0 12px 0;
+        border-radius: 4px;
+        overflow: hidden;
+    }
 }
 
 .player-header {
@@ -83,6 +93,21 @@
     height: 100%;
     object-fit: contain;
     display: block;
+}
+
+/* Mobile Player Container */
+@media (max-width: 768px) {
+    .player-container {
+        max-height: 250px;
+        aspect-ratio: 16/9;
+    }
+}
+
+@media (max-width: 576px) {
+    .player-container {
+        max-height: 220px;
+        aspect-ratio: 16/9;
+    }
 }
 
 /* Plyr.io Player Fixes */
@@ -423,29 +448,106 @@
     background: #000;
 }
 
+/* Touch-friendly improvements for mobile */
+@media (max-width: 768px) {
+    .control-btn,
+    .nav-episode-btn,
+    .episode-btn {
+        -webkit-tap-highlight-color: rgba(65, 105, 225, 0.3);
+        touch-action: manipulation;
+    }
+    
+    .player-container iframe {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+    
+    .custom-iframe-container {
+        max-height: 250px;
+        width: 100%;
+        aspect-ratio: 16/9;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .watch-section {
         padding: 15px 0 10px;
     }
     
+    .container {
+        padding: 0 10px;
+    }
+    
     .player-header {
-        flex-direction: column;
-        gap: 8px;
+        padding: 10px 15px;
+        flex-direction: row;
+        justify-content: space-between;
         align-items: flex-start;
-        padding: 8px 10px;
+        gap: 10px;
+    }
+    
+    .player-title {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .player-title .anime-title {
+        font-size: 0.9rem;
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        margin-bottom: 2px;
+    }
+    
+    .player-title .episode-indicator {
+        font-size: 0.65rem;
+        display: block;
+        line-height: 1;
     }
     
     .player-controls {
-        align-self: stretch;
-        justify-content: space-between;
+        display: flex;
+        gap: 6px;
+        flex-shrink: 0;
+        align-self: flex-start;
+    }
+    
+    .control-btn {
+        padding: 6px 8px;
+        font-size: 0.7rem;
+        min-width: 32px;
+        height: 32px;
     }
     
     .player-footer {
-        flex-direction: column;
-        gap: 8px;
-        align-items: flex-start;
-        padding: 6px 10px;
+        padding: 10px 15px;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .source-info {
+        justify-content: flex-start;
+        flex-shrink: 0;
+    }
+    
+    .episode-navigation {
+        justify-content: flex-end;
+        gap: 6px;
+        flex-shrink: 0;
+    }
+    
+    .nav-episode-btn {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+        min-width: 80px;
     }
     
     .episodes-grid {
@@ -469,6 +571,83 @@
 }
 
 @media (max-width: 576px) {
+    .player-header {
+        padding: 8px 12px;
+        flex-wrap: nowrap;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .player-title {
+        flex: 1;
+        min-width: 0;
+        margin-bottom: 0;
+    }
+    
+    .player-title .anime-title {
+        font-size: 0.85rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        line-height: 1.2;
+        margin-bottom: 2px;
+    }
+    
+    .player-title .episode-indicator {
+        font-size: 0.65rem;
+        display: block;
+        line-height: 1;
+    }
+    
+    .player-controls {
+        flex-shrink: 0;
+        justify-content: flex-end;
+        gap: 4px;
+        align-self: flex-start;
+    }
+    
+    .control-btn {
+        padding: 4px 6px;
+        font-size: 0.65rem;
+        min-width: 28px;
+        height: 28px;
+    }
+    
+    .player-footer {
+        padding: 8px 12px;
+        gap: 8px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .source-info {
+        justify-content: flex-start;
+        flex-shrink: 0;
+    }
+    
+    .source-name {
+        font-size: 0.7rem;
+    }
+    
+    .change-source-btn {
+        padding: 2px 4px;
+        font-size: 0.6rem;
+    }
+    
+    .episode-navigation {
+        justify-content: flex-end;
+        gap: 4px;
+        flex-shrink: 0;
+    }
+    
+    .nav-episode-btn {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+        min-width: 70px;
+    }
+    
     .episodes-grid {
         grid-template-columns: repeat(auto-fill, minmax(32px, 1fr));
         gap: 4px;
@@ -480,14 +659,11 @@
         font-size: 0.7rem;
     }
     
-    .control-btn {
-        padding: 3px 5px;
-        font-size: 0.65rem;
-        min-width: 22px;
-        height: 22px;
-    }
-    
     .episodes-scroll-container {
         max-height: 100px;
+    }
+    
+    .episodes-section {
+        padding: 8px;
     }
 }
