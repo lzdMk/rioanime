@@ -1,0 +1,56 @@
+/* Registration Modal Custom Styles */
+#registerModal .modal-content {
+  background: #181828;
+  color: #fff;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+  border: none;
+}
+#registerModal .modal-header {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+#registerModal .modal-title {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  color: #fff;
+}
+#registerModal .form-label {
+  color: #bdbdbd;
+  letter-spacing: 0.05em;
+}
+#registerModal .form-control {
+  background: #23234a;
+  color: #fff;
+  border: 1px solid #35357a;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  box-shadow: none;
+}
+#registerModal .form-control:focus {
+  background: #23234a;
+  color: #fff;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 0.2rem rgba(124,58,237,0.15);
+}
+#registerModal .btn-primary {
+  background: linear-gradient(90deg, #7c3aed 0%, #a78bfa 100%);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-radius: 0.75rem;
+  transition: background 0.2s;
+}
+#registerModal .btn-primary:hover {
+  background: linear-gradient(90deg, #a78bfa 0%, #7c3aed 100%);
+}
+#registerModal .btn-close {
+  filter: invert(1);
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+#registerModal .btn-close:hover {
+  opacity: 1;
+}

@@ -1,5 +1,11 @@
 // Homepage JavaScript functionality
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize modal instances first
+    const registerModalEl = document.getElementById('registerModal');
+    const loginModalEl = document.getElementById('loginModal');
+    const registerModal = registerModalEl ? new bootstrap.Modal(registerModalEl) : null;
+    const loginModal = loginModalEl ? new bootstrap.Modal(loginModalEl) : null;
+    
     // Auto-play carousel with custom timing
     const carousel = new bootstrap.Carousel(document.querySelector('#animeCarousel'), {
         interval: 5000,
@@ -99,6 +105,60 @@ document.addEventListener('DOMContentLoaded', function() {
             const genreName = this.querySelector('.genre-name').textContent;
             console.log('Clicked on genre:', genreName);
             // window.location.href = `/genre/${genreName.toLowerCase()}`;
+        });
+    });
+
+    // Registration modal trigger
+    const userAvatar = document.querySelector('.user-avatar');
+    if (userAvatar) {
+        userAvatar.addEventListener('click', function() {
+            // Use the already defined registerModal instance
+            if (registerModal) {
+                registerModal.show();
+            } else {
+                // Fallback if the instance wasn't created yet
+                const tempRegisterModal = new bootstrap.Modal(document.getElementById('registerModal'));
+                tempRegisterModal.show();
+            }
+        });
+    }
+
+    // Modal switching between Register and Login
+    // Show login modal when clicking 'Login' in registration modal
+    document.querySelectorAll('.login-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (registerModal) {
+                registerModal.hide();
+                // Wait for modal to be fully hidden before showing login
+                registerModalEl.addEventListener('hidden.bs.modal', function handler() {
+                    if (loginModal) loginModal.show();
+                    // Remove any leftover backdrop
+                    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                    registerModalEl.removeEventListener('hidden.bs.modal', handler);
+                });
+            } else if (loginModal) {
+                loginModal.show();
+            }
+        });
+    });
+
+    // Show registration modal when clicking 'Register' in login modal
+    document.querySelectorAll('.register-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (loginModal) {
+                loginModal.hide();
+                // Wait for modal to be fully hidden before showing registration
+                loginModalEl.addEventListener('hidden.bs.modal', function handler() {
+                    if (registerModal) registerModal.show();
+                    // Remove any leftover backdrop
+                    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                    loginModalEl.removeEventListener('hidden.bs.modal', handler);
+                });
+            } else if (registerModal) {
+                registerModal.show();
+            }
         });
     });
 });
