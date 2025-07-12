@@ -19,3 +19,11 @@ $routes->get('watch/(:segment)/(:num)', 'Watch::episode/$1/$2');
 // Embedded player routes
 $routes->get('embeded/watch/(:num)/(:num)', 'Embedded::watch/$1/$2');
 
+// Admin routes
+$routes->group('admin', function ($routes) {
+    $routes->get('/', 'Admin::index');
+    $routes->get('metrics', 'Admin::metrics');
+    $routes->get('accounts', 'Admin::accounts');
+    $routes->get('anime-manage', 'Admin::animeManage');
+});
+

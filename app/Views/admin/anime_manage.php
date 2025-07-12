@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | RioAnime</title>
+    <title>Anime Manage | RioAnime Admin</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -35,7 +35,7 @@
             <div class="sidebar-menu">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a href="<?= site_url('admin') ?>" class="nav-link active">
+                        <a href="<?= site_url('admin') ?>" class="nav-link">
                             <i class="fas fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </a>
@@ -56,7 +56,7 @@
                     </li>
                     
                     <li class="nav-item">
-                        <a href="<?= site_url('admin/anime-manage') ?>" class="nav-link">
+                        <a href="<?= site_url('admin/anime-manage') ?>" class="nav-link active">
                             <i class="fas fa-film"></i>
                             <span>Anime Manage</span>
                         </a>
@@ -106,10 +106,7 @@
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0">Dashboard</h1>
-                        <div class="d-none d-sm-inline-block">
-                            <span class="text-muted">Welcome to RioAnime Admin</span>
-                        </div>
+                        <h1 class="h3 mb-0">Anime Manage</h1>
                     </div>
                     
                     <!-- Content Row -->
@@ -118,10 +115,10 @@
                             <!-- Empty content area as requested -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold">Content Area</h6>
+                                    <h6 class="m-0 font-weight-bold">Anime Management Content</h6>
                                 </div>
                                 <div class="card-body">
-                                    <p>This is the main content area. It's currently empty as requested.</p>
+                                    <p>This is the anime management content area. It's currently empty as requested.</p>
                                 </div>
                             </div>
                         </div>
