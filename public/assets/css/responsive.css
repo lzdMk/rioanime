@@ -130,6 +130,14 @@
     .genre-card {
         padding: 1.5rem 0.75rem;
     }
+
+    /* Anime Grid Responsive */
+    .anime-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -182,5 +190,12 @@
     
     .anime-meta {
         font-size: 0.75rem;
+    }
+
+    /* Anime Grid for Extra Small Devices */
+    .anime-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+        margin-bottom: 1rem;
     }
 }
