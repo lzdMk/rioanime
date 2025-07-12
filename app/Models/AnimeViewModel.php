@@ -44,25 +44,36 @@ class AnimeViewModel extends Model
      */
     public function getTrendingByPeriod($period = 'today', $limit = 10)
     {
-        // Determine the start date based on the period
         $db = \Config\Database::connect();
-        $builder = $db->table('anime_views');
-        if ($period === 'today') {
-            $start = date('Y-m-d 00:00:00');
-        } elseif ($period === 'week') {
-            $start = date('Y-m-d H:i:s', strtotime('-7 days'));
-        } elseif ($period === 'month') {
-            $start = date('Y-m-d H:i:s', strtotime('-1 month'));
-        } else {
-            $start = date('Y-m-d 00:00:00');
+        $periods = [
+            'today' => date('Y-m-d 00:00:00'),
+            'week' => date('Y-m-d H:i:s', strtotime('-7 days')),
+            'month' => date('Y-m-d H:i:s', strtotime('-1 month')),
+        ];
+        $result = [];
+        foreach ($periods as $p => $start) {
+            $builder = $db->table('anime_views');
+            $builder->select('anime_views.anime_id, anime_data.title, anime_data.type, anime_data.ratings, anime_data.backgroundImage, anime_data.genres, anime_data.total_ep, anime_data.status, anime_data.studios, anime_data.synopsis, SUM(anime_views.views) as total_views')
+                ->join('anime_data', 'anime_data.anime_id = anime_views.anime_id')
+                ->where('anime_views.viewed_at >=', $start)
+                ->groupBy('anime_views.anime_id')
+                ->orderBy('total_views', 'DESC')
+                ->limit($limit);
+            $result = $builder->get()->getResultArray();
+            if (!empty($result)) {
+                break;
+            }
         }
-        // Join with anime_data to get full details
-        $builder->select('anime_views.anime_id, anime_data.title, anime_data.type, anime_data.ratings, anime_data.backgroundImage, anime_data.genres, anime_data.total_ep, anime_data.status, anime_data.studios, anime_data.synopsis, SUM(anime_views.views) as total_views')
-            ->join('anime_data', 'anime_data.anime_id = anime_views.anime_id')
-            ->where('anime_views.viewed_at >=', $start)
-            ->groupBy('anime_views.anime_id')
-            ->orderBy('total_views', 'DESC')
-            ->limit($limit);
-        return $builder->get()->getResultArray();
+        // If still empty, fallback to all-time top 10
+        if (empty($result)) {
+            $builder = $db->table('anime_views');
+            $builder->select('anime_views.anime_id, anime_data.title, anime_data.type, anime_data.ratings, anime_data.backgroundImage, anime_data.genres, anime_data.total_ep, anime_data.status, anime_data.studios, anime_data.synopsis, SUM(anime_views.views) as total_views')
+                ->join('anime_data', 'anime_data.anime_id = anime_views.anime_id')
+                ->groupBy('anime_views.anime_id')
+                ->orderBy('total_views', 'DESC')
+                ->limit($limit);
+            $result = $builder->get()->getResultArray();
+        }
+        return $result;
     }
 }
