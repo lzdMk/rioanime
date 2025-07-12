@@ -82,7 +82,7 @@
     }
 
     .carousel-description {
-        font-size: 0.9rem;
+        display: none;
     }
 
     .carousel-actions {

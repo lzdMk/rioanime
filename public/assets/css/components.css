@@ -110,7 +110,6 @@
     .anime-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 1rem;
-        grid-auto-rows: 340px;
     }
 }
 
@@ -119,7 +118,6 @@
     .anime-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 0.8rem;
-        grid-auto-rows: 320px;
     }
 }
 
@@ -885,23 +883,192 @@
 @media (max-width: 768px) {
     .sidebar {
         position: static;
-        margin-top: 2rem;
+        margin-top: 1rem;
+    }
+    
+    .content-section {
+        padding: 1rem 0.5rem;
+        margin: 0;
     }
     
     .anime-grid {
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 0.5rem;
+        margin-bottom: 1rem;
     }
     
     .anime-grid-horizontal {
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .section-header {
+        margin-bottom: 1rem;
+        gap: 0.5rem;
     }
     
     .footer {
-        padding: 2rem 0 1rem;
+        padding: 1.5rem 0 1rem;
+        margin-top: 2rem;
     }
     
-    .footer-brand, .footer-section {
-        margin-bottom: 1.5rem;
+    .footer-brand {
+        margin-bottom: 1rem;
+    }
+    
+    .footer-section {
+        margin-bottom: 1rem;
+    }
+    
+    /* Footer mobile layout - LINKS and HELP side by side */
+    .footer .row {
+        display: block;
+    }
+    
+    .footer .col-md-6 {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    
+    /* Create a container for LINKS and HELP */
+    .footer .col-md-3 {
+        width: 48%;
+        float: left;
+        margin-right: 4%;
+    }
+    
+    .footer .col-md-3:last-child {
+        margin-right: 0;
+    }
+    
+    /* Clear floats */
+    .footer .row::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+    
+    .footer-title {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .footer-links {
+        font-size: 0.8rem;
+    }
+    
+    .footer-links li {
+        margin-bottom: 0.3rem;
+    }
+    
+    .footer-links a {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .content-section {
+        padding: 0.75rem 0.25rem;
+        margin: 0;
+    }
+    
+    .section-header {
+        margin-bottom: 0.75rem;
+        gap: 0.25rem;
+    }
+    
+    .anime-grid {
+        gap: 0.4rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .anime-grid-horizontal {
+        gap: 0.4rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .footer {
+        padding: 1rem 0 0.75rem;
+        margin-top: 1.5rem;
+    }
+    
+    .footer-brand {
+        margin-bottom: 0.75rem;
+        text-align: center;
+    }
+    
+    .footer-logo {
+        font-size: 1.2rem;
+        justify-content: center;
+        margin-bottom: 0.5rem;
+    }
+    
+    .footer-description {
+        font-size: 0.8rem;
+        text-align: center;
+        line-height: 1.4;
+    }
+    
+    /* Keep LINKS and HELP side by side on small mobile */
+    .footer .col-md-3 {
+        width: 48%;
+        float: left;
+        margin-right: 4%;
+    }
+    
+    .footer .col-md-3:last-child {
+        margin-right: 0;
+    }
+    
+    .footer-section {
+        margin-bottom: 0.75rem;
+    }
+    
+    .footer-title {
+        font-size: 0.85rem;
+        margin-bottom: 0.4rem;
+    }
+    
+    .footer-links {
+        font-size: 0.75rem;
+    }
+    
+    .footer-links li {
+        margin-bottom: 0.2rem;
+    }
+    
+    .footer-links a {
+        font-size: 0.75rem;
+    }
+    
+    /* Minimize container padding on mobile */
+    .container {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    
+    /* Reduce sidebar margins */
+    .sidebar {
+        margin-top: 0.75rem;
+    }
+    
+    .sidebar-section {
+        margin-bottom: 1rem;
+    }
+    
+    .sidebar-header {
+        padding: 0.75rem;
+    }
+    
+    .sidebar-title-wrapper {
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Reduce view more button spacing */
+    .view-more-container {
+        margin: 1rem 0;
+        padding: 0.5rem 0;
     }
 }
 
