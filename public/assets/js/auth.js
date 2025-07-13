@@ -45,7 +45,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     if (errorAlert) {
                         errorAlert.textContent = data.message;
-                        errorAlert.classList.remove('d-none');
+                        errorAlert.classList.remove('d-none', 'alert-success');
+                        errorAlert.classList.add('alert-danger');
                     }
                 }
             })
@@ -105,17 +106,13 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(data => {
                 if (data.success) {
-                    // Show success message and close modal
-                    showSuccessNotification(data.message);
-                    
-                    // Close modal after a slight delay
+                    // Show success message inside registration modal
+                    showRegisterSuccessNotification(data.message);
                     setTimeout(() => {
                         const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
                         if (registerModal) {
                             registerModal.hide();
                         }
-                        
-                        // Clear form
                         registerForm.reset();
                     }, 1500);
                 } else {
@@ -127,11 +124,11 @@ document.addEventListener('DOMContentLoaded', function() {
                             showFormError(getFieldId(field), data.errors[field]);
                         }
                     }
-                    
                     // Show general error message
                     if (data.message) {
                         errorAlert.textContent = data.message;
-                        errorAlert.classList.remove('d-none');
+                        errorAlert.classList.remove('d-none', 'alert-success');
+                        errorAlert.classList.add('alert-danger');
                     }
                 }
             })
@@ -140,6 +137,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 errorAlert.textContent = 'An error occurred. Please try again.';
                 errorAlert.classList.remove('d-none');
             });
+        });
+    }
+    
+    // Reset registration success message when modal is opened
+    const registerModalEl = document.getElementById('registerModal');
+    if (registerModalEl) {
+        registerModalEl.addEventListener('show.bs.modal', function() {
+            const errorAlert = document.getElementById('registerFormErrors');
+            if (errorAlert) {
+                errorAlert.textContent = '';
+                errorAlert.classList.add('d-none');
+                errorAlert.classList.remove('alert-success', 'alert-danger');
+            }
         });
     }
     
@@ -229,6 +239,28 @@ function getFieldId(fieldName) {
  * Show success notification
  */
 function showSuccessNotification(message) {
-    // You can implement a toast notification here
-    alert(message); // Simple alert for now
+    // Show green alert inside login modal
+    const errorAlert = document.getElementById('loginFormErrors');
+    if (errorAlert) {
+        errorAlert.textContent = message;
+        errorAlert.classList.remove('d-none', 'alert-danger');
+        errorAlert.classList.add('alert-success');
+    } else {
+        alert(message); // fallback
+    }
+}
+
+/**
+ * Show registration success notification
+ */
+function showRegisterSuccessNotification(message) {
+    // Show green alert inside registration modal
+    const errorAlert = document.getElementById('registerFormErrors');
+    if (errorAlert) {
+        errorAlert.textContent = message;
+        errorAlert.classList.remove('d-none', 'alert-danger');
+        errorAlert.classList.add('alert-success');
+    } else {
+        alert(message); // fallback
+    }
 }
