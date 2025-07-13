@@ -30,3 +30,8 @@ $routes->group('admin', function ($routes) {
 // Random anime route
 $routes->get('random', 'Home::randomAnime');
 
+// Account routes
+$routes->post('account/register', 'Account::register');
+$routes->post('account/check-username', 'Account::checkUsername');
+$routes->post('account/check-email', 'Account::checkEmail');
+

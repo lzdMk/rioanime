@@ -9,21 +9,31 @@
       <div class="modal-body pt-2 pb-4 px-4">
         <form id="registerForm" autocomplete="off">
           <div class="mb-3">
-            <label for="registerName" class="form-label text-uppercase small">Your Name</label>
-            <input type="text" class="form-control form-control-lg rounded-3 bg-dark text-light border-secondary" id="registerName" name="name" placeholder="Name" required>
+            <label for="registerUsername" class="form-label text-uppercase small">Username</label>
+            <input type="text" class="form-control form-control-lg rounded-3 bg-dark text-light border-secondary" id="registerUsername" name="username" placeholder="Username" required>
+            <div class="invalid-feedback"></div>
+          </div>
+          <div class="mb-3">
+            <label for="registerDisplayName" class="form-label text-uppercase small">Display Name</label>
+            <input type="text" class="form-control form-control-lg rounded-3 bg-dark text-light border-secondary" id="registerDisplayName" name="display_name" placeholder="Display Name" required>
+            <div class="invalid-feedback"></div>
           </div>
           <div class="mb-3">
             <label for="registerEmail" class="form-label text-uppercase small">Email Address</label>
             <input type="email" class="form-control form-control-lg rounded-3 bg-dark text-light border-secondary" id="registerEmail" name="email" placeholder="name@email.com" required>
+            <div class="invalid-feedback"></div>
           </div>
           <div class="mb-3">
             <label for="registerPassword" class="form-label text-uppercase small">Password</label>
             <input type="password" class="form-control form-control-lg rounded-3 bg-dark text-light border-secondary" id="registerPassword" name="password" placeholder="Password" required>
+            <div class="invalid-feedback"></div>
           </div>
           <div class="mb-3">
             <label for="registerConfirmPassword" class="form-label text-uppercase small">Confirm Password</label>
             <input type="password" class="form-control form-control-lg rounded-3 bg-dark text-light border-secondary" id="registerConfirmPassword" name="confirm_password" placeholder="Confirm Password" required>
+            <div class="invalid-feedback"></div>
           </div>
+          <div class="alert alert-danger d-none" id="registerFormErrors"></div>
           <button type="submit" class="btn btn-primary w-100 py-2 rounded-3 fw-bold">Register</button>
         </form>
         <div class="text-center mt-3">

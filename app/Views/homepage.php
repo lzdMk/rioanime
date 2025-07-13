@@ -355,5 +355,6 @@ helper('url');
     
     <!-- Custom JavaScript -->
     <script src="<?= base_url('assets/js/homepage.js') ?>"></script>
+    <script src="<?= base_url('assets/js/auth.js') ?>"></script>
 </body>
 </html>
