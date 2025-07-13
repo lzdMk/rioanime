@@ -8,6 +8,10 @@
       </div>
       <div class="modal-body pt-2 pb-4 px-4">
         <form id="registerForm" autocomplete="off">
+          <!-- CSRF Token -->
+          <?php if (function_exists('csrf_field')): ?>
+            <?= csrf_field() ?>
+          <?php endif; ?>
           <div class="mb-3">
             <label for="registerUsername" class="form-label text-uppercase small">Username</label>
             <input type="text" class="form-control form-control-lg rounded-3 bg-dark text-light border-secondary" id="registerUsername" name="username" placeholder="Username" required>
@@ -55,6 +59,7 @@
       <div class="modal-body pt-2 pb-4 px-4">
         <form id="loginForm" autocomplete="off">
           <div class="mb-3">
+            <div class="alert alert-danger d-none" id="loginFormErrors"></div>
             <label for="loginEmail" class="form-label text-uppercase small">Email Address</label>
             <input type="email" class="form-control form-control-lg rounded-3 bg-dark text-light border-secondary" id="loginEmail" name="email" placeholder="name@email.com" required>
           </div>

@@ -3,6 +3,61 @@
  * Handles login and registration functionalities
  */
 document.addEventListener('DOMContentLoaded', function() {
+    // Login form handler
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const errorAlert = document.getElementById('loginFormErrors');
+            if (errorAlert) errorAlert.classList.add('d-none');
+
+            const formData = new FormData(loginForm);
+            // Add CSRF token if present
+            const csrfInputs = loginForm.querySelectorAll('input[type="hidden"]');
+            csrfInputs.forEach(input => {
+                formData.set(input.name, input.value);
+            });
+
+            const baseUrl = window.baseUrl || '/rioanime/';
+            const url = baseUrl.endsWith('/') ? baseUrl + 'account/login' : baseUrl + '/account/login';
+
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    showSuccessNotification(data.message);
+                    setTimeout(() => {
+                        const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+                        if (loginModal) loginModal.hide();
+                        window.location.href = data.redirect;
+                    }, 1000);
+                } else {
+                    if (errorAlert) {
+                        errorAlert.textContent = data.message;
+                        errorAlert.classList.remove('d-none');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Login error:', error);
+                if (errorAlert) {
+                    errorAlert.textContent = 'An error occurred. Please try again.';
+                    errorAlert.classList.remove('d-none');
+                }
+            });
+        });
+    }
     // Registration form handler
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {
@@ -16,6 +71,11 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Get form data
             const formData = new FormData(registerForm);
+            // Ensure CSRF token is always appended (regardless of its name)
+            const csrfInputs = registerForm.querySelectorAll('input[type="hidden"]');
+            csrfInputs.forEach(input => {
+                formData.set(input.name, input.value);
+            });
             
             // Validate password match
             const password = formData.get('password');
@@ -26,11 +86,23 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Submit form via AJAX
-            fetch(window.baseUrl + 'account/register', {
+            const baseUrl = window.baseUrl || '/rioanime/';
+            // Ensure proper URL construction
+            const url = baseUrl.endsWith('/') ? baseUrl + 'account/register' : baseUrl + '/account/register';
+            
+            fetch(url, {
                 method: 'POST',
-                body: formData
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
                     // Show success message and close modal
@@ -48,7 +120,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     }, 1500);
                 } else {
                     // Show errors
+                    console.log('Registration failed:', data);
                     if (data.errors) {
+                        console.log('Validation errors:', data.errors);
                         for (const field in data.errors) {
                             showFormError(getFieldId(field), data.errors[field]);
                         }
@@ -100,7 +174,10 @@ function checkAvailability(type, value) {
     const formData = new FormData();
     formData.append(type, value);
     
-    fetch(window.baseUrl + 'account/' + endpoint, {
+    const baseUrl = window.baseUrl || '/rioanime/';
+    const url = baseUrl.endsWith('/') ? baseUrl + 'account/' + endpoint : baseUrl + '/account/' + endpoint;
+    
+    fetch(url, {
         method: 'POST',
         body: formData
     })

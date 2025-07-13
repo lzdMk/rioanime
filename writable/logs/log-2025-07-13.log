@@ -1,0 +1,4 @@
+DEBUG - 2025-07-13 01:04:42 --> Registration request received. Method: POST
+DEBUG - 2025-07-13 01:04:42 --> Request URI: http://localhost/rioanime/account/register
+DEBUG - 2025-07-13 01:04:42 --> POST data: {"csrf_test_name":"806fc185d5e848a287993e065eea4601","username":"jonas","display_name":"jonas_pogi","email":"jonas@jonas.com","password":"jonas12345","confirm_password":"jonas12345"}
+ERROR - 2025-07-13 01:04:42 --> Invalid request method: POST

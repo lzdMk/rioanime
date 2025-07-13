@@ -26,8 +26,8 @@ class AccountModel extends Model
     
     // Validation rules
     protected $validationRules = [
-        'username' => 'required|alpha_numeric_space|min_length[3]|max_length[32]|is_unique[user_accounts.username]',
-        'display_name' => 'required|alpha_numeric_space|min_length[3]|max_length[64]',
+        'username' => 'required|regex_match[/^[a-zA-Z0-9_ ]+$/]|min_length[3]|max_length[32]|is_unique[user_accounts.username]',
+        'display_name' => 'required|regex_match[/^[a-zA-Z0-9_ ]+$/]|min_length[3]|max_length[64]',
         'email' => 'required|valid_email|max_length[128]|is_unique[user_accounts.email]',
         'password' => 'required|min_length[8]'
     ];
@@ -36,7 +36,11 @@ class AccountModel extends Model
         'username' => [
             'required' => 'Username is required',
             'is_unique' => 'Username is already taken',
-            'alpha_numeric_space' => 'Username can only contain letters, numbers, and spaces'
+            'regex_match' => 'Username can only contain letters, numbers, spaces, and underscores'
+        ],
+        'display_name' => [
+            'required' => 'Display name is required',
+            'regex_match' => 'Display name can only contain letters, numbers, spaces, and underscores'
         ],
         'email' => [
             'required' => 'Email is required',
@@ -65,6 +69,18 @@ class AccountModel extends Model
     }
     
     /**
+     * Verify user credentials for login
+     */
+    public function verifyCredentials($email, $password)
+    {
+        $user = $this->where('email', $email)->first();
+        if ($user && password_verify($password, $user['password'])) {
+            return $user;
+        }
+        return false;
+    }
+
+    /**
      * Register a new user
      */
     public function registerUser($userData)
@@ -73,7 +89,16 @@ class AccountModel extends Model
         $userData['type'] = $userData['type'] ?? 'viewer';
         $userData['followed_anime'] = $userData['followed_anime'] ?? '';
         $userData['user_profile'] = $userData['user_profile'] ?? null;
+        $userData['created_at'] = $userData['created_at'] ?? date('Y-m-d H:i:s');
         
-        return $this->insert($userData);
+        // Try to insert and log any errors
+        $result = $this->insert($userData);
+        
+        if (!$result) {
+            log_message('error', 'Insert failed. Validation errors: ' . json_encode($this->errors()));
+            log_message('error', 'User data being inserted: ' . json_encode($userData));
+        }
+        
+        return $result;
     }
 }

@@ -32,6 +32,7 @@ $routes->get('random', 'Home::randomAnime');
 
 // Account routes
 $routes->post('account/register', 'Account::register');
+$routes->post('account/login', 'Account::login');
 $routes->post('account/check-username', 'Account::checkUsername');
 $routes->post('account/check-email', 'Account::checkEmail');
 

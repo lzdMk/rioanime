@@ -7,6 +7,47 @@ use CodeIgniter\RESTful\ResourceController;
 
 class Account extends BaseController
 {
+    /**
+     * Handle user login
+     */
+    public function login()
+    {
+        if (strtolower($this->request->getMethod()) !== 'post') {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Invalid request method: ' . $this->request->getMethod() . '. Expected POST.'
+            ]);
+        }
+
+        $email = $this->request->getPost('email');
+        $password = $this->request->getPost('password');
+
+        $user = $this->accountModel->verifyCredentials($email, $password);
+        if ($user) {
+            // Set session data
+            session()->set([
+                'user_id' => $user['id'],
+                'username' => $user['username'],
+                'type' => $user['type'],
+                'isLoggedIn' => true
+            ]);
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Login successful',
+                'redirect' => ($user['type'] === 'admin') ? base_url('admin') : base_url('/'),
+                'user' => [
+                    'id' => $user['id'],
+                    'username' => $user['username'],
+                    'type' => $user['type']
+                ]
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Invalid email or password.'
+            ]);
+        }
+    }
     protected $accountModel;
     
     public function __construct()
@@ -20,10 +61,10 @@ class Account extends BaseController
     public function register()
     {
         // Only accept POST requests
-        if ($this->request->getMethod() !== 'post') {
+        if (strtolower($this->request->getMethod()) !== 'post') {
             return $this->response->setJSON([
-                'success' => false, 
-                'message' => 'Invalid request method'
+                'success' => false,
+                'message' => 'Invalid request method: ' . $this->request->getMethod() . '. Expected POST.'
             ]);
         }
         
@@ -37,7 +78,8 @@ class Account extends BaseController
         ];
         
         // Attempt to register user
-        if ($this->accountModel->registerUser($data)) {
+        $result = $this->accountModel->registerUser($data);
+        if ($result) {
             return $this->response->setJSON([
                 'success' => true,
                 'message' => 'Registration successful! You can now login.'
@@ -45,6 +87,11 @@ class Account extends BaseController
         } else {
             // Return validation errors
             $errors = $this->accountModel->errors();
+            
+            // Log the actual error for debugging
+            log_message('error', 'Registration failed. Errors: ' . json_encode($errors));
+            log_message('error', 'User data: ' . json_encode($data));
+            
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Registration failed',
