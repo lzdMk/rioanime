@@ -9,22 +9,9 @@ helper('url');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RioAnime - Watch Anime Online</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Custom CSS Files -->
-    <link href="<?= base_url('assets/css/variables.css') ?>" rel="stylesheet">
-    <link href="<?= base_url('assets/css/header.css') ?>" rel="stylesheet">
-    <link href="<?= base_url('assets/css/search.css') ?>" rel="stylesheet">
-    <link href="<?= base_url('assets/css/user_profile.css') ?>" rel="stylesheet">
-    <link href="<?= base_url('assets/css/carousel.css') ?>" rel="stylesheet">
-    <link href="<?= base_url('assets/css/components.css') ?>" rel="stylesheet">
-    <link href="<?= base_url('assets/css/responsive.css') ?>" rel="stylesheet">
+
+    <!-- Custom CSS and Fonts -->
+    <?= $this->include('partials/custom_link') ?>
 </head>
 
 <body>
@@ -356,6 +343,5 @@ helper('url');
     
     <!-- Custom JavaScript -->
     <script src="<?= base_url('assets/js/homepage.js') ?>"></script>
-    <script src="<?= base_url('assets/js/auth.js') ?>"></script>
 </body>
 </html>

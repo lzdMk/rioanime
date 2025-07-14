@@ -45,6 +45,7 @@ CREATE TABLE `user_accounts` (
   `password` varchar(255) NOT NULL,
   `type` enum('viewer','moderator','admin') NOT NULL DEFAULT 'viewer',
   `followed_anime` text DEFAULT NULL,
+  `watched` text DEFAULT NULL,
   `user_profile` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),

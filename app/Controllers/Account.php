@@ -7,6 +7,32 @@ use CodeIgniter\RESTful\ResourceController;
 
 class Account extends BaseController
 {
+    protected $accountModel;
+
+    public function __construct()
+    {
+        $this->accountModel = new AccountModel();
+    }
+
+    /**
+     * Show the user profile page
+     */
+    public function profile()
+    {
+        // Only allow access if logged in
+        if (!session('isLoggedIn')) {
+            return redirect()->to(base_url('account/login'));
+        }
+        // Pass user data to the view if needed
+        $data = [
+            'user_id' => session('user_id'),
+            'username' => session('username'),
+            'type' => session('type'),
+            'email' => session('email'),
+        ];
+        return view('pages/user_profile', $data);
+    }
+
     /**
      * Handle user logout
      */
@@ -25,6 +51,7 @@ class Account extends BaseController
         // Otherwise, redirect to homepage
         return redirect()->to(base_url('/'));
     }
+
     /**
      * Handle user login
      */
@@ -47,6 +74,7 @@ class Account extends BaseController
                 'user_id' => $user['id'],
                 'username' => $user['username'],
                 'type' => $user['type'],
+                'email' => $user['email'],
                 'isLoggedIn' => true
             ]);
             return $this->response->setJSON([
@@ -56,7 +84,8 @@ class Account extends BaseController
                 'user' => [
                     'id' => $user['id'],
                     'username' => $user['username'],
-                    'type' => $user['type']
+                    'type' => $user['type'],
+                    'email' => $user['email']
                 ]
             ]);
         } else {
@@ -66,13 +95,7 @@ class Account extends BaseController
             ]);
         }
     }
-    protected $accountModel;
-    
-    public function __construct()
-    {
-        $this->accountModel = new AccountModel();
-    }
-    
+
     /**
      * Handle user registration
      */
@@ -85,7 +108,7 @@ class Account extends BaseController
                 'message' => 'Invalid request method: ' . $this->request->getMethod() . '. Expected POST.'
             ]);
         }
-        
+
         // Get form data
         $data = [
             'username' => $this->request->getPost('username'),
@@ -94,7 +117,7 @@ class Account extends BaseController
             'password' => $this->request->getPost('password'),
             'user_profile' => null // Default profile picture will be set later
         ];
-        
+
         // Attempt to register user
         $result = $this->accountModel->registerUser($data);
         if ($result) {
@@ -105,11 +128,11 @@ class Account extends BaseController
         } else {
             // Return validation errors
             $errors = $this->accountModel->errors();
-            
+
             // Log the actual error for debugging
             log_message('error', 'Registration failed. Errors: ' . json_encode($errors));
             log_message('error', 'User data: ' . json_encode($data));
-            
+
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Registration failed',
@@ -117,30 +140,30 @@ class Account extends BaseController
             ]);
         }
     }
-    
+
     /**
      * Check if username is available via AJAX
      */
     public function checkUsername()
     {
         $username = $this->request->getPost('username');
-        
+
         $user = $this->accountModel->where('username', $username)->first();
-        
+
         return $this->response->setJSON([
             'available' => $user === null
         ]);
     }
-    
+
     /**
      * Check if email is available via AJAX
      */
     public function checkEmail()
     {
         $email = $this->request->getPost('email');
-        
+
         $user = $this->accountModel->where('email', $email)->first();
-        
+
         return $this->response->setJSON([
             'available' => $user === null
         ]);

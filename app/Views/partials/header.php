@@ -41,9 +41,9 @@
                                  <span class="fw-bold text-purple user-dropdown-username"><?= session('username') ?></span><br>
                                  <span class="small text-secondary"><?= session('email') ?></span>
                              </div>
-                             <button class="dropdown-item d-flex align-items-center rounded-2 text-light bg-transparent px-2 user-dropdown-btn">
+                             <a href="<?= base_url('account/profile') ?>" class="dropdown-item d-flex align-items-center rounded-2 text-light bg-transparent px-2 user-dropdown-btn">
                                  <i class="fas fa-user me-2 user-dropdown-icon"></i>Profile
-                             </button>
+                             </a>
                              <button class="dropdown-item d-flex align-items-center rounded-2 text-light bg-transparent px-2 user-dropdown-btn">
                                  <i class="fas fa-bell me-2 user-dropdown-icon"></i>Notification
                              </button>
@@ -71,3 +71,4 @@
      window.baseUrl = '<?= base_url() ?>';
  </script>
  <script src="<?= base_url('assets/js/search.js') ?>"></script>
+<script src="<?= base_url('assets/js/auth.js') ?>"></script>
