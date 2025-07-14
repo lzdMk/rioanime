@@ -59,6 +59,34 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+    // Logout button handler
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const baseUrl = window.baseUrl || '/rioanime/';
+            const url = baseUrl.endsWith('/') ? baseUrl + 'account/logout' : baseUrl + '/account/logout';
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    window.location.href = data.redirect || baseUrl;
+                } else {
+                    console.log('Logout failed: ' + (data.message || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Logout error:', error);
+            });
+        });
+    }
     // Registration form handler
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {

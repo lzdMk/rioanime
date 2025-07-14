@@ -8,6 +8,24 @@ use CodeIgniter\RESTful\ResourceController;
 class Account extends BaseController
 {
     /**
+     * Handle user logout
+     */
+    public function logout()
+    {
+        // Destroy session
+        session()->destroy();
+        // If AJAX, return JSON
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Logout successful',
+                'redirect' => base_url('/')
+            ]);
+        }
+        // Otherwise, redirect to homepage
+        return redirect()->to(base_url('/'));
+    }
+    /**
      * Handle user login
      */
     public function login()

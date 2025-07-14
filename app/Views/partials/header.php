@@ -36,22 +36,22 @@
                          <a href="#" class="d-flex align-items-center" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                              <img src="https://via.placeholder.com/36x36/8B5CF6/ffffff?text=U" alt="User" class="user-avatar rounded-circle border">
                          </a>
-                         <div class="dropdown-menu dropdown-menu-end p-2 shadow rounded-3" aria-labelledby="userDropdown" style="min-width: 220px; background-color: #1c1c2b; color: #f0f0f0;">
+                         <div class="dropdown-menu dropdown-menu-end p-2 shadow rounded-3 user-dropdown-menu" aria-labelledby="userDropdown">
                              <div class="mb-2 px-2">
-                                 <span class="fw-bold text-purple" style="color: #A78BFA;"><?= session('username') ?></span><br>
+                                 <span class="fw-bold text-purple user-dropdown-username"><?= session('username') ?></span><br>
                                  <span class="small text-secondary"><?= session('email') ?></span>
                              </div>
-                             <button class="dropdown-item d-flex align-items-center rounded-2 text-light bg-transparent px-2" style="transition: background 0.3s;" onmouseover="this.style.background='#2a2a3d'" onmouseout="this.style.background='transparent'">
-                                 <i class="fas fa-user me-2" style="color: #A78BFA;"></i>Profile
+                             <button class="dropdown-item d-flex align-items-center rounded-2 text-light bg-transparent px-2 user-dropdown-btn">
+                                 <i class="fas fa-user me-2 user-dropdown-icon"></i>Profile
                              </button>
-                             <button class="dropdown-item d-flex align-items-center rounded-2 text-light bg-transparent px-2" style="transition: background 0.3s;" onmouseover="this.style.background='#2a2a3d'" onmouseout="this.style.background='transparent'">
-                                 <i class="fas fa-bell me-2" style="color: #A78BFA;"></i>Notification
+                             <button class="dropdown-item d-flex align-items-center rounded-2 text-light bg-transparent px-2 user-dropdown-btn">
+                                 <i class="fas fa-bell me-2 user-dropdown-icon"></i>Notification
                              </button>
-                             <button class="dropdown-item d-flex align-items-center rounded-2 text-light bg-transparent px-2" style="transition: background 0.3s;" onmouseover="this.style.background='#2a2a3d'" onmouseout="this.style.background='transparent'">
-                                 <i class="fas fa-cog me-2" style="color: #A78BFA;"></i>Settings
+                             <button class="dropdown-item d-flex align-items-center rounded-2 text-light bg-transparent px-2 user-dropdown-btn">
+                                 <i class="fas fa-cog me-2 user-dropdown-icon"></i>Settings
                              </button>
                              <div class="mt-3 text-end px-2">
-                                 <button class="btn btn-sm btn-outline-light fw-bold">Logout <i class="fas fa-arrow-right ms-1"></i></button>
+                                 <button id="logoutBtn" class="btn btn-sm btn-outline-light fw-bold">Logout <i class="fas fa-arrow-right ms-1"></i></button>
                              </div>
                          </div>
                      </div>

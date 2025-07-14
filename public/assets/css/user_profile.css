@@ -1,0 +1,20 @@
+/* User Dropdown Styles */
+.user-dropdown-menu {
+    min-width: 220px;
+    background-color: #1c1c2b;
+    color: #f0f0f0;
+}
+.user-dropdown-username {
+    color: #A78BFA;
+}
+.user-dropdown-btn {
+    transition: background 0.3s;
+    background: transparent;
+    color: #f0f0f0;
+}
+.user-dropdown-btn:hover {
+    background: #2a2a3d;
+}
+.user-dropdown-icon {
+    color: #A78BFA;
+}
