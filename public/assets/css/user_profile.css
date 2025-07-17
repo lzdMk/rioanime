@@ -4,106 +4,208 @@
     background-color: #1c1c2b;
     color: #f0f0f0;
 }
+
 .user-dropdown-username {
     color: #A78BFA;
 }
+
 .user-dropdown-btn {
     transition: background 0.3s;
     background: transparent;
     color: #f0f0f0;
 }
+
 .user-dropdown-btn:hover {
     background: #2a2a3d;
 }
+
 .user-dropdown-icon {
     color: #A78BFA;
 }
 
-
-/* User Profile Page Styles */
-.user-profile {
-    min-height: 100vh;
-    color: #ffffff;
-    padding: 20px 0;
+/* User Profile Styles */
+.top-nav {
+    padding: 15px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-
-.user-profile-icon {
-    font-size: 1.2em;
-    vertical-align: middle;
-    transition: color 0.2s;
-}
-
-.user-profile-icon-user { color: #A78BFA !important; }     
-.user-profile-icon-play { color: #22d3ee !important; }      
-.user-profile-icon-heart { color: #ef4444 !important; }    
-.user-profile-icon-bell { color: #f59e42 !important; }      
-.user-profile-icon-cog { color: #10b981 !important; }      
-.user-profile-icon-envelope { color: #6366f1 !important; } 
-
-.user-profile .user-profile-header {
-    text-align: center;
-    margin-bottom: 40px;
-    padding: 20px 0;
-}
-
-.user-profile .user-profile-header h1 {
-    font-size: 2.5rem;
-    font-weight: 300;
-    margin-bottom: 10px;
-}
-
-.user-profile .user-profile-nav {
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
     justify-content: center;
-    gap: 20px;
-    margin-top: 30px;
+    gap: 30px;
     flex-wrap: wrap;
+    padding: 0 20px;
 }
 
-.user-profile .user-profile-nav-tab {
+.nav-tab {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 20px;
+    padding: 10px 20px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 25px;
+    border-radius: 20px;
     text-decoration: none;
     color: #ffffff;
     font-weight: 500;
+    font-size: 0.9rem;
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.user-profile .user-profile-nav-tab:hover {
+.nav-tab:hover {
     background: rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
     color: #ffffff;
 }
 
-.user-profile .user-profile-nav-tab.active {
+.nav-tab.active {
     background: rgba(255, 255, 255, 0.25);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
 }
 
-.user-profile .user-profile-form-card {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
-    padding: 40px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+.main-content {
+    padding: 20px;
 }
 
-.user-profile .user-profile-avatar-container {
+.profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #16163b;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-header h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0;
+    color: #ffffff;
+}
+
+.profile-header .icon {
+    font-size: 1.5rem;
+    color: #8b8bbd;
+}
+
+.profile-form {
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    gap: 40px;
+    align-items: start;
+}
+
+.form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #8b8bbd;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-input {
+    padding: 12px 16px;
+    background: #4a4a7a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    background: #525282;
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.form-input:disabled {
+    background: #3a3a5a;
+    color: #8b8bbd;
+    cursor: not-allowed;
+}
+
+.form-input::placeholder {
+    color: #8b8bbd;
+}
+
+.verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 16px;
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    color: #22c55e;
+    margin-top: 6px;
+    width: fit-content;
+}
+
+.change-password-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #4a4a7a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #8b8bbd;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.change-password-btn:hover {
+    background: #525282;
+    color: #ffffff;
+}
+
+.avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.avatar-container {
     position: relative;
     width: 120px;
     height: 120px;
-    margin: 0 auto 20px;
+    margin-bottom: 15px;
 }
 
-.user-profile .user-profile-avatar {
+.avatar {
     width: 100%;
     height: 100%;
     border-radius: 50%;
@@ -111,20 +213,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: bold;
     color: white;
-    border: 4px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-.user-profile .user-profile-edit-avatar {
+.edit-avatar-btn {
     position: absolute;
     bottom: 5px;
     right: 5px;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     background: #667eea;
+    border: 2px solid #3c3c6b;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -132,122 +235,63 @@
     cursor: pointer;
     color: white;
     font-size: 14px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    border: none;
-}
-
-.user-profile .user-profile-section-title {
-    font-size: 1.8rem;
-    font-weight: 600;
-    margin-bottom: 30px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.user-profile .user-profile-form-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.user-profile .user-profile-form-input {
-    width: 100%;
-    padding: 15px 20px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    color: #ffffff;
-    font-size: 1rem;
-    outline: none;
     transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
 }
 
-.user-profile .user-profile-form-input:focus {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.4);
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
-    color: #ffffff;
+.edit-avatar-btn:hover {
+    background: #764ba2;
+    transform: scale(1.1);
 }
 
-.user-profile .user-profile-form-input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.user-profile .user-profile-form-input:disabled {
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(255, 255, 255, 0.6);
-    cursor: not-allowed;
-}
-
-.user-profile .user-profile-verified-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(34, 197, 94, 0.2);
-    border: 1px solid rgba(34, 197, 94, 0.4);
-    border-radius: 20px;
-    padding: 6px 12px;
-    font-size: 0.8rem;
-    color: #22c55e;
-    margin-top: 8px;
-}
-
-.user-profile .user-profile-change-password-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    padding: 15px 20px;
-    color: #ffffff;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    cursor: pointer;
-    width: 100%;
-    justify-content: center;
-}
-
-.user-profile .user-profile-change-password-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-    color: #ffffff;
-}
-
-.user-profile .user-profile-save-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.save-btn {
+    background: #ff6b9d;
     border: none;
-    border-radius: 12px;
-    padding: 15px 40px;
+    border-radius: 8px;
+    padding: 12px 30px;
     color: white;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    width: 100%;
     margin-top: 20px;
+    width: 100%;
 }
 
-.user-profile .user-profile-save-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+.save-btn:hover {
+    background: #ff5a8a;
+    transform: translateY(-1px);
 }
 
 @media (max-width: 768px) {
-    .user-profile .user-profile-nav {
+    .nav-container {
         gap: 15px;
+        padding: 0 15px;
     }
 
-    .user-profile .user-profile-form-card {
-        padding: 30px 20px;
+    .nav-tab {
+        padding: 8px 15px;
+        font-size: 0.85rem;
+    }
+
+    .profile-form {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .profile-container {
+        padding: 20px;
+    }
+
+    .avatar-section {
+        order: -1;
+    }
+
+    .avatar-container {
+        width: 100px;
+        height: 100px;
+    }
+
+    .avatar {
+        font-size: 2rem;
     }
 }

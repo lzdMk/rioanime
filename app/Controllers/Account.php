@@ -24,11 +24,17 @@ class Account extends BaseController
             return redirect()->to(base_url('account/login'));
         }
         // Pass user data to the view if needed
+        $user_id = session('user_id');
+        $user = null;
+        if ($user_id) {
+            $user = $this->accountModel->find($user_id);
+        }
         $data = [
-            'user_id' => session('user_id'),
+            'user_id' => $user_id,
             'username' => session('username'),
             'type' => session('type'),
             'email' => session('email'),
+            'user_profile' => $user['user_profile'] ?? null,
         ];
         return view('pages/user_profile', $data);
     }

@@ -3,125 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - <?= esc($username) ?></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-     <!-- Custom CSS and Fonts -->
-     <?= $this->include('partials/custom_link') ?>
+    <title>Edit Profile - <?= esc($username) ?></title>
+    <?= $this->include('partials/custom_link') ?>
 </head>
 <body>
     <?= $this->include('partials/header') ?>
-    <div class="user-profile">
-        <div class="container">
-            <div class="user-profile-header">
-                <h1>Hi, <?= esc($username) ?></h1>
-                
-                <div class="user-profile-nav">
-                    <a href="#" class="user-profile-nav-tab active">
-                        <span><i class="fas fa-user user-profile-icon user-profile-icon-user"></i></span>
-                        Profile
-                    </a>
-                    <a href="#" class="user-profile-nav-tab">
-                        <span><i class="fas fa-play user-profile-icon user-profile-icon-play"></i></span>
-                        Continue Watching
-                    </a>
-                    <a href="#" class="user-profile-nav-tab">
-                        <span><i class="fas fa-heart user-profile-icon user-profile-icon-heart"></i></span>
-                        Watch List
-                    </a>
-                    <a href="#" class="user-profile-nav-tab">
-                        <span><i class="fas fa-bell user-profile-icon user-profile-icon-bell"></i></span>
-                        Notification
-                    </a>
-                    <a href="#" class="user-profile-nav-tab">
-                        <span><i class="fas fa-cog user-profile-icon user-profile-icon-cog"></i></span>
-                        Settings
-                    </a>
-                    <a href="#" class="user-profile-nav-tab">
-                        <span><i class="fas fa-envelope user-profile-icon user-profile-icon-envelope"></i></span>
-                        MAL
-                    </a>
-                </div>
-            </div>
-
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="user-profile-form-card">
-                                <h2 class="user-profile-section-title">
-                                    <span><i class="fas fa-user user-profile-icon user-profile-icon-user"></i></span>
-                                    Edit Profile
-                                </h2>
-
-                                <form action="<?= base_url('account/updateProfile') ?>" method="POST">
-                                    <?= csrf_field() ?>
-                                    
-                                    <div class="mb-4">
-                                        <label class="user-profile-form-label">Email Address</label>
-                                        <input type="email" name="email" class="user-profile-form-input" value="<?= esc($email) ?>" required>
-                                        <div class="user-profile-verified-badge">
-                                            <span>✓</span>
-                                            Verified
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <label class="user-profile-form-label">Your Name</label>
-                                        <input type="text" name="username" class="user-profile-form-input" value="<?= esc($username) ?>" required>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <label class="user-profile-form-label">Account Type</label>
-                                        <input type="text" class="user-profile-form-input" value="<?= esc($type) ?>" disabled>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <label class="user-profile-form-label">Member Since</label>
-                                        <input type="text" class="user-profile-form-input" value="<?= date('Y-m-d', strtotime(session('created_at') ?? 'now')) ?>" disabled>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <a href="<?= base_url('account/changePassword') ?>" class="user-profile-change-password-btn">
-                                            <span>🔒</span>
-                                            Change password
-                                        </a>
-                                    </div>
-
-                                    <button type="submit" class="user-profile-save-btn">
-                                        Save Changes
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="text-center">
-                                <div class="user-profile-avatar-container">
-                                    <div class="user-profile-avatar">
-                                        <?= strtoupper(substr($username, 0, 1)) ?>
-                                    </div>
-                                    <button class="user-profile-edit-avatar">
-                                        ✏️
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="top-nav">
+        <div class="nav-container">
+            <a href="#" class="nav-tab active">
+                <span>👤</span>
+                Profile
+            </a>
+            <a href="#" class="nav-tab">
+                <span>▶️</span>
+                Continue Watching
+            </a>
+            <a href="#" class="nav-tab">
+                <span>❤️</span>
+                Watch List
+            </a>
+            <a href="#" class="nav-tab">
+                <span>🔔</span>
+                Notification
+            </a>
+            <a href="#" class="nav-tab">
+                <span>⚙️</span>
+                Settings
+            </a>
+            <a href="#" class="nav-tab">
+                <span>📧</span>
+                MAL
+            </a>
         </div>
     </div>
-    <?= $this->include('partials/footer') ?>
 
+    <div class="main-content">
+        <div class="profile-container">
+        <div class="profile-header">
+            <span class="icon">👤</span>
+            <h1>Edit Profile</h1>
+        </div>
+
+        <form action="<?= base_url('account/updateProfile') ?>" method="POST" class="profile-form">
+            <?= csrf_field() ?>
+            
+            <div class="form-fields">
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" name="email" class="form-input" value="<?= esc($email ?? 'xyrusx@proton.me') ?>" required>
+                    <div class="verified-badge">
+                        <span>✓</span>
+                        Verified
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Your Name</label>
+                    <input type="text" name="username" class="form-input" value="<?= esc($username) ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Joined</label>
+                    <input type="text" class="form-input" value="<?= date('Y-m-d', strtotime(session('created_at') ?? '2024-10-26')) ?>" disabled>
+                </div>
+
+                <div class="form-group">
+                    <a href="<?= base_url('account/changePassword') ?>" class="change-password-btn">
+                        <span>🔒</span>
+                        Change password
+                    </a>
+                </div>
+
+                <button type="submit" class="save-btn">
+                    Save
+                </button>
+            </div>
+
+            <div class="avatar-section">
+                <div class="avatar-container">
+                    <div class="avatar">
+                        <?php if (!empty($user_profile)): ?>
+                            <img src="<?= esc($user_profile) ?>" alt="Profile Picture" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;" />
+                        <?php elseif (!empty($username)): ?>
+                            <?= strtoupper(substr(trim($username), 0, 1)) ?>
+                        <?php endif; ?>
+                    </div>
+                    <button type="button" class="edit-avatar-btn">
+                        ✏️
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<?= $this->include('partials/footer') ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Add some interactivity
         document.addEventListener('DOMContentLoaded', function() {
-            const editAvatar = document.querySelector('.user-profile-edit-avatar');
+            const editAvatarBtn = document.querySelector('.edit-avatar-btn');
             const form = document.querySelector('form');
             
-            editAvatar.addEventListener('click', function() {
+            editAvatarBtn.addEventListener('click', function() {
                 alert('Avatar upload functionality would go here');
             });
             
