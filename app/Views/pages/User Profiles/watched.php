@@ -14,7 +14,7 @@
 		<a href="<?= base_url('account/profile') ?>" class="nav-tab"><span>👤</span> Profile</a>
 		<a href="<?= base_url('account/continue-watching') ?>" class="nav-tab active"><span>▶️</span> Continue Watching</a>
 		<a href="#" class="nav-tab"><span>❤️</span> Watch List</a>
-		<a href="#" class="nav-tab"><span>🔔</span> Notification</a>
+		<a href="<?= base_url('account/notifications') ?>" class="nav-tab"><span>🔔</span> Notification</a>
 		<a href="#" class="nav-tab"><span>⚙️</span> Settings</a>
 		<a href="#" class="nav-tab"><span>📧</span> MAL</a>
 	</div>
@@ -49,6 +49,5 @@
 </div>
 </div>
 <?= $this->include('partials/footer') ?>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

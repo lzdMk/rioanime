@@ -38,5 +38,6 @@ $routes->post('account/check-username', 'Account::checkUsername');
 
 $routes->get('account/profile', 'Account::profile');
 $routes->get('account/continue-watching', 'Account::continueWatching');
+$routes->get('account/notifications', 'Account::notifications');
 $routes->post('account/check-email', 'Account::checkEmail');
 

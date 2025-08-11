@@ -71,6 +71,26 @@ class Account extends BaseController
     }
 
     /**
+     * Notifications page (UI only)
+     */
+    public function notifications()
+    {
+        if (!session('isLoggedIn')) {
+            return redirect()->to(base_url('account/login'));
+        }
+        $user_id = session('user_id');
+        $user = $this->accountModel->find($user_id);
+        $data = [
+            'user_id' => $user_id,
+            'username' => session('username'),
+            'type' => session('type'),
+            'email' => session('email'),
+            'user_profile' => $user['user_profile'] ?? null,
+        ];
+        return view('pages/User Profiles/notifications', $data);
+    }
+
+    /**
      * Handle user logout
      */
     public function logout()

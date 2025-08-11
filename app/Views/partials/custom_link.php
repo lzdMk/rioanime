@@ -12,3 +12,5 @@
 <link href="<?= base_url('assets/css/components.css') ?>" rel="stylesheet">
 <link href="<?= base_url('assets/css/responsive.css') ?>" rel="stylesheet">
 <link href="<?= base_url('assets/css/user_profile.css') ?>" rel="stylesheet">
+<!-- Centralized Bootstrap Bundle JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>

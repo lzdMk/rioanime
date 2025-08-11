@@ -285,6 +285,57 @@
     font-size: 2.2rem;
 }
 
+/* Notifications Page */
+.notifications-wrapper {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 10px 0 60px 0;
+}
+.notifications-header {
+        display:flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap:1rem;
+        margin-bottom:1.5rem;
+}
+.notifications-header .title-group {display:flex;align-items:center;gap:.75rem;}
+.notifications-header h1 {margin:0;font-size:2.3rem;}
+.notif-icon {font-size:2rem;opacity:.9;}
+.actions-group {display:flex;gap:.75rem;}
+.actions-group .btn {border:none;border-radius:6px;padding:.75rem 1.25rem;font-weight:600;font-size:.85rem;display:flex;align-items:center;gap:.5rem;cursor:pointer;transition:.25s;background:#334155;color:#fff;}
+.actions-group .btn:disabled {opacity:.4;cursor:default;}
+.actions-group .btn-mark-read {background:#0891b2;}
+.actions-group .btn-clear-all {background:#f59e0b;}
+.actions-group .btn:not(:disabled):hover {filter:brightness(1.1);}
+
+.notif-tabs {display:flex;gap:.75rem;margin-bottom:1.5rem;}
+.notif-tab {background:#2f2f4d;border:none;padding:.65rem 1.4rem;border-radius:6px;color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;transition:.25s;}
+.notif-tab.active {background:#ff9ac2;color:#1a1a2e;}
+.notif-tab:not(.active):hover {background:#3b3b5c;}
+
+.notif-content {background:transparent;min-height:260px;position:relative;}
+.empty-state {text-align:center;margin-top:70px;}
+.empty-state .empty-icon {font-size:4rem;margin-bottom:1rem;opacity:.8;}
+.empty-state p {color:#fff;font-weight:500;letter-spacing:.5px;}
+
+.notification-item {display:flex;justify-content:space-between;align-items:center;padding:1rem 1.1rem;background:#1f1f36;border:1px solid rgba(255,255,255,0.07);border-radius:10px;margin-bottom:.8rem;gap:1rem;}
+.notification-item:hover {background:#272742;}
+.notification-left {display:flex;align-items:flex-start;gap:.9rem;}
+.badge-type {background:#ff8c37;color:#fff;font-size:.65rem;font-weight:700;padding:.4rem .55rem;border-radius:6px;letter-spacing:.5px;}
+.notification-info {display:flex;flex-direction:column;}
+.notification-title {font-size:.9rem;font-weight:600;margin-bottom:.25rem;color:#fff;}
+.notification-meta {font-size:.65rem;color:#9ca3af;letter-spacing:.5px;}
+.notification-right .dot {width:10px;height:10px;border-radius:50%;display:inline-block;background:#60a5fa;}
+.notification-right .dot.unread {box-shadow:0 0 0 4px rgba(96,165,250,.25);}
+.d-none {display:none!important;}
+
+@media (max-width: 768px){
+    .notifications-header h1 {font-size:1.8rem;}
+    .actions-group {width:100%;justify-content:flex-start;}
+    .notif-tabs {flex-wrap:wrap;}
+}
+
 @media (max-width: 768px) {
     .nav-container {
         gap: 15px;

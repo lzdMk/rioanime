@@ -4,29 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title><?= esc($anime['title']) ?> - Watch Online | RioWave</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Custom CSS Files -->
-    <link href="<?= base_url('assets/css/variables.css') ?>" rel="stylesheet">
-    <link href="<?= base_url('assets/css/header.css') ?>" rel="stylesheet">
-    <link href="<?= base_url('assets/css/search.css') ?>" rel="stylesheet">
-    <link href="<?= base_url('assets/css/carousel.css') ?>" rel="stylesheet">
-    <link href="<?= base_url('assets/css/components.css') ?>" rel="stylesheet">
-    <link href="<?= base_url('assets/css/responsive.css') ?>" rel="stylesheet">
+    <?= $this->include('partials/custom_link') ?>
     <link href="<?= base_url('assets/css/watch.css') ?>" rel="stylesheet">
 </head>
 
 <body>
-    <?php
-    // Load the URL helper
-    helper('url');
-    ?>
+    <?php helper('url'); ?>
     <?= $this->include('partials/header') ?>
 
     <!-- Watch Section -->
@@ -115,14 +98,9 @@
         </div>
     </section>
 
-    <!-- Bootstrap JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
     <!-- Custom JavaScript -->
     <script src="<?= base_url('assets/js/watch.js') ?>"></script>
-    
     <script>
-        // Pass data from PHP to JavaScript
         window.animeData = {
             animeId: <?= json_encode($anime['anime_id']) ?>,
             title: <?= json_encode($jsData['title']) ?>,
