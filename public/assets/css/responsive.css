@@ -196,10 +196,7 @@
         height: 70px;
         padding: 0.6rem;
     }
-    
-    .anime-meta {
-        font-size: 0.75rem;
-    }
+    /* .anime-meta removed */
 
     /* Watch Page Extra Small Responsive */
     .watch-section .container {

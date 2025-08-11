@@ -262,6 +262,29 @@
     transform: translateY(-1px);
 }
 
+/* Continue Watching grid inherits global .anime-grid styles; tweak spacing */
+.profile-container .anime-grid {
+    margin-top: 1rem;
+}
+
+/* Continue Watching page minimal wrapper */
+.continue-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 10px 0 40px 0;
+    background: transparent; /* no panel background */
+}
+
+.continue-container .continue-heading {
+    background: transparent;
+    border: none;
+    padding-left: 0;
+}
+
+.continue-container .profile-header h1 {
+    font-size: 2.2rem;
+}
+
 @media (max-width: 768px) {
     .nav-container {
         gap: 15px;

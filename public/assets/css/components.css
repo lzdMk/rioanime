@@ -281,9 +281,9 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100px;
-    min-height: 100px;
-    max-height: 100px;
+    height: 70px; /* Reduced since meta removed */
+    min-height: 70px;
+    max-height: 70px;
     overflow: hidden;
     box-sizing: border-box;
 }
@@ -314,26 +314,7 @@
     box-sizing: border-box;
 }
 
-.anime-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    margin-top: auto;
-}
-
-.anime-meta .rating {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    color: #ffd700;
-}
-
-.anime-meta .year {
-    color: var(--text-secondary);
-    font-size: 0.75rem;
-}
+/* Removed .anime-meta; rating/year hidden per request */
 
 .rating {
     display: flex;

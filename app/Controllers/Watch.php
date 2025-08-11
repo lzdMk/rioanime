@@ -5,11 +5,13 @@ class Watch extends BaseController
 {
     protected $animeModel;
     protected $animeViewModel;
+    protected $accountModel; // For tracking watched anime
 
     public function __construct()
     {
         $this->animeModel = new \App\Models\AnimeModel();
         $this->animeViewModel = new \App\Models\AnimeViewModel();
+    $this->accountModel = new \App\Models\AccountModel();
     }
 
     /**
@@ -51,6 +53,14 @@ class Watch extends BaseController
         // Increment view count for this anime and user IP
         $user_ip = $this->request->getIPAddress();
         $this->animeViewModel->incrementView($anime['anime_id'], $anime['title'], $user_ip);
+
+        // If user logged in, record this anime as watched
+        if (session()->get('isLoggedIn')) {
+            $userId = session()->get('user_id');
+            if ($userId) {
+                $this->accountModel->addWatchAnime($userId, $anime['anime_id']);
+            }
+        }
 
         // Parse URLs to get episodes
         $episodes = $this->parseEpisodes($anime['urls']);
@@ -167,6 +177,14 @@ class Watch extends BaseController
         // Increment view count for this anime and user IP
         $user_ip = $this->request->getIPAddress();
         $this->animeViewModel->incrementView($anime['anime_id'], $anime['title'], $user_ip);
+
+        // If user logged in, record this anime as watched
+        if (session()->get('isLoggedIn')) {
+            $userId = session()->get('user_id');
+            if ($userId) {
+                $this->accountModel->addWatchAnime($userId, $anime['anime_id']);
+            }
+        }
 
         // Parse URLs to get episodes
         $episodes = $this->parseEpisodes($anime['urls']);

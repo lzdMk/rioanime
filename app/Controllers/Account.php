@@ -35,8 +35,39 @@ class Account extends BaseController
             'type' => session('type'),
             'email' => session('email'),
             'user_profile' => $user['user_profile'] ?? null,
+            'watchedAnime' => [] // not needed on profile page
         ];
-        return view('pages/user_profile', $data);
+    return view('pages/User Profiles/profile', $data);
+    }
+
+    /**
+     * Continue Watching page
+     */
+    public function continueWatching()
+    {
+        if (!session('isLoggedIn')) {
+            return redirect()->to(base_url('account/login'));
+        }
+        $user_id = session('user_id');
+        $user = $this->accountModel->find($user_id);
+        $watchedAnime = [];
+        if (!empty($user['watched'])) {
+            $ids = json_decode($user['watched'], true);
+            if (is_array($ids) && !empty($ids)) {
+                $animeModel = new \App\Models\AnimeModel();
+                $watchedAnime = $animeModel->getAnimeByIds($ids);
+            }
+        }
+        $data = [
+            'user_id' => $user_id,
+            'username' => session('username'),
+            'type' => session('type'),
+            'email' => session('email'),
+            'user_profile' => $user['user_profile'] ?? null,
+            'watchedAnime' => $watchedAnime,
+            'activeTab' => 'continue'
+        ];
+    return view('pages/User Profiles/watched', $data);
     }
 
     /**

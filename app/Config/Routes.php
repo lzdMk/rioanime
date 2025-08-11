@@ -37,5 +37,6 @@ $routes->post('account/logout', 'Account::logout');
 $routes->post('account/check-username', 'Account::checkUsername');
 
 $routes->get('account/profile', 'Account::profile');
+$routes->get('account/continue-watching', 'Account::continueWatching');
 $routes->post('account/check-email', 'Account::checkEmail');
 

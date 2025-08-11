@@ -20,6 +20,7 @@ class AccountModel extends Model
         'password',
         'type',
         'followed_anime',
+        'watched',
         'user_profile',
         'created_at'
     ];
@@ -101,4 +102,25 @@ class AccountModel extends Model
         
         return $result;
     }
+
+    /**
+     * Add an anime to the user's watched list
+     */
+    public function addWatchAnime($userId, $animeId)
+    {
+        $user = $this->find($userId);
+        $watched = !empty($user['watched']) ? json_decode($user['watched'], true) : [];
+
+        if (!is_array($watched)) {
+            $watched = [];
+        }
+
+        if (!in_array($animeId, $watched)) {
+            $watched[] = $animeId;
+            $this->update($userId, ['watched' => json_encode($watched)]);
+        }
+
+        return true;
+    }
+
 }

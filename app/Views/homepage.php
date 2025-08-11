@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-// Load the URL helper
-helper('url');
+// Load helpers
+helper(['url','anime']);
 ?>
 
 <head>
@@ -18,32 +18,7 @@ helper('url');
     <!-- Header -->
     <?= $this->include('partials/header') ?>
 
-    <?php
-    // Helper function to get badge class based on anime type
-    function getBadgeClass($type) {
-        if (empty($type)) return 'unknown';
-        
-        $type = strtolower(trim($type));
-        
-        // Map known types to their CSS classes
-        $typeMap = [
-            'tv' => 'tv',
-            'movie' => 'movie',
-            'ova' => 'ova',
-            'ona' => 'ona',
-            'special' => 'special',
-            'series' => 'series',
-            'completed' => 'completed'
-        ];
-        
-        return isset($typeMap[$type]) ? $typeMap[$type] : 'unknown';
-    }
-
-    // Helper function to truncate title consistently
-    function truncateTitle($title, $maxLength = 35) {
-        return strlen($title) > $maxLength ? substr($title, 0, $maxLength) . '...' : $title;
-    }
-    ?>
+    <?php // helper functions now loaded from app/Helpers/anime_helper.php ?>
 
     <!-- Hero Carousel Section -->
     <section class="hero-section">
@@ -167,9 +142,7 @@ helper('url');
                                                     <i class="fas fa-play"></i>
                                                 </div>
                                             </div>
-                                            <div class="anime-badge <?= getBadgeClass($anime['type']) ?>">
-                                                <?= esc($anime['type']) ?>
-                                            </div>
+                                            <div class="anime-badge <?= esc(!empty($anime['type']) ? strtolower(preg_replace('/[^a-z0-9]+/i','-', $anime['type'])) : 'unknown') ?>"><?= esc($anime['type']) ?></div>
                                             <div class="episode-count">
                                                 <?= !empty($anime['total_ep']) ? 'Ep ' . esc($anime['total_ep']) : 'New' ?>
                                             </div>
@@ -178,13 +151,6 @@ helper('url');
                                             <h3 class="anime-title" title="<?= esc($anime['title']) ?>">
                                                 <?= esc(truncateTitle($anime['title'])) ?>
                                             </h3>
-                                            <div class="anime-meta">
-                                                <span class="rating">
-                                                    <i class="fas fa-star"></i>
-                                                    <?= !empty($anime['ratings']) ? esc($anime['ratings']) : 'N/A' ?>
-                                                </span>
-                                                <span class="year"><?= esc($anime['status']) ?></span>
-                                            </div>
                                         </div>
                                     </div>
                                 </a>
@@ -220,20 +186,11 @@ helper('url');
                                                     <i class="fas fa-play"></i>
                                                 </div>
                                             </div>
-                                            <div class="anime-badge <?= getBadgeClass($anime['type']) ?>">
-                                                <?= esc($anime['type']) ?>
-                                            </div>
+                                            <div class="anime-badge <?= esc($anime['type']) ?>"><?= esc($anime['type']) ?></div>
                                             <div class="episode-count"><?= !empty($anime['total_ep']) ? 'Ep ' . esc($anime['total_ep']) : 'New' ?></div>
                                         </div>
                                         <div class="anime-info">
                                             <h3 class="anime-title"><?= esc(truncateTitle($anime['title'])) ?></h3>
-                                            <div class="anime-meta">
-                                                <span class="rating">
-                                                    <i class="fas fa-star"></i>
-                                                    <?= !empty($anime['ratings']) ? esc($anime['ratings']) : 'N/A' ?>
-                                                </span>
-                                                <span class="year"><?= esc($anime['status']) ?></span>
-                                            </div>
                                         </div>
                                     </div>
                                 </a>
@@ -262,18 +219,11 @@ helper('url');
                                                     <i class="fas fa-play"></i>
                                                 </div>
                                             </div>
-                                            <div class="anime-badge <?= getBadgeClass($anime['type']) ?>"><?= esc($anime['type']) ?></div>
+                                            <div class="anime-badge <?= esc(!empty($anime['type']) ? strtolower(preg_replace('/[^a-z0-9]+/i','-', $anime['type'])) : 'unknown') ?>"><?= esc($anime['type']) ?></div>
                                             <div class="episode-count"><?= !empty($anime['total_ep']) ? 'Ep ' . esc($anime['total_ep']) : 'Movie' ?></div>
                                         </div>
                                         <div class="anime-info">
                                             <h3 class="anime-title"><?= esc(truncateTitle($anime['title'])) ?></h3>
-                                            <div class="anime-meta">
-                                                <span class="rating">
-                                                    <i class="fas fa-star"></i>
-                                                    <?= !empty($anime['ratings']) ? esc($anime['ratings']) : 'N/A' ?>
-                                                </span>
-                                                <span class="year"><?= esc($anime['status']) ?></span>
-                                            </div>
                                         </div>
                                     </div>
                                 </a>
@@ -302,18 +252,11 @@ helper('url');
                                                     <i class="fas fa-play"></i>
                                                 </div>
                                             </div>
-                                            <div class="anime-badge <?= getBadgeClass($anime['type']) ?>"><?= esc($anime['type']) ?></div>
+                                            <div class="anime-badge <?= esc(!empty($anime['type']) ? strtolower(preg_replace('/[^a-z0-9]+/i','-', $anime['type'])) : 'unknown') ?>"><?= esc($anime['type']) ?></div>
                                             <div class="episode-count"><?= !empty($anime['total_ep']) ? 'Ep ' . esc($anime['total_ep']) : 'Complete' ?></div>
                                         </div>
                                         <div class="anime-info">
                                             <h3 class="anime-title"><?= esc(truncateTitle($anime['title'])) ?></h3>
-                                            <div class="anime-meta">
-                                                <span class="rating">
-                                                    <i class="fas fa-star"></i>
-                                                    <?= !empty($anime['ratings']) ? esc($anime['ratings']) : 'N/A' ?>
-                                                </span>
-                                                <span class="year"><?= esc($anime['status']) ?></span>
-                                            </div>
                                         </div>
                                     </div>
                                 </a>

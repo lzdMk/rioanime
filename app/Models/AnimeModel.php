@@ -227,4 +227,31 @@ class AnimeModel extends Model
 
         return null;
     }
+
+    /**
+     * Get multiple anime by array of IDs (preserve given order)
+     */
+    public function getAnimeByIds(array $ids)
+    {
+        if (empty($ids)) {
+            return [];
+        }
+        $rows = $this->builder()
+                     ->select('anime_id, title, backgroundImage, type, total_ep, status, ratings')
+                     ->whereIn('anime_id', $ids)
+                     ->get()
+                     ->getResultArray();
+        // Index by id for order restoration
+        $indexed = [];
+        foreach ($rows as $r) {
+            $indexed[$r['anime_id']] = $r;
+        }
+        $ordered = [];
+        foreach ($ids as $id) {
+            if (isset($indexed[$id])) {
+                $ordered[] = $indexed[$id];
+            }
+        }
+        return $ordered;
+    }
 }
