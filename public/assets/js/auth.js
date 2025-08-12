@@ -136,13 +136,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.success) {
                     // Show success message inside registration modal
                     showRegisterSuccessNotification(data.message);
-                    setTimeout(() => {
-                        const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
-                        if (registerModal) {
-                            registerModal.hide();
-                        }
-                        registerForm.reset();
-                    }, 1500);
+                    
+                    // Check if auto-login was successful
+                    if (data.auto_login) {
+                        setTimeout(() => {
+                            const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+                            if (registerModal) {
+                                registerModal.hide();
+                            }
+                            registerForm.reset();
+                            
+                            // Refresh the page to show logged-in state
+                            window.location.href = data.redirect_url || window.location.href;
+                        }, 1500);
+                    } else {
+                        // Fallback if auto-login didn't work
+                        setTimeout(() => {
+                            const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+                            if (registerModal) {
+                                registerModal.hide();
+                            }
+                            registerForm.reset();
+                        }, 1500);
+                    }
                 } else {
                     // Show errors
                     console.log('Registration failed:', data);

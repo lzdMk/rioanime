@@ -426,6 +426,20 @@ class Account extends BaseController
         // Attempt to register user
         $result = $this->accountModel->registerUser($data);
         if ($result) {
+            // Get the newly created user data
+            $newUser = $this->accountModel->find($result);
+            
+            // Auto-login the user
+            session()->set([
+                'isLoggedIn' => true,
+                'user_id' => $newUser['id'],
+                'username' => $newUser['username'],
+                'email' => $newUser['email'],
+                'type' => $newUser['type'],
+                'user_profile' => $newUser['user_profile'],
+                'created_at' => $newUser['created_at']
+            ]);
+            
             // Create welcome notification for new user
             $username = $data['username'];
             $welcomeMessage = "🎉 Welcome to RioWave, {$username}! We're excited to have you join our anime community. Start exploring and enjoy watching! ✨";
@@ -433,7 +447,9 @@ class Account extends BaseController
             
             return $this->response->setJSON([
                 'success' => true,
-                'message' => 'Registration successful! You can now login.'
+                'message' => 'Registration successful! Welcome to RioWave!',
+                'auto_login' => true,
+                'redirect_url' => base_url()
             ]);
         } else {
             // Return validation errors

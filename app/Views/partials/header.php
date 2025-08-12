@@ -57,6 +57,11 @@
                              <button class="dropdown-item d-flex align-items-center rounded-2 text-light bg-transparent px-2 user-dropdown-btn">
                                  <i class="fas fa-cog me-2 user-dropdown-icon"></i>Settings
                              </button>
+                             <?php if (session('type') === 'admin'): ?>
+                                 <a href="<?= base_url('admin') ?>" class="dropdown-item d-flex align-items-center rounded-2 text-light bg-transparent px-2 user-dropdown-btn">
+                                     <i class="fas fa-shield-alt me-2 user-dropdown-icon" style="color: #f59e0b;"></i>Admin Panel
+                                 </a>
+                             <?php endif; ?>
                              <div class="mt-3 text-end px-2">
                                  <button id="logoutBtn" class="btn btn-sm btn-outline-light fw-bold">Logout <i class="fas fa-arrow-right ms-1"></i></button>
                              </div>
