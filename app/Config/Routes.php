@@ -41,3 +41,14 @@ $routes->get('account/continue-watching', 'Account::continueWatching');
 $routes->get('account/notifications', 'Account::notifications');
 $routes->post('account/check-email', 'Account::checkEmail');
 
+// Account profile actions
+$routes->post('account/updateProfile', 'Account::updateProfile');
+$routes->post('account/changePassword', 'Account::changePassword');
+$routes->post('account/uploadAvatar', 'Account::uploadAvatar');
+
+// Notification routes
+$routes->get('api/notifications', 'Notification::getNotifications');
+$routes->post('api/notifications/mark-read', 'Notification::markAsRead');
+$routes->post('api/notifications/delete', 'Notification::deleteNotifications');
+$routes->get('api/notifications/unread-count', 'Notification::getUnreadCount');
+

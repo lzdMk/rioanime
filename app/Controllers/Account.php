@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\AccountModel;
+use App\Controllers\Notification;
 use CodeIgniter\RESTful\ResourceController;
 
 class Account extends BaseController
@@ -38,6 +39,159 @@ class Account extends BaseController
             'watchedAnime' => [] // not needed on profile page
         ];
     return view('pages/User Profiles/profile', $data);
+    }
+
+    /**
+     * Update profile (email, username)
+     */
+    public function updateProfile()
+    {
+        if (!session('isLoggedIn')) {
+            return $this->response->setStatusCode(401)->setJSON(['success' => false, 'message' => 'Unauthorized']);
+        }
+        if (strtolower($this->request->getMethod()) !== 'post') {
+            return $this->response->setStatusCode(405)->setJSON(['success' => false, 'message' => 'Method not allowed']);
+        }
+
+        $userId = session('user_id');
+        $email = trim((string)$this->request->getPost('email'));
+        $username = trim((string)$this->request->getPost('username'));
+
+        // Basic validation
+        $errors = [];
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = 'Invalid email address';
+        }
+        if (strlen($username) < 3 || strlen($username) > 32) {
+            $errors['username'] = 'Username must be 3-32 characters';
+        }
+        if ($errors) {
+            return $this->response->setJSON(['success' => false, 'errors' => $errors]);
+        }
+
+        // Enforce unique email/username except current user
+        $existingEmail = $this->accountModel->where('email', $email)->where('id !=', $userId)->first();
+        if ($existingEmail) {
+            return $this->response->setJSON(['success' => false, 'errors' => ['email' => 'Email already in use']]);
+        }
+        $existingUsername = $this->accountModel->where('username', $username)->where('id !=', $userId)->first();
+        if ($existingUsername) {
+            return $this->response->setJSON(['success' => false, 'errors' => ['username' => 'Username already in use']]);
+        }
+
+        $this->accountModel->update($userId, [
+            'email' => $email,
+            'username' => $username,
+        ]);
+
+        // Create notification for profile update
+        Notification::createNotification($userId, 'profile_update', 'Your profile has been successfully updated.');
+
+        // Refresh session
+        session()->set(['email' => $email, 'username' => $username]);
+
+        return $this->response->setJSON(['success' => true, 'message' => 'Profile updated']);
+    }
+
+    /**
+     * Change password with current password verification
+     */
+    public function changePassword()
+    {
+        if (!session('isLoggedIn')) {
+            return $this->response->setStatusCode(401)->setJSON(['success' => false, 'message' => 'Unauthorized']);
+        }
+        if (strtolower($this->request->getMethod()) !== 'post') {
+            return $this->response->setStatusCode(405)->setJSON(['success' => false, 'message' => 'Method not allowed']);
+        }
+
+        $userId = session('user_id');
+        $current = (string)$this->request->getPost('current_password');
+        $new = (string)$this->request->getPost('new_password');
+        $confirm = (string)$this->request->getPost('confirm_password');
+
+        $user = $this->accountModel->find($userId);
+        if (!$user || !password_verify($current, $user['password'])) {
+            return $this->response->setJSON(['success' => false, 'errors' => ['current_password' => 'Current password is incorrect']]);
+        }
+        if (strlen($new) < 8) {
+            return $this->response->setJSON(['success' => false, 'errors' => ['new_password' => 'Password must be at least 8 characters']]);
+        }
+        if ($new !== $confirm) {
+            return $this->response->setJSON(['success' => false, 'errors' => ['confirm_password' => 'Passwords do not match']]);
+        }
+
+        $hash = password_hash($new, PASSWORD_DEFAULT);
+        $this->accountModel->update($userId, ['password' => $hash]);
+
+        // Create notification for password change
+        Notification::createNotification($userId, 'security', 'Your password has been successfully changed.');
+
+        return $this->response->setJSON(['success' => true, 'message' => 'Password changed']);
+    }
+
+    /**
+     * Upload avatar with 3MB limit and square crop input (client handles crop)
+     */
+    public function uploadAvatar()
+    {
+        if (!session('isLoggedIn')) {
+            return $this->response->setStatusCode(401)->setJSON(['success' => false, 'message' => 'Unauthorized']);
+        }
+        if (strtolower($this->request->getMethod()) !== 'post') {
+            return $this->response->setStatusCode(405)->setJSON(['success' => false, 'message' => 'Method not allowed']);
+        }
+
+        $file = $this->request->getFile('avatar');
+        if (!$file || !$file->isValid()) {
+            // Create notification for upload error
+            Notification::createNotification(session('user_id'), 'error', 'Avatar upload failed: No valid file uploaded.');
+            return $this->response->setJSON(['success' => false, 'errors' => ['avatar' => 'No file uploaded']]);
+        }
+
+        // Validate size (<= 3MB) and mime
+        if ($file->getSize() > 3 * 1024 * 1024) {
+            // Create notification for size error
+            Notification::createNotification(session('user_id'), 'warning', 'Avatar upload failed: File too large. Maximum size is 3MB.');
+            return $this->response->setJSON(['success' => false, 'errors' => ['avatar' => 'File too large. Max 3MB']]);
+        }
+        $mime = $file->getMimeType();
+        $allowed = ['image/jpeg', 'image/png', 'image/webp'];
+        if (!in_array($mime, $allowed)) {
+            // Create notification for format error
+            Notification::createNotification(session('user_id'), 'warning', 'Avatar upload failed: Invalid file format. Only JPG, PNG, or WEBP allowed.');
+            return $this->response->setJSON(['success' => false, 'errors' => ['avatar' => 'Only JPG, PNG, or WEBP allowed']]);
+        }
+
+        // Move to public/uploads/avatars for direct serving
+        $dir = FCPATH . 'uploads/avatars/';
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+        $ext = $file->getExtension();
+        $newName = 'avatar_' . session('user_id') . '_' . time() . '.' . $ext;
+        $file->move($dir, $newName, true);
+        $fullPath = $dir . $newName;
+
+        // Basic dimension check (require at least 128x128)
+        $info = @getimagesize($fullPath);
+        if (!$info || $info[0] < 128 || $info[1] < 128) {
+            @unlink($fullPath);
+            // Create notification for upload error
+            Notification::createNotification(session('user_id'), 'error', 'Avatar upload failed: Image too small. Minimum 128x128 required.');
+            return $this->response->setJSON(['success' => false, 'errors' => ['avatar' => 'Image too small. Minimum 128x128']]);
+        }
+
+        $publicPath = base_url('uploads/avatars/' . $newName);
+
+        // Save to DB and session
+    $this->accountModel->update(session('user_id'), ['user_profile' => $publicPath]);
+        session()->set(['user_profile' => $publicPath]);
+
+        // Create notification for successful avatar upload
+        Notification::createNotification(session('user_id'), 'profile_update', 'Your avatar has been successfully updated.');
+
+        return $this->response->setJSON(['success' => true, 'message' => 'Avatar updated', 'url' => $publicPath]);
     }
 
     /**
@@ -178,6 +332,11 @@ class Account extends BaseController
         // Attempt to register user
         $result = $this->accountModel->registerUser($data);
         if ($result) {
+            // Create welcome notification for new user
+            $username = $data['username'];
+            $welcomeMessage = "🎉 Welcome to RioWave, {$username}! We're excited to have you join our anime community. Start exploring and enjoy watching! ✨";
+            Notification::createNotification($result, 'welcome', $welcomeMessage);
+            
             return $this->response->setJSON([
                 'success' => true,
                 'message' => 'Registration successful! You can now login.'

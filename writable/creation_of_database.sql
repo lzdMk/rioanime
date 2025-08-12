@@ -56,3 +56,16 @@ CREATE TABLE `user_accounts` (
 -- Sample insert for user_accounts
 INSERT INTO `user_accounts` (`username`, `display_name`, `email`, `password`, `type`, `followed_anime`, `user_profile`, `created_at`) VALUES
 ('sampleuser', 'Sample User', 'sample@example.com', '$2y$10$wH6QJQwQwQwQwQwQwQwQwOeQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', 'viewer', '', 'https://example.com/profile.jpg', NOW());
+
+-- Table: user_notifications
+CREATE TABLE `user_notifications` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` INT(10) UNSIGNED NOT NULL,
+  `type` VARCHAR(32) DEFAULT 'info',
+  `message` TEXT NOT NULL,
+  `is_read` TINYINT(1) NOT NULL DEFAULT 0,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `fk_user_notifications_user` FOREIGN KEY (`user_id`) REFERENCES `user_accounts`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
