@@ -18,7 +18,7 @@
 				<i class="fas fa-play icon-play"></i>
 				Continue Watching
 			</a>
-			<a href="#" class="nav-tab">
+			<a href="<?= base_url('account/watch-list') ?>" class="nav-tab">
 				<i class="fas fa-heart icon-heart"></i>
 				Watch List
 			</a>
@@ -309,15 +309,20 @@ document.addEventListener('DOMContentLoaded', function() {
 			if (json.success) {
 				showToast('Avatar updated');
 				const bustUrl = json.url + (json.url.includes('?') ? '&' : '?') + 't=' + Date.now();
-				// Update avatar preview in panel
+				// Update avatar preview in panel with correct styling
 				const avatarNode = document.querySelector('.avatar');
 				if (avatarNode) {
-					avatarNode.innerHTML = '<img src="'+ bustUrl +'" alt="Profile Picture" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;" />';
+					avatarNode.innerHTML = '<img src="'+ bustUrl +'" alt="Profile Picture" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" />';
 				}
 				// Update navbar avatar
 				const navbarAvatar = document.getElementById('navbarAvatar');
 				if (navbarAvatar) {
-					navbarAvatar.src = bustUrl;
+					if (navbarAvatar.tagName === 'IMG') {
+						navbarAvatar.src = bustUrl;
+					} else {
+						// Replace letter avatar with image
+						navbarAvatar.outerHTML = '<img id="navbarAvatar" src="' + bustUrl + '" alt="User" class="user-avatar rounded-circle border">';
+					}
 				}
 				bootstrap.Modal.getInstance(document.getElementById('avatarModal')).hide();
 				avatarFile.value = '';

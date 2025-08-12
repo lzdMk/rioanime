@@ -217,6 +217,34 @@
     color: var(--white);
 }
 
+.follow-btn {
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid #10b981;
+    color: #10b981;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 0.65rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-left: 6px;
+}
+
+.follow-btn:hover {
+    background: #10b981;
+    color: var(--white);
+}
+
+.follow-btn.following {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+.follow-btn.following:hover {
+    background: #ef4444;
+    color: var(--white);
+}
+
 .episode-navigation {
     display: flex;
     gap: 5px;

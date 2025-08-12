@@ -52,3 +52,11 @@ $routes->post('api/notifications/mark-read', 'Notification::markAsRead');
 $routes->post('api/notifications/delete', 'Notification::deleteNotifications');
 $routes->get('api/notifications/unread-count', 'Notification::getUnreadCount');
 
+// Follow routes
+$routes->get('api/follow/status/(:num)', 'Follow::checkStatus/$1');
+$routes->post('api/follow/follow', 'Follow::follow');
+$routes->post('api/follow/unfollow', 'Follow::unfollow');
+
+// Watch list page
+$routes->get('account/watch-list', 'Account::watchList');
+

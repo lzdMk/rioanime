@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Continue Watching - <?= esc($username) ?></title>
+	<title>Watch List - <?= esc($username) ?></title>
 	<?= $this->include('partials/custom_link') ?>
 	<?php helper(['url','anime']); ?>
 </head>
@@ -12,8 +12,8 @@
 <div class="top-nav">
 	<div class="nav-container">
 		<a href="<?= base_url('account/profile') ?>" class="nav-tab"><i class="fas fa-user icon-profile"></i> Profile</a>
-		<a href="<?= base_url('account/continue-watching') ?>" class="nav-tab active"><i class="fas fa-play icon-play"></i> Continue Watching</a>
-		<a href="<?= base_url('account/watch-list') ?>" class="nav-tab"><i class="fas fa-heart icon-heart"></i> Watch List</a>
+		<a href="<?= base_url('account/continue-watching') ?>" class="nav-tab"><i class="fas fa-play icon-play"></i> Continue Watching</a>
+		<a href="<?= base_url('account/watch-list') ?>" class="nav-tab active"><i class="fas fa-heart icon-heart"></i> Watch List</a>
 		<a href="<?= base_url('account/notifications') ?>" class="nav-tab"><i class="fas fa-bell icon-bell"></i> Notification</a>
 		<a href="#" class="nav-tab"><i class="fas fa-gear icon-gear"></i> Settings</a>
 		<a href="#" class="nav-tab"><i class="fas fa-paper-plane icon-mail"></i> MAL</a>
@@ -23,15 +23,15 @@
 	<div class="notifications-wrapper">
 		<div class="notifications-header">
 			<div class="title-group">
-				<i class="fas fa-play notif-icon" style="color: #10b981;"></i>
-				<h1>Continue Watching</h1>
+				<i class="fas fa-heart notif-icon" style="color: #ec4899;"></i>
+				<h1>Watch List</h1>
 			</div>
 		</div>
 
 		<div class="notif-content">
-			<?php if (!empty($watchedAnime)): ?>
+			<?php if (!empty($followedAnime)): ?>
 				<div class="anime-grid">
-					<?php foreach ($watchedAnime as $anime): ?>
+					<?php foreach ($followedAnime as $anime): ?>
 						<a href="<?= base_url('watch/' . createSlug($anime['title'])) ?>" class="anime-card-link">
 							<div class="anime-card" data-type="<?= strtolower(esc($anime['type'])) ?>">
 								<div class="anime-poster">
@@ -49,9 +49,9 @@
 				</div>
 			<?php else: ?>
 				<div class="empty-state">
-					<div class="empty-icon"><i class="fas fa-play-circle"></i></div>
-					<h3>No Watched Anime</h3>
-					<p>Start watching anime to see your progress here. Your watch history will appear once you begin.</p>
+					<div class="empty-icon"><i class="fas fa-heart-broken"></i></div>
+					<h3>No Anime in Watch List</h3>
+					<p>Follow anime you want to watch later by clicking the "Follow" button on anime pages. Your followed anime will appear here.</p>
 				</div>
 			<?php endif; ?>
 		</div>

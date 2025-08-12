@@ -13,7 +13,7 @@
     <div class="nav-container">
     <a href="<?= base_url('account/profile') ?>" class="nav-tab"><i class="fas fa-user icon-profile"></i> Profile</a>
     <a href="<?= base_url('account/continue-watching') ?>" class="nav-tab"><i class="fas fa-play icon-play"></i> Continue Watching</a>
-    <a href="#" class="nav-tab"><i class="fas fa-heart icon-heart"></i> Watch List</a>
+    <a href="<?= base_url('account/watch-list') ?>" class="nav-tab"><i class="fas fa-heart icon-heart"></i> Watch List</a>
     <a href="<?= base_url('account/notifications') ?>" class="nav-tab active"><i class="fas fa-bell icon-bell"></i> Notification</a>
     <a href="#" class="nav-tab"><i class="fas fa-gear icon-gear"></i> Settings</a>
     <a href="#" class="nav-tab"><i class="fas fa-paper-plane icon-mail"></i> MAL</a>

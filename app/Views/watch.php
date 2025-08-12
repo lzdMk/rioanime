@@ -59,6 +59,12 @@
                                 <button class="change-source-btn">
                                     <i class="fas fa-exchange-alt me-1"></i>Change
                                 </button>
+                                <?php if (session('isLoggedIn')): ?>
+                                    <button class="follow-btn" id="followBtn" data-anime-id="<?= esc($anime['anime_id']) ?>">
+                                        <i class="fas fa-plus me-1" id="followIcon"></i>
+                                        <span id="followText">Follow</span>
+                                    </button>
+                                <?php endif; ?>
                             </div>
                             <div class="episode-navigation">
                                 <?php if ($currentEpisode > 1): ?>
@@ -109,6 +115,71 @@
             slug: <?= json_encode($jsData['slug']) ?>,
             baseUrl: <?= json_encode(base_url()) ?>
         };
+
+        // Follow/Unfollow functionality
+        <?php if (session('isLoggedIn')): ?>
+        document.addEventListener('DOMContentLoaded', function() {
+            const followBtn = document.getElementById('followBtn');
+            const followIcon = document.getElementById('followIcon');
+            const followText = document.getElementById('followText');
+            
+            if (followBtn) {
+                // Check if user already follows this anime
+                checkFollowStatus();
+                
+                followBtn.addEventListener('click', function() {
+                    toggleFollow();
+                });
+            }
+            
+            function checkFollowStatus() {
+                fetch(`${window.animeData.baseUrl}api/follow/status/${window.animeData.animeId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateFollowButton(data.isFollowing);
+                    })
+                    .catch(error => console.error('Error checking follow status:', error));
+            }
+            
+            function toggleFollow() {
+                const isCurrentlyFollowing = followBtn.classList.contains('following');
+                const action = isCurrentlyFollowing ? 'unfollow' : 'follow';
+                
+                fetch(`${window.animeData.baseUrl}api/follow/${action}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        anime_id: window.animeData.animeId,
+                        csrf_token: '<?= csrf_hash() ?>'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateFollowButton(!isCurrentlyFollowing);
+                    } else {
+                        console.error('Error:', data.message);
+                    }
+                })
+                .catch(error => console.error('Error toggling follow:', error));
+            }
+            
+            function updateFollowButton(isFollowing) {
+                if (isFollowing) {
+                    followBtn.classList.add('following');
+                    followIcon.className = 'fas fa-check me-1';
+                    followText.textContent = 'Following';
+                } else {
+                    followBtn.classList.remove('following');
+                    followIcon.className = 'fas fa-plus me-1';
+                    followText.textContent = 'Follow';
+                }
+            }
+        });
+        <?php endif; ?>
     </script>
 </body>
 </html>

@@ -142,24 +142,30 @@ class Account extends BaseController
             return $this->response->setStatusCode(405)->setJSON(['success' => false, 'message' => 'Method not allowed']);
         }
 
+        $userId = session('user_id');
+        
+        // Get current user data to check for existing avatar
+        $currentUser = $this->accountModel->find($userId);
+        $currentAvatar = $currentUser['user_profile'] ?? null;
+
         $file = $this->request->getFile('avatar');
         if (!$file || !$file->isValid()) {
             // Create notification for upload error
-            Notification::createNotification(session('user_id'), 'error', 'Avatar upload failed: No valid file uploaded.');
+            Notification::createNotification($userId, 'error', 'Avatar upload failed: No valid file uploaded.');
             return $this->response->setJSON(['success' => false, 'errors' => ['avatar' => 'No file uploaded']]);
         }
 
         // Validate size (<= 3MB) and mime
         if ($file->getSize() > 3 * 1024 * 1024) {
             // Create notification for size error
-            Notification::createNotification(session('user_id'), 'warning', 'Avatar upload failed: File too large. Maximum size is 3MB.');
+            Notification::createNotification($userId, 'warning', 'Avatar upload failed: File too large. Maximum size is 3MB.');
             return $this->response->setJSON(['success' => false, 'errors' => ['avatar' => 'File too large. Max 3MB']]);
         }
         $mime = $file->getMimeType();
         $allowed = ['image/jpeg', 'image/png', 'image/webp'];
         if (!in_array($mime, $allowed)) {
             // Create notification for format error
-            Notification::createNotification(session('user_id'), 'warning', 'Avatar upload failed: Invalid file format. Only JPG, PNG, or WEBP allowed.');
+            Notification::createNotification($userId, 'warning', 'Avatar upload failed: Invalid file format. Only JPG, PNG, or WEBP allowed.');
             return $this->response->setJSON(['success' => false, 'errors' => ['avatar' => 'Only JPG, PNG, or WEBP allowed']]);
         }
 
@@ -169,7 +175,7 @@ class Account extends BaseController
             mkdir($dir, 0755, true);
         }
         $ext = $file->getExtension();
-        $newName = 'avatar_' . session('user_id') . '_' . time() . '.' . $ext;
+        $newName = 'avatar_' . $userId . '_' . time() . '.' . $ext;
         $file->move($dir, $newName, true);
         $fullPath = $dir . $newName;
 
@@ -178,20 +184,52 @@ class Account extends BaseController
         if (!$info || $info[0] < 128 || $info[1] < 128) {
             @unlink($fullPath);
             // Create notification for upload error
-            Notification::createNotification(session('user_id'), 'error', 'Avatar upload failed: Image too small. Minimum 128x128 required.');
+            Notification::createNotification($userId, 'error', 'Avatar upload failed: Image too small. Minimum 128x128 required.');
             return $this->response->setJSON(['success' => false, 'errors' => ['avatar' => 'Image too small. Minimum 128x128']]);
         }
 
         $publicPath = base_url('uploads/avatars/' . $newName);
 
+        // Delete previous avatar if it exists and is stored in our uploads folder
+        if ($currentAvatar && strpos($currentAvatar, 'uploads/avatars/') !== false) {
+            $this->deleteOldAvatar($currentAvatar);
+        }
+
         // Save to DB and session
-    $this->accountModel->update(session('user_id'), ['user_profile' => $publicPath]);
+        $this->accountModel->update($userId, ['user_profile' => $publicPath]);
         session()->set(['user_profile' => $publicPath]);
 
         // Create notification for successful avatar upload
-        Notification::createNotification(session('user_id'), 'profile_update', 'Your avatar has been successfully updated.');
+        Notification::createNotification($userId, 'profile_update', 'Your avatar has been successfully updated.');
 
         return $this->response->setJSON(['success' => true, 'message' => 'Avatar updated', 'url' => $publicPath]);
+    }
+
+    /**
+     * Delete old avatar file from storage
+     */
+    private function deleteOldAvatar($avatarUrl)
+    {
+        try {
+            // Extract filename from URL
+            $parsedUrl = parse_url($avatarUrl);
+            $path = $parsedUrl['path'] ?? '';
+            
+            // Remove leading slash and base path to get relative path
+            $relativePath = ltrim($path, '/');
+            
+            // Build full file path
+            $filePath = FCPATH . $relativePath;
+            
+            // Only delete if file exists and is in our uploads/avatars directory
+            if (file_exists($filePath) && strpos($relativePath, 'uploads/avatars/') === 0) {
+                @unlink($filePath);
+                log_message('info', "Deleted old avatar: {$filePath}");
+            }
+        } catch (Exception $e) {
+            // Log error but don't fail the upload process
+            log_message('error', "Failed to delete old avatar {$avatarUrl}: " . $e->getMessage());
+        }
     }
 
     /**
@@ -222,6 +260,40 @@ class Account extends BaseController
             'activeTab' => 'continue'
         ];
     return view('pages/User Profiles/watched', $data);
+    }
+
+    /**
+     * Watch list page - shows followed anime
+     */
+    public function watchList()
+    {
+        if (!session('isLoggedIn')) {
+            return redirect()->to(base_url('account/login'));
+        }
+        
+        $user_id = session('user_id');
+        $user = $this->accountModel->find($user_id);
+        $followedAnime = [];
+        
+        if (!empty($user['followed_anime'])) {
+            $ids = json_decode($user['followed_anime'], true);
+            if (is_array($ids) && !empty($ids)) {
+                $animeModel = new \App\Models\AnimeModel();
+                $followedAnime = $animeModel->getAnimeByIds($ids);
+            }
+        }
+        
+        $data = [
+            'user_id' => $user_id,
+            'username' => session('username'),
+            'type' => session('type'),
+            'email' => session('email'),
+            'user_profile' => $user['user_profile'] ?? null,
+            'followedAnime' => $followedAnime,
+            'activeTab' => 'watchlist'
+        ];
+        
+        return view('pages/User Profiles/watchlist', $data);
     }
 
     /**

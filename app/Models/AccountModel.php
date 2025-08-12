@@ -123,4 +123,76 @@ class AccountModel extends Model
         return true;
     }
 
+    /**
+     * Follow an anime
+     */
+    public function followAnime($userId, $animeId)
+    {
+        $user = $this->find($userId);
+        $followed = !empty($user['followed_anime']) ? json_decode($user['followed_anime'], true) : [];
+
+        if (!is_array($followed)) {
+            $followed = [];
+        }
+
+        if (!in_array($animeId, $followed)) {
+            $followed[] = $animeId;
+            return $this->update($userId, ['followed_anime' => json_encode($followed)]);
+        }
+
+        return true; // Already following
+    }
+
+    /**
+     * Unfollow an anime
+     */
+    public function unfollowAnime($userId, $animeId)
+    {
+        $user = $this->find($userId);
+        $followed = !empty($user['followed_anime']) ? json_decode($user['followed_anime'], true) : [];
+
+        if (!is_array($followed)) {
+            $followed = [];
+        }
+
+        $key = array_search($animeId, $followed);
+        if ($key !== false) {
+            unset($followed[$key]);
+            $followed = array_values($followed); // Re-index array
+            return $this->update($userId, ['followed_anime' => json_encode($followed)]);
+        }
+
+        return true; // Not following anyway
+    }
+
+    /**
+     * Check if user is following an anime
+     */
+    public function isFollowingAnime($userId, $animeId)
+    {
+        $user = $this->find($userId);
+        $followed = !empty($user['followed_anime']) ? json_decode($user['followed_anime'], true) : [];
+
+        if (!is_array($followed)) {
+            return false;
+        }
+
+        return in_array($animeId, $followed);
+    }
+
+    /**
+     * Get user's followed anime list
+     */
+    public function getFollowedAnime($userId)
+    {
+        $user = $this->find($userId);
+        $followed = !empty($user['followed_anime']) ? json_decode($user['followed_anime'], true) : [];
+
+        if (!is_array($followed)) {
+            return [];
+        }
+
+        return $followed;
+    }
+
 }
