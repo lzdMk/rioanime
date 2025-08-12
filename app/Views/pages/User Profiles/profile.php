@@ -12,27 +12,27 @@
 	<div class="top-nav">
 		<div class="nav-container">
 			<a href="<?= base_url('account/profile') ?>" class="nav-tab active">
-				<span>👤</span>
+				<i class="fas fa-user icon-profile"></i>
 				Profile
 			</a>
 			<a href="<?= base_url('account/continue-watching') ?>" class="nav-tab">
-				<span>▶️</span>
+				<i class="fas fa-play icon-play"></i>
 				Continue Watching
 			</a>
 			<a href="#" class="nav-tab">
-				<span>❤️</span>
+				<i class="fas fa-heart icon-heart"></i>
 				Watch List
 			</a>
 			<a href="<?= base_url('account/notifications') ?>" class="nav-tab">
-				<span>🔔</span>
+				<i class="fas fa-bell icon-bell"></i>
 				Notification
 			</a>
 			<a href="#" class="nav-tab">
-				<span>⚙️</span>
+				<i class="fas fa-gear icon-gear"></i>
 				Settings
 			</a>
 			<a href="#" class="nav-tab">
-				<span>📧</span>
+				<i class="fas fa-paper-plane icon-mail"></i>
 				MAL
 			</a>
 		</div>
@@ -41,7 +41,7 @@
 	<div class="main-content">
 		<div class="profile-container">
 		<div class="profile-header">
-			<span class="icon">👤</span>
+			<i class="fas fa-user icon icon-profile"></i>
 			<h1>Edit Profile</h1>
 		</div>
 
@@ -53,7 +53,7 @@
 					<label class="form-label">Email Address</label>
 					<input type="email" name="email" class="form-input" value="<?= esc($email ?? 'xyrusx@proton.me') ?>" required>
 					<div class="verified-badge">
-						<span>✓</span>
+						<i class="fas fa-check-circle icon-verified"></i>
 						Verified
 					</div>
 				</div>
@@ -70,7 +70,7 @@
 
 				<div class="form-group">
 					<a href="<?= base_url('account/changePassword') ?>" class="change-password-btn">
-						<span>🔒</span>
+						<i class="fas fa-lock icon-lock"></i>
 						Change password
 					</a>
 				</div>
@@ -89,8 +89,8 @@
 							<?= strtoupper(substr(trim($username), 0, 1)) ?>
 						<?php endif; ?>
 					</div>
-					<button type="button" class="edit-avatar-btn">
-						✏️
+					<button type="button" class="edit-avatar-btn" aria-label="Edit avatar">
+						<i class="fas fa-pen"></i>
 					</button>
 				</div>
 			</div>

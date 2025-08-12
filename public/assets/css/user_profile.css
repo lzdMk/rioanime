@@ -302,6 +302,7 @@
 .notifications-header .title-group {display:flex;align-items:center;gap:.75rem;}
 .notifications-header h1 {margin:0;font-size:2.3rem;}
 .notif-icon {font-size:2rem;opacity:.9;}
+.notif-icon { color: #ffb800; }
 .actions-group {display:flex;gap:.75rem;}
 .actions-group .btn {border:none;border-radius:6px;padding:.75rem 1.25rem;font-weight:600;font-size:.85rem;display:flex;align-items:center;gap:.5rem;cursor:pointer;transition:.25s;background:#334155;color:#fff;}
 .actions-group .btn:disabled {opacity:.4;cursor:default;}
@@ -317,6 +318,7 @@
 .notif-content {background:transparent;min-height:260px;position:relative;}
 .empty-state {text-align:center;margin-top:70px;}
 .empty-state .empty-icon {font-size:4rem;margin-bottom:1rem;opacity:.8;}
+.empty-state .empty-icon { color: #7dd3fc; }
 .empty-state p {color:#fff;font-weight:500;letter-spacing:.5px;}
 
 .notification-item {display:flex;justify-content:space-between;align-items:center;padding:1rem 1.1rem;background:#1f1f36;border:1px solid rgba(255,255,255,0.07);border-radius:10px;margin-bottom:.8rem;gap:1rem;}
@@ -369,3 +371,20 @@
         font-size: 2rem;
     }
 }
+
+/* Modern icon palette for FA icons */
+.nav-tab .fa-user.icon-profile { color: #A78BFA; }
+.nav-tab .fa-play.icon-play { color: #34D399; }
+.nav-tab .fa-heart.icon-heart { color: #F472B6; }
+.nav-tab .fa-bell.icon-bell { color: #FBBF24; }
+.nav-tab .fa-gear.icon-gear { color: #60A5FA; }
+.nav-tab .fa-paper-plane.icon-mail { color: #38BDF8; }
+
+/* Slightly larger icons inside headers */
+.profile-header .icon-profile { color: #C084FC; font-size: 1.6rem; }
+.continue-heading .icon-play { color: #34D399; font-size: 1.6rem; }
+.icon-verified { color: #22C55E; }
+.icon-lock { color: #93C5FD; }
+
+/* Edit avatar button icon unify */
+.edit-avatar-btn .fa-pen { font-size: 0.9rem; }
