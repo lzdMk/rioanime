@@ -204,8 +204,14 @@
 
                                     <!-- Pagination -->
                                     <?php if (isset($pager)): ?>
-                                        <div class="d-flex justify-content-center">
-                                            <?= $pager->links() ?>
+                                        <div class="admin-pagination-wrapper">
+                                            <div class="admin-pagination-info">
+                                                <i class="fas fa-users me-1"></i>
+                                                Showing account results with modern pagination
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <?= $pager->links() ?>
+                                            </div>
                                         </div>
                                     <?php endif; ?>
                                 </div>

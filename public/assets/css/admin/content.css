@@ -479,3 +479,102 @@
         max-height: 250px;
     }
 }
+
+/* Modern Pagination Styles */
+.pagination {
+    --bs-pagination-padding-x: 0.75rem;
+    --bs-pagination-padding-y: 0.5rem;
+    --bs-pagination-font-size: 0.875rem;
+    --bs-pagination-color: var(--text-color);
+    --bs-pagination-bg: var(--card-bg);
+    --bs-pagination-border-width: 1px;
+    --bs-pagination-border-color: var(--border-color);
+    --bs-pagination-border-radius: 8px;
+    --bs-pagination-hover-color: var(--primary-color);
+    --bs-pagination-hover-bg: rgba(120, 120, 255, 0.1);
+    --bs-pagination-hover-border-color: var(--primary-color);
+    --bs-pagination-focus-color: var(--primary-color);
+    --bs-pagination-focus-bg: rgba(120, 120, 255, 0.1);
+    --bs-pagination-focus-box-shadow: 0 0 0 0.25rem rgba(120, 120, 255, 0.25);
+    --bs-pagination-active-color: #fff;
+    --bs-pagination-active-bg: var(--primary-color);
+    --bs-pagination-active-border-color: var(--primary-color);
+    --bs-pagination-disabled-color: var(--light-color);
+    --bs-pagination-disabled-bg: var(--darker-color);
+    --bs-pagination-disabled-border-color: var(--border-color);
+    margin-bottom: 0;
+}
+
+.pagination .page-link {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    transition: all var(--transition-speed);
+    font-weight: 500;
+    margin: 0 2px;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pagination .page-link:hover {
+    background: rgba(120, 120, 255, 0.1);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(120, 120, 255, 0.2);
+}
+
+.pagination .page-link:focus {
+    background: rgba(120, 120, 255, 0.1);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(120, 120, 255, 0.25);
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #6366f1 100%);
+    border-color: var(--primary-color);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(120, 120, 255, 0.3);
+}
+
+.pagination .page-item.disabled .page-link {
+    background: var(--darker-color);
+    border-color: var(--border-color);
+    color: var(--light-color);
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.pagination .page-item:first-child .page-link,
+.pagination .page-item:last-child .page-link {
+    border-radius: 8px !important;
+}
+
+/* Pagination wrapper */
+.admin-pagination-wrapper {
+    background: rgba(75, 85, 99, 0.1);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-top: 1.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.admin-pagination-info {
+    color: var(--light-color);
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* Pagination size variants */
+.pagination-sm .page-link {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+.pagination-lg .page-link {
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+}

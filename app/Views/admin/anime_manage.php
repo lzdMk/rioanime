@@ -224,8 +224,14 @@
 
                                     <!-- Pagination -->
                                     <?php if (isset($pager)): ?>
-                                        <div class="d-flex justify-content-center mt-4">
-                                            <?= $pager->links() ?>
+                                        <div class="admin-pagination-wrapper">
+                                            <div class="admin-pagination-info">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                Showing anime results with modern pagination
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <?= $pager->links() ?>
+                                            </div>
                                         </div>
                                     <?php endif; ?>
                                 </div>
