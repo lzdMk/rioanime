@@ -31,6 +31,12 @@ $routes->group('admin', function ($routes) {
     $routes->post('api/account/create', 'Admin::createAccount');
     $routes->post('api/account/update/(:num)', 'Admin::updateAccount/$1');
     $routes->delete('api/account/delete/(:num)', 'Admin::deleteAccount/$1');
+    
+    // Anime management API
+    $routes->get('api/anime/(:num)', 'Admin::getAnime/$1');
+    $routes->post('api/anime/create', 'Admin::createAnime');
+    $routes->post('api/anime/update/(:num)', 'Admin::updateAnime/$1');
+    $routes->delete('api/anime/delete/(:num)', 'Admin::deleteAnime/$1');
 });
 
 // Random anime route

@@ -18,7 +18,7 @@
     
     <!-- Custom Admin CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/css/admin/main.css') ?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/accounts.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/content.css') ?>">
 </head>
 <body>
     <div class="admin-container">
