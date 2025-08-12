@@ -96,7 +96,7 @@
         <div class="sidebar-section">
             <div class="sidebar-header">
                 <h3 class="sidebar-title">
-                    <i class="fas fa-thumbs-up me-2"></i>
+                    <i class="fas fa-thumbs-up me-2" style="color: #3b82f6;"></i>
                     Recommended
                 </h3>
             </div>

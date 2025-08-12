@@ -171,7 +171,10 @@ helper(['url','anime']);
 
                     <!-- Action Section -->
                     <div class="section-header mt-5">
-                        <h2 class="section-title">Action</h2>
+                        <h2 class="section-title">
+                            <i class="fas fa-fist-raised me-2" style="color: #ef4444;"></i>
+                            Action
+                        </h2>
                         <a href="#" class="view-all-link">more</a>
                     </div>
                     <div class="anime-grid">
@@ -204,7 +207,10 @@ helper(['url','anime']);
 
                     <!-- Movies Section -->
                     <div class="section-header mt-5">
-                        <h2 class="section-title">Movies</h2>
+                        <h2 class="section-title">
+                            <i class="fas fa-film me-2" style="color: #f59e0b;"></i>
+                            Movies
+                        </h2>
                         <a href="#" class="view-all-link">more</a>
                     </div>
                     <div class="anime-grid">
@@ -237,7 +243,10 @@ helper(['url','anime']);
 
                     <!-- Completed Anime Section -->
                     <div class="section-header mt-5">
-                        <h2 class="section-title">Completed Anime</h2>
+                        <h2 class="section-title">
+                            <i class="fas fa-check-circle me-2" style="color: #10b981;"></i>
+                            Completed Anime
+                        </h2>
                         <a href="#" class="view-all-link">more</a>
                     </div>
                     <div class="anime-grid">
