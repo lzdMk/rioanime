@@ -60,3 +60,6 @@ $routes->post('api/follow/unfollow', 'Follow::unfollow');
 // Watch list page
 $routes->get('account/watch-list', 'Account::watchList');
 
+// Avatar cleanup (development only)
+$routes->get('avatar-cleanup', 'AvatarCleanup::index');
+

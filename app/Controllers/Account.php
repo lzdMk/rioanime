@@ -192,7 +192,10 @@ class Account extends BaseController
 
         // Delete previous avatar if it exists and is stored in our uploads folder
         if ($currentAvatar && strpos($currentAvatar, 'uploads/avatars/') !== false) {
+            log_message('info', "Found existing avatar to delete: {$currentAvatar}");
             $this->deleteOldAvatar($currentAvatar);
+        } else {
+            log_message('info', "No existing avatar to delete. Current avatar: " . ($currentAvatar ?: 'null'));
         }
 
         // Save to DB and session
@@ -211,24 +214,43 @@ class Account extends BaseController
     private function deleteOldAvatar($avatarUrl)
     {
         try {
+            log_message('info', "Attempting to delete old avatar: {$avatarUrl}");
+            
             // Extract filename from URL
             $parsedUrl = parse_url($avatarUrl);
             $path = $parsedUrl['path'] ?? '';
             
-            // Remove leading slash and base path to get relative path
-            $relativePath = ltrim($path, '/');
+            log_message('info', "Parsed path from URL: {$path}");
             
-            // Build full file path
-            $filePath = FCPATH . $relativePath;
-            
-            // Only delete if file exists and is in our uploads/avatars directory
-            if (file_exists($filePath) && strpos($relativePath, 'uploads/avatars/') === 0) {
-                @unlink($filePath);
-                log_message('info', "Deleted old avatar: {$filePath}");
+            // Extract just the filename from the path
+            // The URL will be like: http://localhost/rioanime/uploads/avatars/avatar_123_123456.png
+            // We need to get: uploads/avatars/avatar_123_123456.png
+            if (strpos($path, 'uploads/avatars/') !== false) {
+                // Find the position of 'uploads/avatars/' and extract from there
+                $startPos = strpos($path, 'uploads/avatars/');
+                $relativePath = substr($path, $startPos);
+                
+                // Build full file path
+                $filePath = FCPATH . $relativePath;
+                
+                log_message('info', "Attempting to delete file at: {$filePath}");
+                
+                // Only delete if file exists
+                if (file_exists($filePath)) {
+                    if (@unlink($filePath)) {
+                        log_message('info', "Successfully deleted old avatar: {$filePath}");
+                    } else {
+                        log_message('error', "Failed to unlink file: {$filePath}");
+                    }
+                } else {
+                    log_message('info', "File does not exist: {$filePath}");
+                }
+            } else {
+                log_message('info', "Avatar URL does not contain uploads/avatars/ path: {$avatarUrl}");
             }
         } catch (Exception $e) {
             // Log error but don't fail the upload process
-            log_message('error', "Failed to delete old avatar {$avatarUrl}: " . $e->getMessage());
+            log_message('error', "Exception when deleting old avatar {$avatarUrl}: " . $e->getMessage());
         }
     }
 

@@ -378,3 +378,30 @@ DEBUG - 2025-08-12 03:17:26 --> Session: Class initialized using 'CodeIgniter\Se
 DEBUG - 2025-08-12 03:19:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 DEBUG - 2025-08-12 03:19:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 DEBUG - 2025-08-12 03:19:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-12 03:21:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-12 03:21:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-12 03:21:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-12 03:21:15 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-12 03:21:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-12 03:21:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-12 03:21:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-12 03:21:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-12 03:21:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-12 03:22:04 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-12 03:22:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-12 03:24:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-12 03:24:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-12 03:25:07 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-12 03:25:07 --> Found existing avatar to delete: http://localhost/rioanime/uploads/avatars/avatar_100003_1754968915.png
+INFO - 2025-08-12 03:25:07 --> Attempting to delete old avatar: http://localhost/rioanime/uploads/avatars/avatar_100003_1754968915.png
+INFO - 2025-08-12 03:25:07 --> Parsed path from URL: /rioanime/uploads/avatars/avatar_100003_1754968915.png
+INFO - 2025-08-12 03:25:07 --> Attempting to delete file at: D:\xampp\htdocs\rioanime\public\uploads/avatars/avatar_100003_1754968915.png
+INFO - 2025-08-12 03:25:07 --> File does not exist: D:\xampp\htdocs\rioanime\public\uploads/avatars/avatar_100003_1754968915.png
+DEBUG - 2025-08-12 03:25:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-12 03:25:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-08-12 03:25:24 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+INFO - 2025-08-12 03:25:24 --> Found existing avatar to delete: http://localhost/rioanime/uploads/avatars/avatar_100003_1754969107.png
+INFO - 2025-08-12 03:25:24 --> Attempting to delete old avatar: http://localhost/rioanime/uploads/avatars/avatar_100003_1754969107.png
+INFO - 2025-08-12 03:25:24 --> Parsed path from URL: /rioanime/uploads/avatars/avatar_100003_1754969107.png
+INFO - 2025-08-12 03:25:24 --> Attempting to delete file at: D:\xampp\htdocs\rioanime\public\uploads/avatars/avatar_100003_1754969107.png
+INFO - 2025-08-12 03:25:24 --> Successfully deleted old avatar: D:\xampp\htdocs\rioanime\public\uploads/avatars/avatar_100003_1754969107.png
