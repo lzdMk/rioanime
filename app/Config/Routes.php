@@ -41,6 +41,7 @@ $routes->group('admin', function ($routes) {
     $routes->post('createAnime', 'Admin::createAnime');
     $routes->post('updateAnime/(:num)', 'Admin::updateAnime/$1');
     $routes->delete('deleteAnime/(:num)', 'Admin::deleteAnime/$1');
+    $routes->post('importAnime', 'Admin::importAnime');
 });
 
 // Random anime route

@@ -519,4 +519,364 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+
+    // Import functionality
+    const importJsonFile = document.getElementById('importJsonFile');
+    const validateJsonBtn = document.getElementById('validateJsonBtn');
+    const importJsonBtn = document.getElementById('importJsonBtn');
+    const importValidationResults = document.getElementById('importValidationResults');
+    const validationContent = document.getElementById('validationContent');
+    const importPreview = document.getElementById('importPreview');
+    const previewContent = document.getElementById('previewContent');
+    const previewCount = document.getElementById('previewCount');
+
+    let validatedAnimeData = null;
+
+    // Required fields for validation (must exist in JSON)
+    const requiredFields = [
+        'title', 'language', 'type', 'total ep', 'ratings', 
+        'genres', 'status', 'studios', 'backgroundImage', 'synopsis', 'urls'
+    ];
+
+    // Valid values for specific fields
+    const validValues = {
+        language: ['sub', 'dub'],
+        type: ['TV', 'Movie', 'OVA', 'Special', 'ONA', 'Music'],
+        status: ['Finished Airing', 'Airing', 'Incomplete']
+    };
+
+    if (validateJsonBtn) {
+        validateJsonBtn.addEventListener('click', function() {
+            validateJsonFile();
+        });
+    }
+
+    if (importJsonBtn) {
+        importJsonBtn.addEventListener('click', function() {
+            importValidatedData();
+        });
+    }
+
+    // Reset import modal when closed
+    document.getElementById('importAnimeModal').addEventListener('hidden.bs.modal', function() {
+        resetImportModal();
+    });
+
+    function validateJsonFile() {
+        const fileInput = importJsonFile;
+        const file = fileInput.files[0];
+
+        if (!file) {
+            showImportError('Please select a JSON file to import.');
+            return;
+        }
+
+        if (!file.name.toLowerCase().endsWith('.json')) {
+            showImportError('Please select a valid JSON file (.json extension required).');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const jsonData = JSON.parse(e.target.result);
+                validateAnimeData(jsonData);
+            } catch (error) {
+                showImportError(`Invalid JSON format: ${error.message}`);
+            }
+        };
+
+        reader.onerror = function() {
+            showImportError('Failed to read the file. Please try again.');
+        };
+
+        reader.readAsText(file);
+    }
+
+    function validateAnimeData(data) {
+        const validationResults = {
+            valid: [],
+            invalid: [],
+            errors: []
+        };
+
+        if (!Array.isArray(data)) {
+            showImportError('JSON must contain an array of anime objects.');
+            return;
+        }
+
+        if (data.length === 0) {
+            showImportError('JSON array is empty. Please provide at least one anime object.');
+            return;
+        }
+
+        data.forEach((anime, index) => {
+            const itemErrors = [];
+            const missingKeys = [];
+            const emptyValues = [];
+            const invalidValues = [];
+
+            // Check if item is an object
+            if (typeof anime !== 'object' || anime === null) {
+                itemErrors.push(`Item ${index + 1}: Must be an object`);
+                validationResults.invalid.push({ index: index + 1, errors: itemErrors });
+                return;
+            }
+
+            // Check if all required keys exist in JSON (critical - blocks upload)
+            requiredFields.forEach(field => {
+                if (!(field in anime)) {
+                    missingKeys.push(field);
+                }
+            });
+
+            // If any keys are missing, this item is invalid (cannot upload)
+            if (missingKeys.length > 0) {
+                itemErrors.push(`Missing keys: ${missingKeys.join(', ')} - Cannot upload without these keys`);
+                validationResults.invalid.push({
+                    index: index + 1,
+                    title: anime.title || 'Unknown',
+                    errors: itemErrors
+                });
+                return;
+            }
+
+            // Check for empty values (warning only - allows upload)
+            requiredFields.forEach(field => {
+                if (anime[field] === null || anime[field] === undefined || anime[field] === '') {
+                    emptyValues.push(field);
+                }
+            });
+
+            // Validate specific field values
+            if (anime.language && !validValues.language.some(valid => valid.toLowerCase() === anime.language.toLowerCase())) {
+                invalidValues.push(`language: "${anime.language}" (valid: ${validValues.language.join(', ')})`);
+            }
+
+            // Handle multiple types separated by commas
+            if (anime.type) {
+                const types = anime.type.split(',').map(t => t.trim());
+                const invalidTypes = types.filter(type => !validValues.type.includes(type));
+                if (invalidTypes.length > 0) {
+                    invalidValues.push(`type: "${anime.type}" - invalid types: ${invalidTypes.join(', ')} (valid: ${validValues.type.join(', ')})`);
+                }
+            }
+
+            if (anime.status && !validValues.status.some(valid => valid.toLowerCase() === anime.status.toLowerCase())) {
+                invalidValues.push(`status: "${anime.status}" (valid: ${validValues.status.join(', ')})`);
+            }
+
+            // Validate total ep
+            if (anime['total ep'] !== undefined && anime['total ep'] !== null && anime['total ep'] !== '') {
+                const totalEp = Number(anime['total ep']);
+                if (isNaN(totalEp) || totalEp < 0) {
+                    invalidValues.push(`total ep: "${anime['total ep']}" (must be a positive number)`);
+                }
+            }
+
+            // Validate ratings
+            if ('ratings' in anime && anime.ratings && anime.ratings !== '') {
+                const rating = parseFloat(anime.ratings);
+                if (isNaN(rating) || rating < 0 || rating > 10) {
+                    invalidValues.push(`ratings: "${anime.ratings}" (must be a number between 0-10)`);
+                }
+            }
+
+            // Validate URLs array
+            if (anime.urls && !Array.isArray(anime.urls)) {
+                invalidValues.push(`urls: must be an array of strings`);
+            } else if (anime.urls && Array.isArray(anime.urls)) {
+                anime.urls.forEach((url, urlIndex) => {
+                    if (typeof url !== 'string' || url.trim() === '') {
+                        invalidValues.push(`urls[${urlIndex}]: must be a non-empty string`);
+                    }
+                });
+            }
+
+            // Collect validation results
+            const warnings = [];
+            
+            // Add empty value warnings (non-blocking)
+            if (emptyValues.length > 0) {
+                warnings.push(`Empty values: ${emptyValues.join(', ')} - Will be imported as empty`);
+            }
+            
+            // Add invalid value errors (blocking)
+            if (invalidValues.length > 0) {
+                itemErrors.push(`Invalid values: ${invalidValues.join('; ')}`);
+            }
+
+            // Determine if item is valid
+            if (itemErrors.length > 0) {
+                // Item has critical errors (invalid values) - cannot upload
+                validationResults.invalid.push({
+                    index: index + 1,
+                    title: anime.title || 'Unknown',
+                    errors: itemErrors
+                });
+            } else {
+                // Item is valid (may have warnings for empty values, but can upload)
+                validationResults.valid.push({
+                    index: index + 1,
+                    title: anime.title,
+                    anime: anime,
+                    warnings: warnings
+                });
+            }
+        });
+
+        displayValidationResults(validationResults);
+    }
+
+    function displayValidationResults(results) {
+        importValidationResults.style.display = 'block';
+        
+        let html = '';
+        
+        if (results.valid.length > 0) {
+            html += `<div class="alert alert-success alert-sm mb-2">
+                <strong><i class="fas fa-check-circle me-1"></i>Valid Items: ${results.valid.length}</strong>
+            </div>`;
+            
+            // Show warnings for valid items with empty values
+            const itemsWithWarnings = results.valid.filter(item => item.warnings && item.warnings.length > 0);
+            if (itemsWithWarnings.length > 0) {
+                html += `<div class="alert alert-warning alert-sm mb-2">
+                    <strong><i class="fas fa-exclamation-triangle me-1"></i>Items with empty values (will be imported): ${itemsWithWarnings.length}</strong>
+                    <div class="mt-1 small">`;
+                itemsWithWarnings.slice(0, 3).forEach(item => {
+                    html += `<div>• ${escapeHtml(item.title)}: ${item.warnings.join(', ')}</div>`;
+                });
+                if (itemsWithWarnings.length > 3) {
+                    html += `<div>• ... and ${itemsWithWarnings.length - 3} more</div>`;
+                }
+                html += '</div></div>';
+            }
+        }
+        
+        if (results.invalid.length > 0) {
+            html += `<div class="alert alert-danger alert-sm mb-2">
+                <strong><i class="fas fa-times-circle me-1"></i>Invalid Items (cannot import): ${results.invalid.length}</strong>
+            </div>`;
+            
+            html += '<div class="validation-errors mt-2">';
+            results.invalid.forEach(item => {
+                html += `<div class="border-start border-danger ps-2 mb-2">
+                    <strong>Item ${item.index}: ${escapeHtml(item.title)}</strong>
+                    <ul class="mb-0 small">`;
+                item.errors.forEach(error => {
+                    html += `<li class="text-danger">${escapeHtml(error)}</li>`;
+                });
+                html += '</ul></div>';
+            });
+            html += '</div>';
+        }
+        
+        validationContent.innerHTML = html;
+        
+        if (results.valid.length > 0) {
+            validatedAnimeData = results.valid.map(item => item.anime);
+            showImportPreview(results.valid);
+            importJsonBtn.style.display = 'inline-block';
+        } else {
+            validatedAnimeData = null;
+            importPreview.style.display = 'none';
+            importJsonBtn.style.display = 'none';
+        }
+    }
+
+    function showImportPreview(validItems) {
+        importPreview.style.display = 'block';
+        previewCount.textContent = validItems.length;
+        
+        let html = '';
+        validItems.slice(0, 3).forEach(item => { // Show first 3 items as preview
+            const anime = item.anime;
+            html += `<div class="preview-item border-bottom pb-2 mb-2">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <strong class="admin-text-primary">${escapeHtml(anime.title)}</strong>
+                        <div class="small admin-text-muted">
+                            ${escapeHtml(anime.type)} • ${escapeHtml(anime.language)} • ${anime['total ep'] || 'N/A'} episodes
+                        </div>
+                        <div class="small">
+                            <span class="badge badge-secondary">${escapeHtml(anime.status)}</span>
+                            <span class="admin-text-muted">Rating: ${anime.ratings || 'N/A'}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        });
+        
+        if (validItems.length > 3) {
+            html += `<div class="admin-text-muted small text-center">... and ${validItems.length - 3} more items</div>`;
+        }
+        
+        previewContent.innerHTML = html;
+    }
+
+    function importValidatedData() {
+        if (!validatedAnimeData || validatedAnimeData.length === 0) {
+            showToast('No valid data to import', 'error');
+            return;
+        }
+
+        // Disable import button and show loading
+        importJsonBtn.disabled = true;
+        importJsonBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Importing...';
+
+        // Send data to server
+        fetch(`${baseUrl}admin/importAnime`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({ anime_data: validatedAnimeData })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast(`Successfully imported ${data.imported_count} anime!`, 'success');
+                bootstrap.Modal.getInstance(document.getElementById('importAnimeModal')).hide();
+                loadAnime(); // Refresh the anime list
+            } else {
+                showToast(data.message || 'Failed to import anime data', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('An error occurred during import', 'error');
+        })
+        .finally(() => {
+            // Re-enable import button
+            importJsonBtn.disabled = false;
+            importJsonBtn.innerHTML = '<i class="fas fa-upload me-1"></i> Import';
+        });
+    }
+
+    function showImportError(message) {
+        importValidationResults.style.display = 'block';
+        validationContent.innerHTML = `
+            <div class="alert alert-danger alert-sm mb-0">
+                <i class="fas fa-exclamation-triangle me-1"></i>
+                <strong>Validation Error:</strong> ${escapeHtml(message)}
+            </div>
+        `;
+        importPreview.style.display = 'none';
+        importJsonBtn.style.display = 'none';
+        validatedAnimeData = null;
+    }
+
+    function resetImportModal() {
+        importJsonFile.value = '';
+        importValidationResults.style.display = 'none';
+        importPreview.style.display = 'none';
+        importJsonBtn.style.display = 'none';
+        validatedAnimeData = null;
+        validationContent.innerHTML = '';
+        previewContent.innerHTML = '';
+        importJsonBtn.disabled = false;
+        importJsonBtn.innerHTML = '<i class="fas fa-upload me-1"></i> Import';
+    }
 });

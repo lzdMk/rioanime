@@ -119,9 +119,14 @@
                             <div class="admin-card shadow mb-4">
                                 <div class="admin-card-header py-3 d-flex justify-content-between align-items-center">
                                     <h6 class="m-0 font-weight-bold admin-text-primary">Anime Library Management</h6>
-                                    <button class="btn admin-btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addAnimeModal">
-                                        <i class="fas fa-plus me-1"></i> Add Anime
-                                    </button>
+                                    <div class="btn-group" role="group">
+                                        <button class="btn admin-btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addAnimeModal">
+                                            <i class="fas fa-plus me-1"></i> Add Anime
+                                        </button>
+                                        <button class="btn admin-btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#importAnimeModal">
+                                            <i class="fas fa-file-import me-1"></i> Import JSON
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="admin-card-body">
                                     <!-- Search and Filter -->
@@ -180,6 +185,72 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Anime Modal -->
+    <div class="modal fade" id="importAnimeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content admin-modal">
+                <div class="modal-header admin-modal-header py-2">
+                    <h6 class="modal-title admin-text-success mb-0"><i class="fas fa-file-import me-2"></i>Import Anime from JSON</h6>
+                    <button type="button" class="btn-close admin-btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body admin-modal-body p-3">
+                    <!-- File Upload Section -->
+                    <div class="mb-4">
+                        <label class="form-label admin-form-label">Select JSON File *</label>
+                        <input type="file" class="form-control admin-form-control" id="importJsonFile" accept=".json" required>
+                        <div class="form-text admin-text-muted">
+                            <small><i class="fas fa-info-circle me-1"></i>Upload a JSON file containing anime data</small>
+                        </div>
+                    </div>
+
+                    <!-- JSON Format Info -->
+                    <div class="mb-4">
+                        <h6 class="admin-text-primary mb-2">Required JSON Format:</h6>
+                        <div class="bg-light p-3 rounded">
+                            <pre class="mb-0 small"><code>[{
+    "title": "Anime Title",
+    "language": "sub or dub",
+    "type": "TV, Movie, OVA, Special, ONA, Music (or multiple: TV, Special)",
+    "total ep": 12,
+    "ratings": "8.5",
+    "genres": "Action, Adventure",
+    "status": "Finished Airing, Airing, or Incomplete",
+    "studios": "Studio Name",
+    "backgroundImage": "https://image-url.jpg",
+    "synopsis": "Anime description",
+    "urls": ["https://streaming-url"]
+}]</code></pre>
+                        </div>
+                        <div class="form-text admin-text-muted mt-2">
+                            <small><i class="fas fa-info-circle me-1"></i>All keys must exist in the JSON. Empty values are allowed and will be imported as empty.</small>
+                        </div>
+                    </div>
+
+                    <!-- Validation Results -->
+                    <div id="importValidationResults" class="mb-3" style="display: none;">
+                        <h6 class="admin-text-info mb-2">Validation Results:</h6>
+                        <div id="validationContent" class="border rounded p-3"></div>
+                    </div>
+
+                    <!-- Preview Section -->
+                    <div id="importPreview" class="mb-3" style="display: none;">
+                        <h6 class="admin-text-success mb-2">Import Preview (<span id="previewCount">0</span> items):</h6>
+                        <div id="previewContent" class="border rounded p-3 bg-light" style="max-height: 300px; overflow-y: auto;"></div>
+                    </div>
+                </div>
+                <div class="modal-footer admin-modal-footer py-2">
+                    <button type="button" class="btn admin-btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn admin-btn-primary btn-sm" id="validateJsonBtn">
+                        <i class="fas fa-check me-1"></i> Validate
+                    </button>
+                    <button type="button" class="btn admin-btn-success btn-sm" id="importJsonBtn" style="display: none;">
+                        <i class="fas fa-upload me-1"></i> Import
+                    </button>
                 </div>
             </div>
         </div>

@@ -212,3 +212,93 @@
         grid-column: auto;
     }
 }
+
+/* Import Modal Styles */
+.admin-btn-success {
+    color: #fff !important;
+}
+
+#importAnimeModal .modal-dialog {
+    max-width: 800px;
+}
+
+#importAnimeModal pre {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+}
+
+#importAnimeModal code {
+    display: block;
+    background: #23272f !important;
+    color: #e9ecef !important;
+    border-radius: 8px;
+    padding: 1.1em 1.2em;
+    font-size: 1em;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
+    border: 1px solid #343a40;
+    margin: 0.2em 0 0.2em 0;
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 1.6;
+}
+
+.validation-errors {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.preview-item {
+    background: var(--card-bg);
+    border-radius: 6px;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.preview-item:last-child {
+    margin-bottom: 0;
+}
+
+.alert-sm {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+/* Import validation styling */
+.border-success {
+    border-color: #28a745 !important;
+}
+
+.border-danger {
+    border-color: #dc3545 !important;
+}
+
+.border-start {
+    border-left: 3px solid !important;
+}
+
+/* File input styling */
+#importJsonFile {
+    transition: border-color 0.3s ease;
+}
+
+#importJsonFile:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* JSON format display */
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+
+/* Import preview styling */
+#importPreview .badge {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.badge-secondary {
+    background-color: #6c757d;
+    color: white;
+}

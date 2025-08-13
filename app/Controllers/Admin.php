@@ -434,4 +434,88 @@ class Admin extends BaseController
             log_message('error', "Failed to delete avatar {$avatarUrl}: " . $e->getMessage());
         }
     }
+
+    /**
+     * Import anime data from JSON
+     */
+    public function importAnime()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(403);
+        }
+
+        try {
+            $input = $this->request->getJSON(true);
+            
+            if (!isset($input['anime_data']) || !is_array($input['anime_data'])) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Invalid data format'
+                ]);
+            }
+
+            $animeData = $input['anime_data'];
+            $importedCount = 0;
+            $errors = [];
+
+            foreach ($animeData as $anime) {
+                try {
+                    // Prepare data for insertion
+                    $insertData = [
+                        'title' => $anime['title'],
+                        'language' => strtolower($anime['language']),
+                        'type' => $anime['type'],
+                        'total_ep' => isset($anime['total ep']) ? (int)$anime['total ep'] : null,
+                        'ratings' => $anime['ratings'] ?? null,
+                        'genres' => $anime['genres'] ?? null,
+                        'status' => $anime['status'],
+                        'studios' => $anime['studios'] ?? null,
+                        'backgroundImage' => $anime['backgroundImage'] ?? null,
+                        'synopsis' => $anime['synopsis'] ?? null,
+                        'urls' => isset($anime['urls']) && is_array($anime['urls']) 
+                                ? implode("\n", $anime['urls']) 
+                                : (is_string($anime['urls']) ? $anime['urls'] : null)
+                    ];
+
+                    // Check if anime with same title already exists
+                    $existingAnime = $this->animeModel->where('title', $insertData['title'])->first();
+                    if ($existingAnime) {
+                        $errors[] = "Anime '{$insertData['title']}' already exists - skipped";
+                        continue;
+                    }
+
+                    // Insert anime
+                    if ($this->animeModel->insert($insertData)) {
+                        $importedCount++;
+                    } else {
+                        $errors[] = "Failed to insert '{$insertData['title']}'";
+                    }
+                } catch (Exception $e) {
+                    $errors[] = "Error processing '{$anime['title']}': " . $e->getMessage();
+                }
+            }
+
+            $message = "Successfully imported {$importedCount} anime";
+            if (count($errors) > 0) {
+                $message .= ". " . count($errors) . " items had issues: " . implode(', ', array_slice($errors, 0, 3));
+                if (count($errors) > 3) {
+                    $message .= "...";
+                }
+            }
+
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => $message,
+                'imported_count' => $importedCount,
+                'errors' => $errors
+            ]);
+
+        } catch (Exception $e) {
+            log_message('error', 'Import anime error: ' . $e->getMessage());
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'An error occurred during import: ' . $e->getMessage()
+            ]);
+        }
+    }
 }
