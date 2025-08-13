@@ -141,9 +141,9 @@
                                         <div class="col-md-2">
                                             <select class="form-select admin-form-control" id="statusFilter">
                                                 <option value="">All Status</option>
-                                                <option value="Completed">Completed</option>
-                                                <option value="Ongoing">Ongoing</option>
-                                                <option value="Upcoming">Upcoming</option>
+                                                <option value="Finished Airing">Finished Airing</option>
+                                                <option value="Airing">Airing</option>
+                                                <option value="Incomplete">Incomplete</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2">
@@ -156,7 +156,7 @@
                                             </select>
                                         </div>
                                         <div class="col-md-1">
-                                            <input type="number" class="form-control admin-form-control" id="customPerPageInput" placeholder="Min: 8" min="8" style="display: none;">
+                                            <input type="number" class="form-control admin-form-control" id="customPerPageInput" placeholder="Min: 5" min="5" style="display: none;">
                                         </div>
                                         <div class="col-md-2">
                                             <button class="btn admin-btn-outline w-100" id="refreshBtn">
@@ -214,6 +214,8 @@
                                 <label class="form-label admin-form-label small">Language *</label>
                                 <select class="form-select admin-form-control form-control-sm" name="language" required>
                                     <option value="">Select Language</option>
+                                    <option value="Sub">Sub</option>
+                                    <option value="Dub">Dub</option>
                                     <option value="Japanese">Japanese</option>
                                     <option value="English">English</option>
                                     <option value="Chinese">Chinese</option>
@@ -231,9 +233,9 @@
                                 <label class="form-label admin-form-label small">Status *</label>
                                 <select class="form-select admin-form-control form-control-sm" name="status" required>
                                     <option value="">Select Status</option>
-                                    <option value="Completed">Completed</option>
-                                    <option value="Ongoing">Ongoing</option>
-                                    <option value="Upcoming">Upcoming</option>
+                                    <option value="Finished Airing">Finished Airing</option>
+                                    <option value="airing">Airing</option>
+                                    <option value="incomplete">Incomplete</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
@@ -297,9 +299,8 @@
                                 <label class="form-label admin-form-label small">Language *</label>
                                 <select class="form-select admin-form-control form-control-sm" id="editLanguage" name="language" required>
                                     <option value="">Select Language</option>
-                                    <option value="Japanese">Japanese</option>
-                                    <option value="English">English</option>
-                                    <option value="Chinese">Chinese</option>
+                                    <option value="sub">Sub</option>
+                                    <option value="dub">Dub</option>
                                 </select>
                             </div>
                             <div class="col-md-4">
@@ -314,9 +315,9 @@
                                 <label class="form-label admin-form-label small">Status *</label>
                                 <select class="form-select admin-form-control form-control-sm" id="editStatus" name="status" required>
                                     <option value="">Select Status</option>
-                                    <option value="Completed">Completed</option>
-                                    <option value="Ongoing">Ongoing</option>
-                                    <option value="Upcoming">Upcoming</option>
+                                    <option value="Finished Airing">Finished Airing</option>
+                                    <option value="Airing">Airing</option>
+                                    <option value="Incomplete">Incomplete</option>
                                 </select>
                             </div>
                             <div class="col-md-6">

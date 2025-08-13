@@ -146,7 +146,7 @@
                                             </select>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="number" class="form-control admin-form-control" id="customPerPageInput" placeholder="Min: 8" min="8" style="display: none;">
+                                            <input type="number" class="form-control admin-form-control" id="customPerPageInput" placeholder="Min: 5" min="5" style="display: none;">
                                         </div>
                                         <div class="col-md-2">
                                             <button class="btn admin-btn-outline" id="refreshBtn">

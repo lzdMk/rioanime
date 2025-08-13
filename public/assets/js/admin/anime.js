@@ -103,8 +103,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Status badge
         const statusBadge = document.getElementById('viewAnimeStatus');
         statusBadge.textContent = anime.status;
-        const statusClass = anime.status.toLowerCase() === 'completed' ? 'success' : 
-                           (anime.status.toLowerCase() === 'ongoing' ? 'primary' : 'secondary');
+        const statusLower = anime.status.toLowerCase();
+        const statusClass = statusLower === 'finish airing' ? 'success' : 
+                           (statusLower === 'airing' ? 'primary' : 
+                           (statusLower === 'incomplete' ? 'warning' : 'secondary'));
         statusBadge.className = `badge admin-badge-${statusClass}`;
 
         // Rating

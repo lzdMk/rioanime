@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentSearch = '';
     let currentTypeFilter = '';
     let currentPerPage = 8;
-    
+    const minPerPage = 5;
+
     // DOM elements
     const searchInput = document.getElementById('accountSearch');
     const typeFilter = document.getElementById('typeFilter');
@@ -62,12 +63,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (customPerPageInput) {
         customPerPageInput.addEventListener('blur', function() {
             const value = parseInt(this.value);
-            if (value && value >= 8) {
+            if (value && value >= minPerPage) {
                 currentPerPage = value;
                 currentPage = 1;
                 loadAccounts();
             } else {
-                this.value = Math.max(8, currentPerPage);
+                this.value = Math.max(minPerPage, currentPerPage);
             }
         });
         

@@ -373,6 +373,8 @@ class Admin extends BaseController
         $page = (int) ($this->request->getGet('page') ?? 1);
         $perPage = (int) ($this->request->getGet('per_page') ?? 20);
         $search = $this->request->getGet('search') ?? '';
+        $type = $this->request->getGet('type') ?? '';
+        $status = $this->request->getGet('status') ?? '';
 
         $builder = $this->animeModel->orderBy('anime_id', 'DESC');
         
@@ -382,6 +384,14 @@ class Admin extends BaseController
                    ->orLike('genres', $search)
                    ->orLike('studios', $search)
                    ->groupEnd();
+        }
+
+        if (!empty($type)) {
+            $builder->where('type', $type);
+        }
+
+        if (!empty($status)) {
+            $builder->where('status', $status);
         }
 
         $totalItems = $builder->countAllResults(false);

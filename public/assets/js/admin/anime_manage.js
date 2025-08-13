@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentTypeFilter = '';
     let currentStatusFilter = '';
     let currentPerPage = 8;
-    
+    const minPerPage = 5;
+
     // DOM elements
     const searchInput = document.getElementById('animeSearch');
     const typeFilter = document.getElementById('typeFilter');
@@ -73,12 +74,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (customPerPageInput) {
         customPerPageInput.addEventListener('blur', function() {
             const value = parseInt(this.value);
-            if (value && value >= 8) {
+            if (value && value >= minPerPage) {
                 currentPerPage = value;
                 currentPage = 1;
                 loadAnime();
             } else {
-                this.value = Math.max(8, currentPerPage);
+                this.value = Math.max(minPerPage, currentPerPage);
             }
         });
         
@@ -183,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     </span>
                                 </td>
                                 <td class="admin-text-muted">${anime.ratings || 'N/A'}</td>
-                                <td class="admin-text-muted">${escapeHtml(anime.language)}</td>
+                                <td class="admin-text-muted">${anime.language || 'N/A'}</td>
                                 <td>
                                     <div class="btn-group admin-action-buttons" role="group">
                                         <button class="btn admin-btn-info btn-sm view-anime" data-id="${anime.anime_id}" title="View Details">
@@ -265,8 +266,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function getStatusBadgeClass(status) {
         const statusLower = status.toLowerCase();
-        if (statusLower === 'completed') return 'success';
-        if (statusLower === 'ongoing') return 'primary';
+        if (statusLower === 'finished airing') return 'success';
+        if (statusLower === 'airing') return 'primary';
+        if (statusLower === 'incomplete') return 'warning';
         return 'secondary';
     }
     
@@ -400,7 +402,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (status) {
                 const statusLower = (anime.status || '').toLowerCase();
                 status.textContent = anime.status || 'Unknown';
-                status.className = `badge admin-badge-${statusLower === 'completed' ? 'success' : statusLower === 'ongoing' ? 'primary' : 'secondary'}`;
+                status.className = `badge admin-badge-${statusLower === 'finished airing' ? 'success' : statusLower === 'airing' ? 'primary' : statusLower === 'incomplete' ? 'warning' : 'secondary'}`;
             }
             if (language) language.textContent = anime.language || 'N/A';
             if (episodes) episodes.textContent = anime.total_ep != null ? anime.total_ep : 'N/A';
@@ -427,19 +429,29 @@ document.addEventListener('DOMContentLoaded', function() {
         if (modal) {
             const idField = modal.querySelector('#editAnimeId');
             const titleField = modal.querySelector('#editTitle');
+            const typeField = modal.querySelector('#editType');
+            const languageField = modal.querySelector('#editLanguage');
+            const totalEpField = modal.querySelector('#editTotalEp');
+            const ratingsField = modal.querySelector('#editRatings');
+            const statusField = modal.querySelector('#editStatus');
             const genresField = modal.querySelector('#editGenres');
             const studiosField = modal.querySelector('#editStudios');
             const backgroundImageField = modal.querySelector('#editBackgroundImage');
             const urlsField = modal.querySelector('#editUrls');
             const synopsisField = modal.querySelector('#editSynopsis');
             
-            if (idField) idField.value = anime.anime_id;
-            if (titleField) titleField.value = anime.title;
-            if (genresField) genresField.value = anime.genres;
-            if (studiosField) studiosField.value = anime.studios;
-            if (backgroundImageField) backgroundImageField.value = anime.backgroundImage;
-            if (urlsField) urlsField.value = anime.urls;
-            if (synopsisField) synopsisField.value = anime.synopsis;
+            if (idField) idField.value = anime.anime_id || '';
+            if (titleField) titleField.value = anime.title || '';
+            if (typeField) typeField.value = anime.type || '';
+            if (languageField) languageField.value = anime.language || '';
+            if (totalEpField) totalEpField.value = anime.total_ep || '';
+            if (ratingsField) ratingsField.value = anime.ratings || '';
+            if (statusField) statusField.value = anime.status || '';
+            if (genresField) genresField.value = anime.genres || '';
+            if (studiosField) studiosField.value = anime.studios || '';
+            if (backgroundImageField) backgroundImageField.value = anime.backgroundImage || '';
+            if (urlsField) urlsField.value = anime.urls || '';
+            if (synopsisField) synopsisField.value = anime.synopsis || '';
         }
     }
 
