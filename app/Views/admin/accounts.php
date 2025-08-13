@@ -19,6 +19,7 @@
     <!-- Custom Admin CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/css/admin/main.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/admin/content.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/pagination.css') ?>">
 </head>
 <body>
     <div class="admin-container">
@@ -124,96 +125,47 @@
                                 <div class="admin-card-body">
                                     <!-- Search and Filter -->
                                     <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <input type="text" class="form-control admin-form-control" id="searchInput" placeholder="Search by username or email...">
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control admin-form-control" id="accountSearch" placeholder="Search by username or email...">
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <select class="form-select admin-form-control" id="typeFilter">
                                                 <option value="">All Types</option>
-                                                <option value="user">User</option>
+                                                <option value="viewer">Viewer</option>
+                                                <option value="moderator">Moderator</option>
                                                 <option value="admin">Admin</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
+                                            <select class="form-select admin-form-control" id="perPageSelect">
+                                                <option value="8" selected>8 per page</option>
+                                                <option value="10">10 per page</option>
+                                                <option value="15">15 per page</option>
+                                                <option value="20">20 per page</option>
+                                                <option value="custom">Custom...</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="number" class="form-control admin-form-control" id="customPerPageInput" placeholder="Min: 8" min="8" style="display: none;">
+                                        </div>
+                                        <div class="col-md-2">
                                             <button class="btn admin-btn-outline" id="refreshBtn">
                                                 <i class="fas fa-sync-alt"></i> Refresh
                                             </button>
                                         </div>
                                     </div>
 
-                                    <!-- Accounts Table -->
-                                    <div class="table-responsive">
-                                        <table class="table admin-table table-hover" id="accountsTable">
-                                            <thead class="admin-table-header">
-                                                <tr>
-                                                    <th>Avatar</th>
-                                                    <th>Username</th>
-                                                    <th>Email</th>
-                                                    <th>Type</th>
-                                                    <th>Created</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="admin-table-body">
-                                                <?php if (!empty($accounts)): ?>
-                                                    <?php foreach ($accounts as $account): ?>
-                                                        <tr data-account-id="<?= $account['id'] ?>">
-                                                            <td class="text-center">
-                                                                <?php if (!empty($account['user_profile'])): ?>
-                                                                    <img src="<?= esc($account['user_profile']) ?>" alt="Avatar" class="admin-avatar">
-                                                                <?php else: ?>
-                                                                    <div class="admin-avatar-letter">
-                                                                        <?= strtoupper(substr($account['username'], 0, 1)) ?>
-                                                                    </div>
-                                                                <?php endif; ?>
-                                                            </td>
-                                                            <td class="admin-text-primary fw-bold"><?= esc($account['username']) ?></td>
-                                                            <td class="admin-text-muted"><?= esc($account['email']) ?></td>
-                                                            <td>
-                                                                <span class="badge admin-badge-<?= $account['type'] === 'admin' ? 'danger' : 'primary' ?>">
-                                                                    <?= ucfirst(esc($account['type'])) ?>
-                                                                </span>
-                                                            </td>
-                                                            <td class="admin-text-muted"><?= date('M j, Y', strtotime($account['created_at'])) ?></td>
-                                                            <td>
-                                                                <div class="btn-group admin-action-buttons" role="group">
-                                                                    <button class="btn admin-btn-info btn-sm view-account" data-id="<?= $account['id'] ?>" title="View Details">
-                                                                        <i class="fas fa-eye"></i>
-                                                                    </button>
-                                                                    <button class="btn admin-btn-warning btn-sm edit-account" data-id="<?= $account['id'] ?>" title="Edit">
-                                                                        <i class="fas fa-edit"></i>
-                                                                    </button>
-                                                                    <button class="btn admin-btn-danger btn-sm delete-account" data-id="<?= $account['id'] ?>" title="Delete">
-                                                                        <i class="fas fa-trash"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    <?php endforeach; ?>
-                                                <?php else: ?>
-                                                    <tr>
-                                                        <td colspan="6" class="text-center admin-text-muted py-4">
-                                                            <i class="fas fa-users fa-3x mb-3 opacity-50"></i>
-                                                            <p class="mb-0">No accounts found</p>
-                                                        </td>
-                                                    </tr>
-                                                <?php endif; ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <!-- Pagination -->
-                                    <?php if (isset($pager)): ?>
-                                        <div class="admin-pagination-wrapper">
-                                            <div class="admin-pagination-info">
-                                                <i class="fas fa-users me-1"></i>
-                                                Showing account results with modern pagination
-                                            </div>
-                                            <div class="d-flex justify-content-center">
-                                                <?= $pager->links() ?>
+                                    <!-- Accounts Table Container -->
+                                    <div id="accountsTableContainer">
+                                        <div class="text-center py-4">
+                                            <div class="spinner-border admin-text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
                                             </div>
                                         </div>
-                                    <?php endif; ?>
+                                    </div>
+                                    
+                                    <!-- Pagination Container -->
+                                    <div id="accountsPagination"></div>
                                 </div>
                             </div>
                         </div>
@@ -252,7 +204,8 @@
                         <div class="mb-3">
                             <label class="form-label admin-form-label">Account Type</label>
                             <select class="form-select admin-form-control" name="type" required>
-                                <option value="user">User</option>
+                                <option value="viewer">Viewer</option>
+                                <option value="moderator">Moderator</option>
                                 <option value="admin">Admin</option>
                             </select>
                         </div>
@@ -296,7 +249,8 @@
                         <div class="mb-3">
                             <label class="form-label admin-form-label">Account Type</label>
                             <select class="form-select admin-form-control" id="editType" name="type" required>
-                                <option value="user">User</option>
+                                <option value="viewer">Viewer</option>
+                                <option value="moderator">Moderator</option>
                                 <option value="admin">Admin</option>
                             </select>
                         </div>
@@ -393,6 +347,32 @@
         </div>
     </div>
 
+    <!-- Delete Account Confirmation Modal -->
+    <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content admin-modal">
+                <div class="modal-header admin-modal-header py-2 border-danger">
+                    <h6 class="modal-title text-danger mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Confirm Delete</h6>
+                    <button type="button" class="btn-close admin-btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body admin-modal-body p-3 text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-user-times fa-3x text-danger mb-3"></i>
+                        <h6 class="admin-text-primary">Are you sure you want to delete this account?</h6>
+                        <p class="admin-text-muted small mb-0">This action cannot be undone.</p>
+                    </div>
+                    <div id="deleteAccountUsername" class="admin-text-warning fw-bold"></div>
+                </div>
+                <div class="modal-footer admin-modal-footer py-2 justify-content-center">
+                    <button type="button" class="btn admin-btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn admin-btn-danger btn-sm" id="confirmDeleteAccount">
+                        <i class="fas fa-trash me-1"></i> Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Container -->
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080">
         <div id="liveToast" class="toast align-items-center text-bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true">
@@ -408,6 +388,7 @@
     
     <!-- Custom Admin JS -->
     <script src="<?= base_url('assets/js/admin/main.js') ?>"></script>
+    <script src="<?= base_url('assets/js/admin/pagination.js') ?>"></script>
     <script src="<?= base_url('assets/js/admin/accounts.js') ?>"></script>
 </body>
 </html>

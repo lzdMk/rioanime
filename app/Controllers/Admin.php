@@ -28,36 +28,12 @@ class Admin extends BaseController
 
     public function accounts()
     {
-        // Get all accounts with pagination
-        $perPage = 20;
-        $page = $this->request->getGet('page') ?? 1;
-        
-        $accounts = $this->accountModel->orderBy('created_at', 'DESC')->paginate($perPage);
-        $pager = $this->accountModel->pager;
-        
-        $data = [
-            'accounts' => $accounts,
-            'pager' => $pager
-        ];
-        
-        return view('admin/accounts', $data);
+        return view('admin/accounts');
     }
 
     public function animeManage()
     {
-        // Get all anime with pagination
-        $perPage = 20;
-        $page = $this->request->getGet('page') ?? 1;
-        
-        $anime_list = $this->animeModel->orderBy('anime_id', 'DESC')->paginate($perPage);
-        $pager = $this->animeModel->pager;
-        
-        $data = [
-            'anime_list' => $anime_list,
-            'pager' => $pager
-        ];
-        
-        return view('admin/anime_manage', $data);
+        return view('admin/anime_manage');
     }
 
     /**
@@ -200,14 +176,14 @@ class Admin extends BaseController
         if (!empty($account['watched'])) {
             $watchedIds = json_decode($account['watched'], true) ?: [];
             if (!empty($watchedIds)) {
-                $watchedAnime = $this->animeModel->whereIn('id', $watchedIds)->findAll();
+                $watchedAnime = $this->animeModel->whereIn('anime_id', $watchedIds)->findAll();
             }
         }
         
         if (!empty($account['followed_anime'])) {
             $followedIds = json_decode($account['followed_anime'], true) ?: [];
             if (!empty($followedIds)) {
-                $followedAnime = $this->animeModel->whereIn('id', $followedIds)->findAll();
+                $followedAnime = $this->animeModel->whereIn('anime_id', $followedIds)->findAll();
             }
         }
 
@@ -337,6 +313,93 @@ class Admin extends BaseController
         } else {
             return $this->response->setJSON(['success' => false, 'message' => 'Failed to delete account']);
         }
+    }
+
+    /**
+     * Get accounts with AJAX pagination
+     */
+    public function getAccounts()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(403);
+        }
+
+        $page = (int) ($this->request->getGet('page') ?? 1);
+        $perPage = (int) ($this->request->getGet('per_page') ?? 20);
+        $search = $this->request->getGet('search') ?? '';
+        $type = $this->request->getGet('type') ?? '';
+
+        $builder = $this->accountModel->orderBy('created_at', 'DESC');
+        
+        if (!empty($search)) {
+            $builder->groupStart()
+                   ->like('username', $search)
+                   ->orLike('display_name', $search)
+                   ->orLike('email', $search)
+                   ->groupEnd();
+        }
+
+        if (!empty($type)) {
+            $builder->where('type', $type);
+        }
+
+        $totalItems = $builder->countAllResults(false);
+        $accounts = $builder->paginate($perPage, 'default', $page);
+        $totalPages = ceil($totalItems / $perPage);
+
+        return $this->response->setJSON([
+            'success' => true,
+            'accounts' => $accounts,
+            'pagination' => [
+                'current_page' => $page,
+                'total_pages' => $totalPages,
+                'total_items' => $totalItems,
+                'per_page' => $perPage,
+                'has_previous' => $page > 1,
+                'has_next' => $page < $totalPages
+            ]
+        ]);
+    }
+
+    /**
+     * Get anime with AJAX pagination
+     */
+    public function getAnimeList()
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(403);
+        }
+
+        $page = (int) ($this->request->getGet('page') ?? 1);
+        $perPage = (int) ($this->request->getGet('per_page') ?? 20);
+        $search = $this->request->getGet('search') ?? '';
+
+        $builder = $this->animeModel->orderBy('anime_id', 'DESC');
+        
+        if (!empty($search)) {
+            $builder->groupStart()
+                   ->like('title', $search)
+                   ->orLike('genres', $search)
+                   ->orLike('studios', $search)
+                   ->groupEnd();
+        }
+
+        $totalItems = $builder->countAllResults(false);
+        $anime_list = $builder->paginate($perPage, 'default', $page);
+        $totalPages = ceil($totalItems / $perPage);
+
+        return $this->response->setJSON([
+            'success' => true,
+            'anime_list' => $anime_list,
+            'pagination' => [
+                'current_page' => $page,
+                'total_pages' => $totalPages,
+                'total_items' => $totalItems,
+                'per_page' => $perPage,
+                'has_previous' => $page > 1,
+                'has_next' => $page < $totalPages
+            ]
+        ]);
     }
 
     /**

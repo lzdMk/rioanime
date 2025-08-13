@@ -26,17 +26,21 @@ $routes->group('admin', function ($routes) {
     $routes->get('accounts', 'Admin::accounts');
     $routes->get('anime-manage', 'Admin::animeManage');
     
+    // Pagination API routes
+    $routes->get('getAccounts', 'Admin::getAccounts');
+    $routes->get('getAnimeList', 'Admin::getAnimeList');
+    
     // Account management API
-    $routes->get('api/account/(:num)', 'Admin::getAccount/$1');
-    $routes->post('api/account/create', 'Admin::createAccount');
-    $routes->post('api/account/update/(:num)', 'Admin::updateAccount/$1');
-    $routes->delete('api/account/delete/(:num)', 'Admin::deleteAccount/$1');
+    $routes->get('getAccount/(:num)', 'Admin::getAccount/$1');
+    $routes->post('createAccount', 'Admin::createAccount');
+    $routes->post('updateAccount/(:num)', 'Admin::updateAccount/$1');
+    $routes->delete('deleteAccount/(:num)', 'Admin::deleteAccount/$1');
     
     // Anime management API
-    $routes->get('api/anime/(:num)', 'Admin::getAnime/$1');
-    $routes->post('api/anime/create', 'Admin::createAnime');
-    $routes->post('api/anime/update/(:num)', 'Admin::updateAnime/$1');
-    $routes->delete('api/anime/delete/(:num)', 'Admin::deleteAnime/$1');
+    $routes->get('getAnime/(:num)', 'Admin::getAnime/$1');
+    $routes->post('createAnime', 'Admin::createAnime');
+    $routes->post('updateAnime/(:num)', 'Admin::updateAnime/$1');
+    $routes->delete('deleteAnime/(:num)', 'Admin::deleteAnime/$1');
 });
 
 // Random anime route

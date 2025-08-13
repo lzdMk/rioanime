@@ -19,6 +19,8 @@
     <!-- Custom Admin CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/css/admin/main.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/admin/content.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/pagination.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/anime-modal.css') ?>">
 </head>
 <body>
     <div class="admin-container">
@@ -124,8 +126,8 @@
                                 <div class="admin-card-body">
                                     <!-- Search and Filter -->
                                     <div class="row mb-3">
-                                        <div class="col-md-4">
-                                            <input type="text" class="form-control admin-form-control" id="searchInput" placeholder="Search by title or genre...">
+                                        <div class="col-md-3">
+                                            <input type="text" class="form-control admin-form-control" id="animeSearch" placeholder="Search by title or genre...">
                                         </div>
                                         <div class="col-md-2">
                                             <select class="form-select admin-form-control" id="typeFilter">
@@ -145,12 +147,16 @@
                                             </select>
                                         </div>
                                         <div class="col-md-2">
-                                            <select class="form-select admin-form-control" id="languageFilter">
-                                                <option value="">All Languages</option>
-                                                <option value="Japanese">Japanese</option>
-                                                <option value="English">English</option>
-                                                <option value="Chinese">Chinese</option>
+                                            <select class="form-select admin-form-control" id="perPageSelect">
+                                                <option value="8" selected>8 per page</option>
+                                                <option value="10">10 per page</option>
+                                                <option value="15">15 per page</option>
+                                                <option value="20">20 per page</option>
+                                                <option value="custom">Custom...</option>
                                             </select>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <input type="number" class="form-control admin-form-control" id="customPerPageInput" placeholder="Min: 8" min="8" style="display: none;">
                                         </div>
                                         <div class="col-md-2">
                                             <button class="btn admin-btn-outline w-100" id="refreshBtn">
@@ -159,81 +165,17 @@
                                         </div>
                                     </div>
 
-                                    <!-- Anime Table -->
-                                    <div class="table-responsive">
-                                        <table class="table admin-table table-hover" id="animeTable">
-                                            <thead class="admin-table-header">
-                                                <tr>
-                                                    <th>Image</th>
-                                                    <th>Title</th>
-                                                    <th>Type</th>
-                                                    <th>Episodes</th>
-                                                    <th>Status</th>
-                                                    <th>Rating</th>
-                                                    <th>Language</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="admin-table-body">
-                                                <?php if (!empty($anime_list)): ?>
-                                                    <?php foreach ($anime_list as $anime): ?>
-                                                        <tr data-anime-id="<?= $anime['anime_id'] ?>">
-                                                            <td class="text-center">
-                                                                <img src="<?= esc($anime['backgroundImage']) ?>" alt="<?= esc($anime['title']) ?>" class="admin-anime-thumb">
-                                                            </td>
-                                                            <td class="admin-text-primary fw-bold"><?= esc($anime['title']) ?></td>
-                                                            <td>
-                                                                <span class="badge admin-badge-<?= strtolower($anime['type']) === 'movie' ? 'warning' : 'info' ?>">
-                                                                    <?= esc($anime['type']) ?>
-                                                                </span>
-                                                            </td>
-                                                            <td class="admin-text-muted"><?= $anime['total_ep'] ? esc($anime['total_ep']) : 'N/A' ?></td>
-                                                            <td>
-                                                                <span class="badge admin-badge-<?= strtolower($anime['status']) === 'completed' ? 'success' : (strtolower($anime['status']) === 'ongoing' ? 'primary' : 'secondary') ?>">
-                                                                    <?= esc($anime['status']) ?>
-                                                                </span>
-                                                            </td>
-                                                            <td class="admin-text-muted"><?= $anime['ratings'] ? esc($anime['ratings']) : 'N/A' ?></td>
-                                                            <td class="admin-text-muted"><?= esc($anime['language']) ?></td>
-                                                            <td>
-                                                                <div class="btn-group admin-action-buttons" role="group">
-                                                                    <button type="button" class="btn admin-btn-info btn-sm view-anime" data-id="<?= $anime['anime_id'] ?>" title="View Details">
-                                                                        <i class="fas fa-eye"></i>
-                                                                    </button>
-                                                                    <button type="button" class="btn admin-btn-warning btn-sm edit-anime" data-id="<?= $anime['anime_id'] ?>" title="Edit Anime">
-                                                                        <i class="fas fa-edit"></i>
-                                                                    </button>
-                                                                    <button type="button" class="btn admin-btn-danger btn-sm delete-anime" data-id="<?= $anime['anime_id'] ?>" title="Delete Anime">
-                                                                        <i class="fas fa-trash"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    <?php endforeach; ?>
-                                                <?php else: ?>
-                                                    <tr>
-                                                        <td colspan="8" class="text-center admin-text-muted py-4">
-                                                            <i class="fas fa-film fa-3x mb-3 opacity-50"></i>
-                                                            <p class="mb-0">No anime found</p>
-                                                        </td>
-                                                    </tr>
-                                                <?php endif; ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <!-- Pagination -->
-                                    <?php if (isset($pager)): ?>
-                                        <div class="admin-pagination-wrapper">
-                                            <div class="admin-pagination-info">
-                                                <i class="fas fa-info-circle me-1"></i>
-                                                Showing anime results with modern pagination
-                                            </div>
-                                            <div class="d-flex justify-content-center">
-                                                <?= $pager->links() ?>
+                                    <!-- Anime Table Container -->
+                                    <div id="animeTableContainer">
+                                        <div class="text-center py-4">
+                                            <div class="spinner-border admin-text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
                                             </div>
                                         </div>
-                                    <?php endif; ?>
+                                    </div>
+                                    
+                                    <!-- Pagination Container -->
+                                    <div id="animePagination"></div>
                                 </div>
                             </div>
                         </div>
@@ -247,94 +189,78 @@
     <div class="modal fade" id="addAnimeModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content admin-modal">
-                <div class="modal-header admin-modal-header">
-                    <h5 class="modal-title admin-text-primary"><i class="fas fa-plus me-2"></i>Add New Anime</h5>
+                <div class="modal-header admin-modal-header py-2">
+                    <h6 class="modal-title admin-text-primary mb-0"><i class="fas fa-plus me-2"></i>Add New Anime</h6>
                     <button type="button" class="btn-close admin-btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form id="addAnimeForm">
-                    <div class="modal-body admin-modal-body">
-                        <div class="row">
+                    <div class="modal-body admin-modal-body p-3">
+                        <div class="row g-3">
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label admin-form-label">Title *</label>
-                                    <input type="text" class="form-control admin-form-control" name="title" required>
-                                </div>
+                                <label class="form-label admin-form-label small">Title *</label>
+                                <input type="text" class="form-control admin-form-control form-control-sm" name="title" required>
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label admin-form-label">Type *</label>
-                                    <select class="form-select admin-form-control" name="type" required>
-                                        <option value="">Select Type</option>
-                                        <option value="TV">TV Series</option>
-                                        <option value="Movie">Movie</option>
-                                        <option value="OVA">OVA</option>
-                                        <option value="Special">Special</option>
-                                    </select>
-                                </div>
+                                <label class="form-label admin-form-label small">Type *</label>
+                                <select class="form-select admin-form-control form-control-sm" name="type" required>
+                                    <option value="">Select Type</option>
+                                    <option value="TV">TV Series</option>
+                                    <option value="Movie">Movie</option>
+                                    <option value="OVA">OVA</option>
+                                    <option value="Special">Special</option>
+                                </select>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label admin-form-label">Language *</label>
-                                    <select class="form-select admin-form-control" name="language" required>
-                                        <option value="">Select Language</option>
-                                        <option value="Japanese">Japanese</option>
-                                        <option value="English">English</option>
-                                        <option value="Chinese">Chinese</option>
-                                    </select>
-                                </div>
+                            <div class="col-md-4">
+                                <label class="form-label admin-form-label small">Language *</label>
+                                <select class="form-select admin-form-control form-control-sm" name="language" required>
+                                    <option value="">Select Language</option>
+                                    <option value="Japanese">Japanese</option>
+                                    <option value="English">English</option>
+                                    <option value="Chinese">Chinese</option>
+                                </select>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label admin-form-label">Total Episodes</label>
-                                    <input type="number" class="form-control admin-form-control" name="total_ep" min="1">
-                                </div>
+                            <div class="col-md-4">
+                                <label class="form-label admin-form-label small">Total Episodes</label>
+                                <input type="number" class="form-control admin-form-control form-control-sm" name="total_ep" min="1">
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label admin-form-label">Status *</label>
-                                    <select class="form-select admin-form-control" name="status" required>
-                                        <option value="">Select Status</option>
-                                        <option value="Completed">Completed</option>
-                                        <option value="Ongoing">Ongoing</option>
-                                        <option value="Upcoming">Upcoming</option>
-                                    </select>
-                                </div>
+                            <div class="col-md-4">
+                                <label class="form-label admin-form-label small">Rating</label>
+                                <input type="text" class="form-control admin-form-control form-control-sm" name="ratings" placeholder="e.g., 8.5">
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label admin-form-label">Rating</label>
-                                    <input type="text" class="form-control admin-form-control" name="ratings" placeholder="e.g., 8.5">
-                                </div>
+                                <label class="form-label admin-form-label small">Status *</label>
+                                <select class="form-select admin-form-control form-control-sm" name="status" required>
+                                    <option value="">Select Status</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Ongoing">Ongoing</option>
+                                    <option value="Upcoming">Upcoming</option>
+                                </select>
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label admin-form-label">Genres</label>
-                            <input type="text" class="form-control admin-form-control" name="genres" placeholder="Action, Adventure, Comedy">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label admin-form-label">Studios</label>
-                            <input type="text" class="form-control admin-form-control" name="studios" placeholder="Studio name">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label admin-form-label">Background Image URL</label>
-                            <input type="url" class="form-control admin-form-control" name="backgroundImage">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label admin-form-label">URLs (streaming links)</label>
-                            <textarea class="form-control admin-form-control" name="urls" rows="3" placeholder="One URL per line"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label admin-form-label">Synopsis</label>
-                            <textarea class="form-control admin-form-control" name="synopsis" rows="4" placeholder="Brief description of the anime"></textarea>
+                            <div class="col-md-6">
+                                <label class="form-label admin-form-label small">Studios</label>
+                                <input type="text" class="form-control admin-form-control form-control-sm" name="studios" placeholder="Studio name">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label admin-form-label small">Genres</label>
+                                <input type="text" class="form-control admin-form-control form-control-sm" name="genres" placeholder="Action, Adventure, Comedy">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label admin-form-label small">Background Image URL</label>
+                                <input type="url" class="form-control admin-form-control form-control-sm" name="backgroundImage">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label admin-form-label small">URLs (streaming links)</label>
+                                <textarea class="form-control admin-form-control form-control-sm" name="urls" rows="2" placeholder="One URL per line"></textarea>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label admin-form-label small">Synopsis</label>
+                                <textarea class="form-control admin-form-control form-control-sm" name="synopsis" rows="3" placeholder="Brief description of the anime"></textarea>
+                            </div>
                         </div>
                     </div>
-                    <div class="modal-footer admin-modal-footer">
-                        <button type="button" class="btn admin-btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn admin-btn-primary">Add Anime</button>
+                    <div class="modal-footer admin-modal-footer py-2">
+                        <button type="button" class="btn admin-btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn admin-btn-primary btn-sm">Add Anime</button>
                     </div>
                 </form>
             </div>
@@ -345,95 +271,79 @@
     <div class="modal fade" id="editAnimeModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content admin-modal">
-                <div class="modal-header admin-modal-header">
-                    <h5 class="modal-title admin-text-warning"><i class="fas fa-edit me-2"></i>Edit Anime</h5>
+                <div class="modal-header admin-modal-header py-2">
+                    <h6 class="modal-title admin-text-warning mb-0"><i class="fas fa-edit me-2"></i>Edit Anime</h6>
                     <button type="button" class="btn-close admin-btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form id="editAnimeForm">
                     <input type="hidden" id="editAnimeId" name="anime_id">
-                    <div class="modal-body admin-modal-body">
-                        <div class="row">
+                    <div class="modal-body admin-modal-body p-3">
+                        <div class="row g-3">
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label admin-form-label">Title *</label>
-                                    <input type="text" class="form-control admin-form-control" id="editTitle" name="title" required>
-                                </div>
+                                <label class="form-label admin-form-label small">Title *</label>
+                                <input type="text" class="form-control admin-form-control form-control-sm" id="editTitle" name="title" required>
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label admin-form-label">Type *</label>
-                                    <select class="form-select admin-form-control" id="editType" name="type" required>
-                                        <option value="">Select Type</option>
-                                        <option value="TV">TV Series</option>
-                                        <option value="Movie">Movie</option>
-                                        <option value="OVA">OVA</option>
-                                        <option value="Special">Special</option>
-                                    </select>
-                                </div>
+                                <label class="form-label admin-form-label small">Type *</label>
+                                <select class="form-select admin-form-control form-control-sm" id="editType" name="type" required>
+                                    <option value="">Select Type</option>
+                                    <option value="TV">TV Series</option>
+                                    <option value="Movie">Movie</option>
+                                    <option value="OVA">OVA</option>
+                                    <option value="Special">Special</option>
+                                </select>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label admin-form-label">Language *</label>
-                                    <select class="form-select admin-form-control" id="editLanguage" name="language" required>
-                                        <option value="">Select Language</option>
-                                        <option value="Japanese">Japanese</option>
-                                        <option value="English">English</option>
-                                        <option value="Chinese">Chinese</option>
-                                    </select>
-                                </div>
+                            <div class="col-md-4">
+                                <label class="form-label admin-form-label small">Language *</label>
+                                <select class="form-select admin-form-control form-control-sm" id="editLanguage" name="language" required>
+                                    <option value="">Select Language</option>
+                                    <option value="Japanese">Japanese</option>
+                                    <option value="English">English</option>
+                                    <option value="Chinese">Chinese</option>
+                                </select>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label admin-form-label">Total Episodes</label>
-                                    <input type="number" class="form-control admin-form-control" id="editTotalEp" name="total_ep" min="1">
-                                </div>
+                            <div class="col-md-4">
+                                <label class="form-label admin-form-label small">Total Episodes</label>
+                                <input type="number" class="form-control admin-form-control form-control-sm" id="editTotalEp" name="total_ep" min="1">
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label admin-form-label">Status *</label>
-                                    <select class="form-select admin-form-control" id="editStatus" name="status" required>
-                                        <option value="">Select Status</option>
-                                        <option value="Completed">Completed</option>
-                                        <option value="Ongoing">Ongoing</option>
-                                        <option value="Upcoming">Upcoming</option>
-                                    </select>
-                                </div>
+                            <div class="col-md-4">
+                                <label class="form-label admin-form-label small">Rating</label>
+                                <input type="text" class="form-control admin-form-control form-control-sm" id="editRatings" name="ratings" placeholder="e.g., 8.5">
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label admin-form-label">Rating</label>
-                                    <input type="text" class="form-control admin-form-control" id="editRatings" name="ratings" placeholder="e.g., 8.5">
-                                </div>
+                                <label class="form-label admin-form-label small">Status *</label>
+                                <select class="form-select admin-form-control form-control-sm" id="editStatus" name="status" required>
+                                    <option value="">Select Status</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Ongoing">Ongoing</option>
+                                    <option value="Upcoming">Upcoming</option>
+                                </select>
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label admin-form-label">Genres</label>
-                            <input type="text" class="form-control admin-form-control" id="editGenres" name="genres" placeholder="Action, Adventure, Comedy">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label admin-form-label">Studios</label>
-                            <input type="text" class="form-control admin-form-control" id="editStudios" name="studios" placeholder="Studio name">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label admin-form-label">Background Image URL</label>
-                            <input type="url" class="form-control admin-form-control" id="editBackgroundImage" name="backgroundImage">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label admin-form-label">URLs (streaming links)</label>
-                            <textarea class="form-control admin-form-control" id="editUrls" name="urls" rows="3" placeholder="One URL per line"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label admin-form-label">Synopsis</label>
-                            <textarea class="form-control admin-form-control" id="editSynopsis" name="synopsis" rows="4" placeholder="Brief description of the anime"></textarea>
+                            <div class="col-md-6">
+                                <label class="form-label admin-form-label small">Studios</label>
+                                <input type="text" class="form-control admin-form-control form-control-sm" id="editStudios" name="studios" placeholder="Studio name">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label admin-form-label small">Genres</label>
+                                <input type="text" class="form-control admin-form-control form-control-sm" id="editGenres" name="genres" placeholder="Action, Adventure, Comedy">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label admin-form-label small">Background Image URL</label>
+                                <input type="url" class="form-control admin-form-control form-control-sm" id="editBackgroundImage" name="backgroundImage">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label admin-form-label small">URLs (streaming links)</label>
+                                <textarea class="form-control admin-form-control form-control-sm" id="editUrls" name="urls" rows="2" placeholder="One URL per line"></textarea>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label admin-form-label small">Synopsis</label>
+                                <textarea class="form-control admin-form-control form-control-sm" id="editSynopsis" name="synopsis" rows="3" placeholder="Brief description of the anime"></textarea>
+                            </div>
                         </div>
                     </div>
-                    <div class="modal-footer admin-modal-footer">
-                        <button type="button" class="btn admin-btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn admin-btn-warning">Update Anime</button>
+                    <div class="modal-footer admin-modal-footer py-2">
+                        <button type="button" class="btn admin-btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn admin-btn-warning btn-sm">Update Anime</button>
                     </div>
                 </form>
             </div>
@@ -442,58 +352,85 @@
 
     <!-- View Anime Modal -->
     <div class="modal fade" id="viewAnimeModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content admin-modal">
-                <div class="modal-header admin-modal-header">
-                    <h5 class="modal-title admin-text-info"><i class="fas fa-film me-2"></i>Anime Details</h5>
+                <div class="modal-header admin-modal-header py-2">
+                    <h6 class="modal-title admin-text-info mb-0"><i class="fas fa-film me-2"></i>Anime Details</h6>
                     <button type="button" class="btn-close admin-btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body admin-modal-body">
-                    <div class="row">
-                        <div class="col-md-4 text-center mb-3">
-                            <div id="viewAnimeImage" class="mb-3"></div>
-                            <h5 id="viewAnimeTitle" class="admin-text-primary"></h5>
+                <div class="modal-body admin-modal-body p-3">
+                    <div class="row g-3">
+                        <!-- Left Column: Image and Basic Info -->
+                        <div class="col-md-4">
+                            <div id="viewAnimeImage" class="mb-2"></div>
+                            <h6 id="viewAnimeTitle" class="admin-text-primary mb-1 fw-bold"></h6>
                             <div class="mb-2">
-                                <span id="viewAnimeType" class="badge me-1"></span>
-                                <span id="viewAnimeStatus" class="badge"></span>
+                                <span id="viewAnimeType" class="badge me-1 small"></span>
+                                <span id="viewAnimeStatus" class="badge small"></span>
                             </div>
-                            <div id="viewAnimeRating" class="admin-text-warning"></div>
+                            <div id="viewAnimeRating" class="admin-text-warning small fw-bold"></div>
                         </div>
+                        
+                        <!-- Right Column: Details -->
                         <div class="col-md-8">
-                            <table class="table table-borderless admin-info-table">
-                                <tr>
-                                    <th class="admin-text-muted">Language:</th>
-                                    <td id="viewAnimeLanguage" class="admin-text-primary"></td>
-                                </tr>
-                                <tr>
-                                    <th class="admin-text-muted">Episodes:</th>
-                                    <td id="viewAnimeEpisodes" class="admin-text-primary"></td>
-                                </tr>
-                                <tr>
-                                    <th class="admin-text-muted">Genres:</th>
-                                    <td id="viewAnimeGenres" class="admin-text-primary"></td>
-                                </tr>
-                                <tr>
-                                    <th class="admin-text-muted">Studios:</th>
-                                    <td id="viewAnimeStudios" class="admin-text-primary"></td>
-                                </tr>
-                            </table>
+                            <div class="anime-details-grid">
+                                <div class="anime-detail-item">
+                                    <span class="detail-label">Language:</span>
+                                    <span id="viewAnimeLanguage" class="detail-value"></span>
+                                </div>
+                                <div class="anime-detail-item">
+                                    <span class="detail-label">Episodes:</span>
+                                    <span id="viewAnimeEpisodes" class="detail-value"></span>
+                                </div>
+                                <div class="anime-detail-item">
+                                    <span class="detail-label">Genres:</span>
+                                    <span id="viewAnimeGenres" class="detail-value"></span>
+                                </div>
+                                <div class="anime-detail-item">
+                                    <span class="detail-label">Studios:</span>
+                                    <span id="viewAnimeStudios" class="detail-value"></span>
+                                </div>
+                            </div>
+                            
+                            <!-- Synopsis Section -->
+                            <div class="mt-3">
+                                <h6 class="section-title">Synopsis:</h6>
+                                <div id="viewAnimeSynopsis" class="content-box synopsis-box"></div>
+                            </div>
+                            
+                            <!-- Streaming URLs Section -->
+                            <div class="mt-3">
+                                <h6 class="section-title">Streaming URLs:</h6>
+                                <div id="viewAnimeUrls" class="content-box urls-box"></div>
+                            </div>
                         </div>
                     </div>
-                    
-                    <div class="row mt-3">
-                        <div class="col-12">
-                            <h6 class="admin-text-muted">Synopsis:</h6>
-                            <div id="viewAnimeSynopsis" class="admin-text-primary p-3 rounded" style="background: var(--darker-color); border: 1px solid var(--border-color);"></div>
-                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteAnimeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content admin-modal">
+                <div class="modal-header admin-modal-header py-2 border-danger">
+                    <h6 class="modal-title text-danger mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Confirm Delete</h6>
+                    <button type="button" class="btn-close admin-btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body admin-modal-body p-3 text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-trash-alt fa-3x text-danger mb-3"></i>
+                        <h6 class="admin-text-primary">Are you sure you want to delete this anime?</h6>
+                        <p class="admin-text-muted small mb-0">This action cannot be undone.</p>
                     </div>
-                    
-                    <div class="row mt-3">
-                        <div class="col-12">
-                            <h6 class="admin-text-muted">Streaming URLs:</h6>
-                            <div id="viewAnimeUrls" class="admin-text-primary"></div>
-                        </div>
-                    </div>
+                    <div id="deleteAnimeTitle" class="admin-text-warning fw-bold"></div>
+                </div>
+                <div class="modal-footer admin-modal-footer py-2 justify-content-center">
+                    <button type="button" class="btn admin-btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn admin-btn-danger btn-sm" id="confirmDeleteAnime">
+                        <i class="fas fa-trash me-1"></i> Delete
+                    </button>
                 </div>
             </div>
         </div>
@@ -514,6 +451,7 @@
     
     <!-- Custom Admin JS -->
     <script src="<?= base_url('assets/js/admin/main.js') ?>"></script>
-    <script src="<?= base_url('assets/js/admin/anime.js') ?>"></script>
+    <script src="<?= base_url('assets/js/admin/pagination.js') ?>"></script>
+    <script src="<?= base_url('assets/js/admin/anime_manage.js') ?>"></script>
 </body>
 </html>
