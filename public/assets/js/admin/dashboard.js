@@ -365,10 +365,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // Toggle user selection
     window.toggleUserSelection = function(userId, username, displayName) {
         const userIndex = selectedUsers.findIndex(user => user.id === userId);
+        const userCard = document.querySelector(`[data-user-id="${userId}"]`);
+        const checkbox = document.getElementById(`user_${userId}`);
         
         if (userIndex > -1) {
             // Remove user from selection
             selectedUsers.splice(userIndex, 1);
+            
+            // Update UI
+            if (userCard) {
+                userCard.classList.remove('selected');
+                const checkIcon = userCard.querySelector('.fas.fa-check-circle');
+                if (checkIcon) {
+                    checkIcon.remove();
+                }
+            }
+            if (checkbox) {
+                checkbox.checked = false;
+            }
         } else {
             // Add user to selection
             selectedUsers.push({
@@ -376,16 +390,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 username: username,
                 display_name: displayName
             });
+            
+            // Update UI
+            if (userCard) {
+                userCard.classList.add('selected');
+                const iconContainer = userCard.querySelector('.d-flex.flex-column.align-items-end');
+                if (iconContainer && !iconContainer.querySelector('.fas.fa-check-circle')) {
+                    iconContainer.insertAdjacentHTML('beforeend', '<i class="fas fa-check-circle text-success"></i>');
+                }
+            }
+            if (checkbox) {
+                checkbox.checked = true;
+            }
         }
         
         updateSelectedUsersSummary();
         updateHiddenInput();
-        
-        // Update the visual state
-        const targetType = document.getElementById('target_type');
-        if (targetType && targetType.value === 'specific') {
-            displayUsers(filteredUsers);
-        }
     };
 
     // Update selected users summary
@@ -418,24 +438,19 @@ document.addEventListener('DOMContentLoaded', function() {
         updateSelectedUsersSummary();
         updateHiddenInput();
         
-        // Uncheck all checkboxes
-        const checkboxes = document.querySelectorAll('#users_list_container input[type="checkbox"]');
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = false;
+        // Clear all visual selection states
+        const userCards = document.querySelectorAll('.user-card');
+        userCards.forEach(card => {
+            card.classList.remove('selected');
+            const checkbox = card.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                checkbox.checked = false;
+            }
+            const checkIcon = card.querySelector('.fas.fa-check-circle');
+            if (checkIcon) {
+                checkIcon.remove();
+            }
         });
-        
-        // Refresh display
-        const targetType = document.getElementById('target_type');
-        if (targetType && targetType.value === 'specific') {
-            displayUsers(filteredUsers);
-        }
-        
-        // Clear search
-        const userSearchInput = document.getElementById('user_search_input');
-        if (userSearchInput) {
-            userSearchInput.value = '';
-            filterUsers(''); // Reset filter
-        }
     };
 
     // Form submission handler

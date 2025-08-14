@@ -42,17 +42,21 @@
     background-color: transparent !important;
     border: 2px solid #9ca3af !important;
     border-radius: 4px !important;
-    width: 18px !important;
-    height: 18px !important;
+    width: 20px !important;
+    height: 20px !important;
+    position: relative !important;
+    flex-shrink: 0 !important;
 }
 
 .user-card .form-check-input:checked {
     background-color: var(--primary-color) !important;
     border-color: var(--primary-color) !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='white'%3e%3cpath fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/%3e%3c/svg%3e") !important;
 }
 
 .user-card .form-check-input:focus {
-    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25) !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
+    border-color: var(--primary-color) !important;
 }
 
 /* User Avatar Styling */
@@ -117,9 +121,22 @@
 
 /* Selected Users Summary */
 #selected_users_summary {
-    background: var(--schedule-card-bg) !important;
+    background: transparent !important;
     border-radius: 8px !important;
     padding: 12px !important;
+    border: 2px solid var(--user-card-border) !important;
+}
+
+#selected_users_summary .d-flex {
+    align-items: center !important;
+}
+
+#selected_users_summary .admin-text-muted {
+    color: var(--text-color) !important;
+}
+
+#selected_users_summary .fas {
+    color: var(--primary-color) !important;
 }
 
 /* Clear Selection Button */
@@ -343,4 +360,17 @@
     background: rgba(59, 130, 246, 0.1) !important;
     color: #3b82f6 !important;
     border-left: 4px solid #3b82f6 !important;
+}
+
+/* User Selection Check Icon */
+.user-card .fa-check-circle {
+    color: #22c55e !important;
+    font-size: 18px !important;
+    margin-top: 4px !important;
+}
+
+.user-card .d-flex.flex-column.align-items-end {
+    min-width: 80px !important;
+    justify-content: space-between !important;
+    height: 100% !important;
 }
