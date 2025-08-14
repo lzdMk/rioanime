@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let allUsers = [];
     let filteredUsers = [];
     let selectedUsers = [];
+    let selectedGroups = [];
 
     initializeDashboard();
 
@@ -51,13 +52,15 @@ document.addEventListener('DOMContentLoaded', function() {
     function initializeTargetTypeHandler() {
         const targetType = document.getElementById('target_type');
         const specificUserSection = document.getElementById('specific_user_section');
-        const groupSection = document.getElementById('group_section');
+        const groupUserSection = document.getElementById('group_user_section');
+        const allUsersSection = document.getElementById('all_users_section');
         
         if (targetType) {
             targetType.addEventListener('change', function() {
                 // Hide all sections first
                 if (specificUserSection) specificUserSection.style.display = 'none';
-                if (groupSection) groupSection.style.display = 'none';
+                if (groupUserSection) groupUserSection.style.display = 'none';
+                if (allUsersSection) allUsersSection.style.display = 'none';
                 
                 if (this.value === 'specific') {
                     if (specificUserSection) {
@@ -68,11 +71,18 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     }
                 } else if (this.value === 'group') {
-                    if (groupSection) groupSection.style.display = 'block';
+                    if (groupUserSection) {
+                        groupUserSection.style.display = 'block';
+                    }
+                } else if (this.value === 'all') {
+                    if (allUsersSection) {
+                        allUsersSection.style.display = 'block';
+                    }
                 }
                 
-                // Clear user selection when changing target type
+                // Clear selections when changing target type
                 clearUserSelection();
+                clearGroupSelection();
             });
         }
     }
@@ -453,6 +463,92 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     };
 
+    // Group selection functions
+    window.toggleGroupSelection = function(groupType) {
+        const groupIndex = selectedGroups.findIndex(group => group === groupType);
+        const groupCard = document.querySelector(`[data-group-type="${groupType}"]`);
+        const checkbox = document.getElementById(`group_${groupType}`);
+        
+        if (groupIndex > -1) {
+            // Remove group from selection
+            selectedGroups.splice(groupIndex, 1);
+            
+            // Update UI
+            if (groupCard) {
+                groupCard.classList.remove('selected');
+                const checkIcon = groupCard.querySelector('.fas.fa-check-circle');
+                if (checkIcon) {
+                    checkIcon.remove();
+                }
+            }
+            if (checkbox) {
+                checkbox.checked = false;
+            }
+        } else {
+            // Add group to selection
+            selectedGroups.push(groupType);
+            
+            // Update UI
+            if (groupCard) {
+                groupCard.classList.add('selected');
+                const iconContainer = groupCard.querySelector('.d-flex.flex-column.align-items-end');
+                if (iconContainer && !iconContainer.querySelector('.fas.fa-check-circle')) {
+                    iconContainer.insertAdjacentHTML('beforeend', '<i class="fas fa-check-circle text-success"></i>');
+                }
+            }
+            if (checkbox) {
+                checkbox.checked = true;
+            }
+        }
+        
+        updateSelectedGroupsSummary();
+        updateGroupHiddenInput();
+    };
+
+    // Update selected groups summary
+    function updateSelectedGroupsSummary() {
+        const countSpan = document.getElementById('selected_groups_count');
+        const clearBtn = document.getElementById('clear_groups_btn');
+        
+        if (countSpan) {
+            countSpan.textContent = selectedGroups.length;
+        }
+        
+        if (clearBtn) {
+            clearBtn.style.display = selectedGroups.length > 0 ? 'inline-block' : 'none';
+        }
+    }
+
+    // Update hidden input with selected group IDs
+    function updateGroupHiddenInput() {
+        const hiddenInput = document.getElementById('selected_group_ids');
+        
+        if (hiddenInput) {
+            hiddenInput.value = selectedGroups.join(',');
+        }
+    }
+
+    // Clear group selection
+    window.clearGroupSelection = function() {
+        selectedGroups = [];
+        updateSelectedGroupsSummary();
+        updateGroupHiddenInput();
+        
+        // Clear all visual selection states
+        const groupCards = document.querySelectorAll('[data-group-type]');
+        groupCards.forEach(card => {
+            card.classList.remove('selected');
+            const checkbox = card.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                checkbox.checked = false;
+            }
+            const checkIcon = card.querySelector('.fas.fa-check-circle');
+            if (checkIcon) {
+                checkIcon.remove();
+            }
+        });
+    };
+
     // Form submission handler
     function handleFormSubmission(form) {
         // Validate form
@@ -508,7 +604,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const message = document.getElementById('notification_message')?.value.trim();
         const notificationType = document.getElementById('notification_type')?.value;
         const priority = document.getElementById('notification_priority')?.value;
-        const userGroup = document.getElementById('user_group')?.value;
         const sendImmediately = document.getElementById('send_immediately')?.checked;
         const scheduleSend = document.getElementById('schedule_send')?.checked;
         
@@ -522,8 +617,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
         
-        if (targetType === 'group' && !userGroup) {
-            showAlert('error', 'Please select a user group.');
+        if (targetType === 'group' && selectedGroups.length === 0) {
+            showAlert('error', 'Please select at least one user group.');
             return false;
         }
         
@@ -566,7 +661,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const titleCount = document.getElementById('title_count');
         const messageCount = document.getElementById('message_count');
         const specificUserSection = document.getElementById('specific_user_section');
-        const groupSection = document.getElementById('group_section');
+        const groupUserSection = document.getElementById('group_user_section');
+        const allUsersSection = document.getElementById('all_users_section');
         const userSearchInput = document.getElementById('user_search_input');
         const scheduleDetails = document.getElementById('schedule_details');
         const sendImmediately = document.getElementById('send_immediately');
@@ -577,15 +673,17 @@ document.addEventListener('DOMContentLoaded', function() {
         if (titleCount) titleCount.textContent = '0';
         if (messageCount) messageCount.textContent = '0';
         if (specificUserSection) specificUserSection.style.display = 'none';
-        if (groupSection) groupSection.style.display = 'none';
+        if (groupUserSection) groupUserSection.style.display = 'none';
+        if (allUsersSection) allUsersSection.style.display = 'none';
         if (scheduleDetails) scheduleDetails.style.display = 'none';
         
         // Reset schedule options
         if (sendImmediately) sendImmediately.checked = true;
         if (scheduleSend) scheduleSend.checked = false;
         
-        // Clear user selection
+        // Clear selections
         clearUserSelection();
+        clearGroupSelection();
         
         // Clear search
         if (userSearchInput) {

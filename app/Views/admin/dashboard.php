@@ -154,23 +154,6 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- Group Selection (Hidden by default) -->
-                                                <div class="row mb-4" id="group_section" style="display: none;">
-                                                    <div class="col-md-12">
-                                                        <label for="user_group" class="form-label admin-form-label fw-bold">
-                                                            <i class="fas fa-users-cog me-2"></i>Select Group
-                                                        </label>
-                                                        <select class="form-select admin-form-control" id="user_group" name="user_group">
-                                                            <option value="">Select group...</option>
-                                                            <option value="premium">Premium Users</option>
-                                                            <option value="active">Active Users (Last 30 days)</option>
-                                                            <option value="new">New Users (Last 7 days)</option>
-                                                            <option value="inactive">Inactive Users</option>
-                                                        </select>
-                                                        <small class="form-text admin-text-muted">Choose a group to send notifications to multiple users.</small>
-                                                    </div>
-                                                </div>
-
                                                 <!-- Notification Title -->
                                                 <div class="row mb-4">
                                                     <div class="col-md-12">
@@ -332,8 +315,8 @@
                                                             <!-- Search Box -->
                                                             <div class="p-3 border-bottom">
                                                                 <div class="input-group">
-                                                                    <span class="input-group-text bg-light">
-                                                                        <i class="fas fa-search admin-text-muted"></i>
+                                                                    <span class="input-group-text">
+                                                                        <i class="fas fa-search"></i>
                                                                     </span>
                                                                     <input type="text" class="form-control admin-form-control" id="user_search_input" placeholder="Search users..." autocomplete="off">
                                                                 </div>
@@ -349,7 +332,7 @@
                                                             </div>
 
                                                             <!-- Selected Users Footer -->
-                                                            <div class="p-3 border-top bg-light">
+                                                            <div class="p-3 border-top">
                                                                 <div id="selected_users_summary">
                                                                     <div class="d-flex justify-content-between align-items-center">
                                                                         <span class="admin-text-muted">
@@ -365,11 +348,125 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <!-- Group User Selection Panel -->
+                                                <div id="group_user_section" style="display: none;">
+                                                    <div class="admin-card h-100">
+                                                        <div class="admin-card-header py-2">
+                                                            <h6 class="m-0 admin-text-primary">
+                                                                <i class="fas fa-users-cog me-2"></i>Select User Groups
+                                                            </h6>
+                                                        </div>
+                                                        <div class="admin-card-body p-0">
+                                                            <!-- Group List Container -->
+                                                            <div id="groups_list_container" style="max-height: 400px; overflow-y: auto;">
+                                                                <div class="p-3">
+                                                                    <!-- Viewer Group -->
+                                                                    <div class="user-card" data-group-type="viewer">
+                                                                        <div class="d-flex align-items-center">
+                                                                            <input class="form-check-input me-3" type="checkbox" id="group_viewer" value="viewer" onchange="toggleGroupSelection('viewer')">
+                                                                            <div class="user-avatar" style="background: #6b7280 !important;">
+                                                                                <i class="fas fa-eye"></i>
+                                                                            </div>
+                                                                            <div class="flex-grow-1">
+                                                                                <div class="fw-bold text-white mb-1">Viewer</div>
+                                                                                <div class="small text-gray-300">Standard users with viewing access</div>
+                                                                            </div>
+                                                                            <div class="d-flex flex-column align-items-end">
+                                                                                <span class="user-type-badge user-type-viewer mb-2">GROUP</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- Moderator Group -->
+                                                                    <div class="user-card" data-group-type="moderator">
+                                                                        <div class="d-flex align-items-center">
+                                                                            <input class="form-check-input me-3" type="checkbox" id="group_moderator" value="moderator" onchange="toggleGroupSelection('moderator')">
+                                                                            <div class="user-avatar" style="background: #f59e0b !important;">
+                                                                                <i class="fas fa-shield-alt"></i>
+                                                                            </div>
+                                                                            <div class="flex-grow-1">
+                                                                                <div class="fw-bold text-white mb-1">Moderator</div>
+                                                                                <div class="small text-gray-300">Users with moderation privileges</div>
+                                                                            </div>
+                                                                            <div class="d-flex flex-column align-items-end">
+                                                                                <span class="user-type-badge" style="background: #f59e0b !important; color: white !important;">GROUP</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- Admin Group -->
+                                                                    <div class="user-card" data-group-type="admin">
+                                                                        <div class="d-flex align-items-center">
+                                                                            <input class="form-check-input me-3" type="checkbox" id="group_admin" value="admin" onchange="toggleGroupSelection('admin')">
+                                                                            <div class="user-avatar" style="background: #dc2626 !important;">
+                                                                                <i class="fas fa-crown"></i>
+                                                                            </div>
+                                                                            <div class="flex-grow-1">
+                                                                                <div class="fw-bold text-white mb-1">Admin</div>
+                                                                                <div class="small text-gray-300">Administrative users with full access</div>
+                                                                            </div>
+                                                                            <div class="d-flex flex-column align-items-end">
+                                                                                <span class="user-type-badge user-type-admin mb-2">GROUP</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Selected Groups Footer -->
+                                                            <div class="p-3 border-top">
+                                                                <div id="selected_groups_summary">
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <span class="admin-text-muted">
+                                                                            <i class="fas fa-check-circle me-1"></i>
+                                                                            <span id="selected_groups_count">0</span> group(s) selected
+                                                                        </span>
+                                                                        <button type="button" class="btn btn-sm admin-btn-outline-warning" onclick="clearGroupSelection()" style="display: none;" id="clear_groups_btn">
+                                                                            <i class="fas fa-times me-1"></i>Clear All
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- All Users Selection Panel -->
+                                                <div id="all_users_section" style="display: none;">
+                                                    <div class="admin-card h-100">
+                                                        <div class="admin-card-header py-2">
+                                                            <h6 class="m-0 admin-text-primary">
+                                                                <i class="fas fa-globe me-2"></i>All Users Selected
+                                                            </h6>
+                                                        </div>
+                                                        <div class="admin-card-body p-3">
+                                                            <div class="text-center py-5">
+                                                                <div class="mb-4">
+                                                                    <i class="fas fa-users fa-4x admin-text-primary"></i>
+                                                                </div>
+                                                                <h5 class="admin-text-primary mb-3">Broadcasting to All Users</h5>
+                                                                <p class="admin-text-muted mb-4">
+                                                                    This notification will be sent to every registered user in the system.
+                                                                </p>
+                                                                <div class="alert alert-custom alert-custom-info">
+                                                                    <i class="fas fa-info-circle me-2"></i>
+                                                                    <small>This includes all user types: Viewers, Moderators, and Admins</small>
+                                                                </div>
+                                                                <div class="d-flex justify-content-center align-items-center mt-4">
+                                                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                                                    <span class="fw-bold text-success">All users will receive this notification</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <!-- Hidden input to store selected user IDs -->
+                                        <!-- Hidden inputs to store selected IDs -->
                                         <input type="hidden" id="selected_user_ids" name="user_ids" value="">
+                                        <input type="hidden" id="selected_group_ids" name="group_ids" value="">
                                     </form>
                                 </div>
                             </div>

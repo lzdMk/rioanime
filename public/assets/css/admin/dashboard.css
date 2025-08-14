@@ -113,6 +113,21 @@
     color: #9ca3af !important;
 }
 
+/* Search Icon Color Fix */
+.input-group-text {
+    background: var(--user-search-bg) !important;
+    border: 2px solid var(--user-card-border) !important;
+    border-right: none !important;
+}
+
+.input-group-text .fas.fa-search {
+    color: #6b7280 !important;
+}
+
+.input-group .admin-form-control {
+    border-left: none !important;
+}
+
 /* Users List Container */
 #users_list_container {
     background: transparent !important;
@@ -373,4 +388,24 @@
     min-width: 80px !important;
     justify-content: space-between !important;
     height: 100% !important;
+}
+
+/* Group Selection Specific Styling */
+.user-card[data-group-type] {
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+.user-card[data-group-type] .user-avatar i {
+    font-size: 18px !important;
+}
+
+.user-card[data-group-type]:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.2) !important;
+}
+
+/* All Users Section Styling */
+#all_users_section .fa-users {
+    color: var(--primary-color) !important;
 }
