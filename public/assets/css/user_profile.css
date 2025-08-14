@@ -616,11 +616,31 @@
     border-radius: 8px;
     border-left: 3px solid #6366f1;
     line-height: 1.6;
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 .notification-message-detail p {
     margin-bottom: 0;
     color: #e5e7eb;
+}
+
+.notification-message-detail::-webkit-scrollbar {
+    width: 6px;
+}
+
+.notification-message-detail::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.notification-message-detail::-webkit-scrollbar-thumb {
+    background: #6366f1;
+    border-radius: 3px;
+}
+
+.notification-message-detail::-webkit-scrollbar-thumb:hover {
+    background: #5b5fc7;
 }
 
 .d-none {display:none!important;}

@@ -94,15 +94,15 @@
 
 <!-- Notification Detail Modal -->
 <div class="modal fade" id="notificationModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg" style="margin-top: 5vh;">
-        <div class="modal-content" style="background:#1b1b35;color:#fff;border:1px solid rgba(255,255,255,0.08)">
-            <div class="modal-header">
+    <div class="modal-dialog modal-lg" style="margin-top: 5vh; max-height: 90vh;">
+        <div class="modal-content" style="background:#1b1b35;color:#fff;border:1px solid rgba(255,255,255,0.08); max-height: 90vh; display: flex; flex-direction: column;">
+            <div class="modal-header" style="flex-shrink: 0;">
                 <h5 class="modal-title" id="notificationModalTitle">
                     <i class="fas fa-bell me-2"></i>Notification Details
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="flex: 1; overflow-y: auto;">
                 <div class="notification-detail">
                     <div class="notification-header-detail mb-3">
                         <div class="d-flex align-items-center mb-2">
@@ -120,7 +120,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" style="flex-shrink: 0;">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="markAsReadFromModal" style="display: none;">
                     <i class="fas fa-check me-1"></i>Mark as Read
@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="notification-content notification-clickable" data-notification-id="${notification.id}">
                         <div class="notification-title">${escapeHtml(notification.title)}</div>
-                        <div class="notification-message">${formatMessageWithLineBreaks(truncateMessage(notification.message, 80))}</div>
+                        <div class="notification-message">${formatMessageWithLineBreaks(truncateMessage(notification.message, 120))}</div>
                         <div class="notification-time">${timeAgo}</div>
                     </div>
                     ${isUnread ? '<div class="unread-indicator"></div>' : ''}
