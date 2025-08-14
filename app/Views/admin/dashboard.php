@@ -163,9 +163,9 @@
                                                         <label for="notification_message" class="form-label admin-form-label fw-bold">
                                                             <i class="fas fa-comment-alt me-2"></i>Message
                                                         </label>
-                                                        <textarea class="form-control admin-form-control" id="notification_message" name="notification_message" rows="4" placeholder="Enter your notification message..." required maxlength="500"></textarea>
+                                                        <textarea class="form-control admin-form-control" id="notification_message" name="notification_message" rows="6" placeholder="Enter your notification message..." required maxlength="1000"></textarea>
                                                         <div class="form-text">
-                                                            <small class="admin-text-muted">Maximum 500 characters. <span id="message_count">0</span>/500</small>
+                                                            <small class="admin-text-muted">Maximum 1000 characters. <span id="message_count">0</span>/1000</small>
                                                             <br><small class="admin-text-muted"><i class="fas fa-info-circle me-1"></i>Line breaks will be preserved in the final message</small>
                                                         </div>
                                                     </div>
