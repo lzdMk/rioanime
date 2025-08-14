@@ -19,6 +19,7 @@
     <!-- Custom Admin CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/css/admin/main.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/admin/content.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/dashboard.css') ?>">
 </head>
 <body>
     <div class="admin-container">
@@ -116,10 +117,10 @@
                     <!-- Content Row -->
                     <div class="row">
                         <!-- Send Notification Card -->
-                        <div class="col-xl-8 col-lg-7 mx-auto">
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">
+                        <div class="col-12">
+                            <div class="admin-card shadow mb-4">
+                                <div class="admin-card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold admin-text-primary">
                                         <i class="fas fa-bell me-2"></i>Send Notification
                                     </h6>
                                     <div class="dropdown no-arrow">
@@ -133,285 +134,243 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-body">
+                                <div class="admin-card-body">
                                     <form id="notificationForm" action="<?= site_url('admin/send-notification') ?>" method="POST">
-                                        <!-- Target Selection -->
-                                        <div class="row mb-4">
-                                            <div class="col-md-12">
-                                                <label for="target_type" class="form-label fw-bold">
-                                                    <i class="fas fa-users me-2"></i>Send To
-                                                </label>
-                                                <select class="form-select" id="target_type" name="target_type" required>
-                                                    <option value="">Select target...</option>
-                                                    <option value="all">All Users</option>
-                                                    <option value="specific">Specific User</option>
-                                                    <option value="group">Group of Users</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <!-- Specific User Selection (Hidden by default) -->
-                                        <div class="row mb-4" id="specific_user_section" style="display: none;">
-                                            <div class="col-md-12">
-                                                <label for="user_search" class="form-label fw-bold">
-                                                    <i class="fas fa-user me-2"></i>Select User(s)
-                                                </label>
-                                                
-                                                <!-- Search Input -->
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text">
-                                                        <i class="fas fa-search"></i>
-                                                    </span>
-                                                    <input type="text" class="form-control" id="user_search" placeholder="Search by username or email...">
-                                                    <button class="btn btn-outline-secondary" type="button" id="load_users_btn" onclick="loadUsers()">
-                                                        <i class="fas fa-refresh me-1"></i>Load
-                                                    </button>
-                                                </div>
-                                                
-                                                <!-- Users List Container -->
-                                                <div id="users_container" class="border rounded p-3" style="max-height: 300px; overflow-y: auto; background: #f8f9fa;">
-                                                    <div class="text-center text-muted py-3">
-                                                        <i class="fas fa-users fa-2x mb-2"></i>
-                                                        <div>Click "Load" to fetch users</div>
-                                                    </div>
-                                                </div>
-                                                
-                                                <!-- Selected Users Summary -->
-                                                <div id="selected_users_summary" class="mt-2" style="display: none;">
-                                                    <small class="text-muted">
-                                                        <i class="fas fa-check-circle text-success me-1"></i>
-                                                        <span id="selected_count">0</span> user(s) selected
-                                                    </small>
-                                                </div>
-                                                
-                                                <!-- Hidden input to store selected user IDs -->
-                                                <input type="hidden" id="selected_user_ids" name="user_ids" value="">
-                                                
-                                                <small class="form-text text-muted">
-                                                    Search and select specific users to send the notification to. You can select multiple users.
-                                                </small>
-                                            </div>
-                                        </div>
-
-                                        <!-- Group Selection (Hidden by default) -->
-                                        <div class="row mb-4" id="group_section" style="display: none;">
-                                            <div class="col-md-12">
-                                                <label for="user_group" class="form-label fw-bold">
-                                                    <i class="fas fa-users-cog me-2"></i>Select Group
-                                                </label>
-                                                <select class="form-select" id="user_group" name="user_group">
-                                                    <option value="">Select group...</option>
-                                                    <option value="premium">Premium Users</option>
-                                                    <option value="active">Active Users (Last 30 days)</option>
-                                                    <option value="new">New Users (Last 7 days)</option>
-                                                    <option value="inactive">Inactive Users</option>
-                                                </select>
-                                                <small class="form-text text-muted">Choose a group to send notifications to multiple users.</small>
-                                            </div>
-                                        </div>
-
-                                        <!-- Notification Title -->
-                                        <div class="row mb-4">
-                                            <div class="col-md-12">
-                                                <label for="notification_title" class="form-label fw-bold">
-                                                    <i class="fas fa-heading me-2"></i>Notification Title
-                                                </label>
-                                                <input type="text" class="form-control" id="notification_title" name="notification_title" placeholder="Enter notification title..." required maxlength="100">
-                                                <div class="form-text">
-                                                    <small class="text-muted">Maximum 100 characters. <span id="title_count">0</span>/100</small>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Notification Message -->
-                                        <div class="row mb-4">
-                                            <div class="col-md-12">
-                                                <label for="notification_message" class="form-label fw-bold">
-                                                    <i class="fas fa-comment-alt me-2"></i>Message
-                                                </label>
-                                                <textarea class="form-control" id="notification_message" name="notification_message" rows="4" placeholder="Enter your notification message..." required maxlength="500"></textarea>
-                                                <div class="form-text">
-                                                    <small class="text-muted">Maximum 500 characters. <span id="message_count">0</span>/500</small>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Notification Type -->
-                                        <div class="row mb-4">
-                                            <div class="col-md-6">
-                                                <label for="notification_type" class="form-label fw-bold">
-                                                    <i class="fas fa-tag me-2"></i>Type
-                                                </label>
-                                                <select class="form-select" id="notification_type" name="notification_type" required>
-                                                    <option value="">Select type...</option>
-                                                    <option value="info">Information</option>
-                                                    <option value="success">Success</option>
-                                                    <option value="warning">Warning</option>
-                                                    <option value="error">Error</option>
-                                                    <option value="announcement">Announcement</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="notification_priority" class="form-label fw-bold">
-                                                    <i class="fas fa-exclamation-triangle me-2"></i>Priority
-                                                </label>
-                                                <select class="form-select" id="notification_priority" name="notification_priority" required>
-                                                    <option value="">Select priority...</option>
-                                                    <option value="low">Low</option>
-                                                    <option value="normal" selected>Normal</option>
-                                                    <option value="high">High</option>
-                                                    <option value="urgent">Urgent</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <!-- Action URL (Optional) -->
-                                        <div class="row mb-4">
-                                            <div class="col-md-12">
-                                                <label for="action_url" class="form-label fw-bold">
-                                                    <i class="fas fa-link me-2"></i>Action URL (Optional)
-                                                </label>
-                                                <input type="url" class="form-control" id="action_url" name="action_url" placeholder="https://example.com/action">
-                                                <small class="form-text text-muted">Optional: Add a link for users to take action on this notification.</small>
-                                            </div>
-                                        </div>
-
-                                        <!-- Send Options -->
-                                        <div class="row mb-4">
-                                            <div class="col-md-12">
-                                                <div class="card bg-light">
-                                                    <div class="card-body">
-                                                        <h6 class="card-title">
-                                                            <i class="fas fa-cogs me-2"></i>Send Options
-                                                        </h6>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="send_immediately" name="send_immediately" checked>
-                                                            <label class="form-check-label" for="send_immediately">
-                                                                Send immediately
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="send_email" name="send_email">
-                                                            <label class="form-check-label" for="send_email">
-                                                                Also send via email (if user has email notifications enabled)
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Submit Buttons -->
                                         <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                    <button type="button" class="btn btn-outline-secondary" onclick="previewNotification()">
-                                                        <i class="fas fa-eye me-2"></i>Preview
-                                                    </button>
-                                                    <button type="button" class="btn btn-outline-warning" onclick="clearForm()">
-                                                        <i class="fas fa-eraser me-2"></i>Clear
-                                                    </button>
-                                                    <button type="submit" class="btn btn-primary">
-                                                        <i class="fas fa-paper-plane me-2"></i>Send Notification
-                                                    </button>
+                                            <!-- Left Column - Form Fields -->
+                                            <div class="col-lg-8">
+                                                <!-- Target Selection -->
+                                                <div class="row mb-4">
+                                                    <div class="col-md-12">
+                                                        <label for="target_type" class="form-label admin-form-label fw-bold">
+                                                            <i class="fas fa-users me-2"></i>Send To
+                                                        </label>
+                                                        <select class="form-select admin-form-control" id="target_type" name="target_type" required>
+                                                            <option value="">Select target...</option>
+                                                            <option value="all">All Users</option>
+                                                            <option value="specific">Specific Users</option>
+                                                            <option value="group">Group of Users</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Group Selection (Hidden by default) -->
+                                                <div class="row mb-4" id="group_section" style="display: none;">
+                                                    <div class="col-md-12">
+                                                        <label for="user_group" class="form-label admin-form-label fw-bold">
+                                                            <i class="fas fa-users-cog me-2"></i>Select Group
+                                                        </label>
+                                                        <select class="form-select admin-form-control" id="user_group" name="user_group">
+                                                            <option value="">Select group...</option>
+                                                            <option value="premium">Premium Users</option>
+                                                            <option value="active">Active Users (Last 30 days)</option>
+                                                            <option value="new">New Users (Last 7 days)</option>
+                                                            <option value="inactive">Inactive Users</option>
+                                                        </select>
+                                                        <small class="form-text admin-text-muted">Choose a group to send notifications to multiple users.</small>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Notification Title -->
+                                                <div class="row mb-4">
+                                                    <div class="col-md-12">
+                                                        <label for="notification_title" class="form-label admin-form-label fw-bold">
+                                                            <i class="fas fa-heading me-2"></i>Notification Title
+                                                        </label>
+                                                        <input type="text" class="form-control admin-form-control" id="notification_title" name="notification_title" placeholder="Enter notification title..." required maxlength="100">
+                                                        <div class="form-text">
+                                                            <small class="admin-text-muted">Maximum 100 characters. <span id="title_count">0</span>/100</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Notification Message -->
+                                                <div class="row mb-4">
+                                                    <div class="col-md-12">
+                                                        <label for="notification_message" class="form-label admin-form-label fw-bold">
+                                                            <i class="fas fa-comment-alt me-2"></i>Message
+                                                        </label>
+                                                        <textarea class="form-control admin-form-control" id="notification_message" name="notification_message" rows="4" placeholder="Enter your notification message..." required maxlength="500"></textarea>
+                                                        <div class="form-text">
+                                                            <small class="admin-text-muted">Maximum 500 characters. <span id="message_count">0</span>/500</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Notification Type & Priority -->
+                                                <div class="row mb-4">
+                                                    <div class="col-md-6">
+                                                        <label for="notification_type" class="form-label admin-form-label fw-bold">
+                                                            <i class="fas fa-tag me-2"></i>Type
+                                                        </label>
+                                                        <select class="form-select admin-form-control" id="notification_type" name="notification_type" required>
+                                                            <option value="">Select type...</option>
+                                                            <option value="info">Information</option>
+                                                            <option value="success">Success</option>
+                                                            <option value="warning">Warning</option>
+                                                            <option value="error">Error</option>
+                                                            <option value="announcement">Announcement</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="notification_priority" class="form-label admin-form-label fw-bold">
+                                                            <i class="fas fa-exclamation-triangle me-2"></i>Priority
+                                                        </label>
+                                                        <select class="form-select admin-form-control" id="notification_priority" name="notification_priority" required>
+                                                            <option value="">Select priority...</option>
+                                                            <option value="low">Low</option>
+                                                            <option value="normal" selected>Normal</option>
+                                                            <option value="high">High</option>
+                                                            <option value="urgent">Urgent</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Action URL (Optional) -->
+                                                <div class="row mb-4">
+                                                    <div class="col-md-12">
+                                                        <label for="action_url" class="form-label admin-form-label fw-bold">
+                                                            <i class="fas fa-link me-2"></i>Action URL (Optional)
+                                                        </label>
+                                                        <input type="url" class="form-control admin-form-control" id="action_url" name="action_url" placeholder="https://example.com/action">
+                                                        <small class="form-text admin-text-muted">Optional: Add a link for users to take action on this notification.</small>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Send Options -->
+                                                <div class="row mb-4">
+                                                    <div class="col-md-12">
+                                                        <div class="send-options-card">
+                                                            <h6 class="card-title">
+                                                                <i class="fas fa-cogs me-2"></i>Send Options
+                                                            </h6>
+                                                            
+                                                            <!-- Send Immediately Option -->
+                                                            <div class="schedule-checkbox mb-3">
+                                                                <input class="form-check-input" type="checkbox" id="send_immediately" name="send_immediately" checked>
+                                                                <label class="form-check-label" for="send_immediately">
+                                                                    <i class="fas fa-bolt me-2"></i>Send immediately
+                                                                </label>
+                                                            </div>
+                                                            
+                                                            <!-- Schedule Option -->
+                                                            <div class="schedule-checkbox mb-3">
+                                                                <input class="form-check-input" type="checkbox" id="schedule_send" name="schedule_send">
+                                                                <label class="form-check-label" for="schedule_send">
+                                                                    <i class="fas fa-clock me-2"></i>Schedule for later
+                                                                </label>
+                                                            </div>
+                                                            
+                                                            <!-- Schedule Details (Hidden by default) -->
+                                                            <div id="schedule_details" style="display: none;">
+                                                                <div class="schedule-card">
+                                                                    <h6 class="card-title">
+                                                                        <i class="fas fa-calendar-alt me-2"></i>Schedule Details
+                                                                    </h6>
+                                                                    
+                                                                    <div class="row">
+                                                                        <div class="col-md-6 mb-3">
+                                                                            <label for="schedule_date" class="form-label admin-form-label fw-bold">
+                                                                                <i class="fas fa-calendar me-2"></i>Date
+                                                                            </label>
+                                                                            <input type="date" class="form-control schedule-input" id="schedule_date" name="schedule_date" min="<?= date('Y-m-d') ?>">
+                                                                        </div>
+                                                                        <div class="col-md-6 mb-3">
+                                                                            <label for="schedule_time" class="form-label admin-form-label fw-bold">
+                                                                                <i class="fas fa-clock me-2"></i>Time
+                                                                            </label>
+                                                                            <input type="time" class="form-control schedule-input" id="schedule_time" name="schedule_time">
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <div class="alert alert-custom alert-custom-info d-flex align-items-center">
+                                                                                <i class="fas fa-info-circle me-2"></i>
+                                                                                <small>
+                                                                                    Notifications will be sent at the specified date and time. 
+                                                                                    Current server time: <strong><?= date('Y-m-d H:i:s') ?></strong>
+                                                                                </small>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Submit Buttons -->
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                            <button type="button" class="btn admin-btn-outline" onclick="previewNotification()">
+                                                                <i class="fas fa-eye me-2"></i>Preview
+                                                            </button>
+                                                            <button type="button" class="btn admin-btn-outline-warning" onclick="clearForm()">
+                                                                <i class="fas fa-eraser me-2"></i>Clear
+                                                            </button>
+                                                            <button type="submit" class="btn admin-btn-primary">
+                                                                <i class="fas fa-paper-plane me-2"></i>Send Notification
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Right Column - User Selection Panel -->
+                                            <div class="col-lg-4">
+                                                <!-- Specific User Selection Panel -->
+                                                <div id="specific_user_section" style="display: none;">
+                                                    <div class="admin-card h-100">
+                                                        <div class="admin-card-header py-2">
+                                                            <h6 class="m-0 admin-text-primary">
+                                                                <i class="fas fa-users me-2"></i>Select Users
+                                                            </h6>
+                                                        </div>
+                                                        <div class="admin-card-body p-0">
+                                                            <!-- Search Box -->
+                                                            <div class="p-3 border-bottom">
+                                                                <div class="input-group">
+                                                                    <span class="input-group-text bg-light">
+                                                                        <i class="fas fa-search admin-text-muted"></i>
+                                                                    </span>
+                                                                    <input type="text" class="form-control admin-form-control" id="user_search_input" placeholder="Search users..." autocomplete="off">
+                                                                </div>
+                                                                <small class="admin-text-muted">Search by username or display name</small>
+                                                            </div>
+
+                                                            <!-- User List Container -->
+                                                            <div id="users_list_container" style="max-height: 400px; overflow-y: auto;">
+                                                                <div class="text-center py-4 admin-text-muted">
+                                                                    <i class="fas fa-spinner fa-spin fa-2x mb-2"></i>
+                                                                    <div>Loading users...</div>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Selected Users Footer -->
+                                                            <div class="p-3 border-top bg-light">
+                                                                <div id="selected_users_summary">
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <span class="admin-text-muted">
+                                                                            <i class="fas fa-check-circle me-1"></i>
+                                                                            <span id="selected_count">0</span> user(s) selected
+                                                                        </span>
+                                                                        <button type="button" class="btn btn-sm admin-btn-outline-warning" onclick="clearUserSelection()" style="display: none;" id="clear_selection_btn">
+                                                                            <i class="fas fa-times me-1"></i>Clear All
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <!-- Hidden input to store selected user IDs -->
+                                        <input type="hidden" id="selected_user_ids" name="user_ids" value="">
                                     </form>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Quick Stats Sidebar -->
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">
-                                        <i class="fas fa-chart-pie me-2"></i>Quick Stats
-                                    </h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="text-center">
-                                        <div class="row">
-                                            <div class="col-6 mb-3">
-                                                <div class="bg-primary text-white rounded p-3">
-                                                    <i class="fas fa-users fa-2x mb-2"></i>
-                                                    <div class="h5 mb-0">1,234</div>
-                                                    <small>Total Users</small>
-                                                </div>
-                                            </div>
-                                            <div class="col-6 mb-3">
-                                                <div class="bg-success text-white rounded p-3">
-                                                    <i class="fas fa-user-check fa-2x mb-2"></i>
-                                                    <div class="h5 mb-0">856</div>
-                                                    <small>Active Users</small>
-                                                </div>
-                                            </div>
-                                            <div class="col-6 mb-3">
-                                                <div class="bg-info text-white rounded p-3">
-                                                    <i class="fas fa-bell fa-2x mb-2"></i>
-                                                    <div class="h5 mb-0">42</div>
-                                                    <small>Sent Today</small>
-                                                </div>
-                                            </div>
-                                            <div class="col-6 mb-3">
-                                                <div class="bg-warning text-white rounded p-3">
-                                                    <i class="fas fa-envelope-open fa-2x mb-2"></i>
-                                                    <div class="h5 mb-0">89%</div>
-                                                    <small>Read Rate</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Recent Notifications -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">
-                                        <i class="fas fa-history me-2"></i>Recent Notifications
-                                    </h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="list-group list-group-flush">
-                                        <div class="list-group-item border-0 px-0 py-2">
-                                            <div class="d-flex align-items-center">
-                                                <div class="bg-success rounded-circle p-2 me-3">
-                                                    <i class="fas fa-check text-white"></i>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <div class="fw-bold">System Update</div>
-                                                    <small class="text-muted">2 hours ago • All Users</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="list-group-item border-0 px-0 py-2">
-                                            <div class="d-flex align-items-center">
-                                                <div class="bg-info rounded-circle p-2 me-3">
-                                                    <i class="fas fa-info text-white"></i>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <div class="fw-bold">New Episodes</div>
-                                                    <small class="text-muted">5 hours ago • Active Users</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="list-group-item border-0 px-0 py-2">
-                                            <div class="d-flex align-items-center">
-                                                <div class="bg-warning rounded-circle p-2 me-3">
-                                                    <i class="fas fa-exclamation text-white"></i>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <div class="fw-bold">Maintenance Notice</div>
-                                                    <small class="text-muted">1 day ago • All Users</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="text-center mt-3">
-                                        <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
-                                    </div>
                                 </div>
                             </div>
                         </div>

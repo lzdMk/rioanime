@@ -1,0 +1,346 @@
+/* Dashboard-specific CSS customizations */
+:root {
+    --user-card-bg: #374151;
+    --user-card-hover-bg: #4b5563;
+    --user-card-selected-bg: #6366f1;
+    --user-card-border: #4b5563;
+    --user-card-hover-border: #6366f1;
+    --user-search-bg: #374151;
+    --user-avatar-bg: #6366f1;
+    --schedule-card-bg: #1f2937;
+    --schedule-input-bg: #374151;
+    --schedule-input-border: #4b5563;
+    --schedule-input-focus-border: #6366f1;
+}
+
+/* User Selection Panel Improvements */
+.user-card {
+    background: var(--user-card-bg) !important;
+    border: 2px solid var(--user-card-border) !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    margin-bottom: 8px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+}
+
+.user-card:hover {
+    background: var(--user-card-hover-bg) !important;
+    border-color: var(--user-card-hover-border) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15) !important;
+}
+
+.user-card.selected {
+    background: var(--user-card-selected-bg) !important;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+}
+
+.user-card .form-check-input {
+    background-color: transparent !important;
+    border: 2px solid #9ca3af !important;
+    border-radius: 4px !important;
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.user-card .form-check-input:checked {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.user-card .form-check-input:focus {
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25) !important;
+}
+
+/* User Avatar Styling */
+.user-avatar {
+    background: var(--user-avatar-bg) !important;
+    color: white !important;
+    border-radius: 50% !important;
+    width: 40px !important;
+    height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+    margin-right: 12px !important;
+}
+
+/* User Type Badges */
+.user-type-badge {
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    padding: 2px 6px !important;
+    border-radius: 12px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+.user-type-admin {
+    background: #dc2626 !important;
+    color: white !important;
+}
+
+.user-type-viewer {
+    background: #6b7280 !important;
+    color: white !important;
+}
+
+/* Search Input Improvements */
+#user_search_input {
+    background: var(--user-search-bg) !important;
+    border: 2px solid var(--user-card-border) !important;
+    color: var(--text-color) !important;
+    border-radius: 8px !important;
+    padding: 10px 12px !important;
+}
+
+#user_search_input:focus {
+    background: var(--user-search-bg) !important;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+}
+
+#user_search_input::placeholder {
+    color: #9ca3af !important;
+}
+
+/* Users List Container */
+#users_list_container {
+    background: transparent !important;
+    padding: 12px !important;
+}
+
+/* Selected Users Summary */
+#selected_users_summary {
+    background: var(--schedule-card-bg) !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+}
+
+/* Clear Selection Button */
+#clear_selection_btn {
+    background: transparent !important;
+    border: 2px solid #f59e0b !important;
+    color: #f59e0b !important;
+    padding: 4px 8px !important;
+    border-radius: 6px !important;
+    font-size: 12px !important;
+    transition: all 0.3s ease !important;
+}
+
+#clear_selection_btn:hover {
+    background: #f59e0b !important;
+    color: white !important;
+}
+
+/* Schedule Section */
+.schedule-card {
+    background: var(--schedule-card-bg) !important;
+    border: 2px solid var(--user-card-border) !important;
+    border-radius: 12px !important;
+    padding: 16px !important;
+    margin-top: 16px !important;
+}
+
+.schedule-card .card-title {
+    color: var(--primary-color) !important;
+    font-weight: 600 !important;
+    margin-bottom: 12px !important;
+}
+
+.schedule-input {
+    background: var(--schedule-input-bg) !important;
+    border: 2px solid var(--schedule-input-border) !important;
+    color: var(--text-color) !important;
+    border-radius: 8px !important;
+    padding: 10px 12px !important;
+    font-size: 14px !important;
+}
+
+.schedule-input:focus {
+    background: var(--schedule-input-bg) !important;
+    border-color: var(--schedule-input-focus-border) !important;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+    color: var(--text-color) !important;
+}
+
+.schedule-input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
+/* Schedule checkbox styling */
+.schedule-checkbox .form-check-input {
+    background-color: transparent !important;
+    border: 2px solid #9ca3af !important;
+    border-radius: 4px !important;
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.schedule-checkbox .form-check-input:checked {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.schedule-checkbox .form-check-input:focus {
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25) !important;
+}
+
+.schedule-checkbox .form-check-label {
+    color: var(--text-color) !important;
+    font-weight: 500 !important;
+    margin-left: 8px !important;
+}
+
+/* Send Options Card Enhancement */
+.send-options-card {
+    background: var(--schedule-card-bg) !important;
+    border: 2px solid var(--user-card-border) !important;
+    border-radius: 12px !important;
+    padding: 16px !important;
+}
+
+.send-options-card .card-title {
+    color: var(--primary-color) !important;
+    font-weight: 600 !important;
+    margin-bottom: 16px !important;
+}
+
+/* Button Improvements */
+.admin-btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), #5b21b6) !important;
+    border: none !important;
+    padding: 12px 24px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+
+.admin-btn-primary:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3) !important;
+}
+
+.admin-btn-outline {
+    background: transparent !important;
+    border: 2px solid var(--primary-color) !important;
+    color: var(--primary-color) !important;
+    padding: 10px 20px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+
+.admin-btn-outline:hover {
+    background: var(--primary-color) !important;
+    color: white !important;
+    transform: translateY(-1px) !important;
+}
+
+.admin-btn-outline-warning {
+    background: transparent !important;
+    border: 2px solid #f59e0b !important;
+    color: #f59e0b !important;
+    padding: 10px 20px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+
+.admin-btn-outline-warning:hover {
+    background: #f59e0b !important;
+    color: white !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Form Control Improvements */
+.admin-form-control:focus {
+    background: var(--card-bg) !important;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+    color: var(--text-color) !important;
+}
+
+/* Loading Animation Enhancement */
+.fa-spinner {
+    color: var(--primary-color) !important;
+}
+
+/* No users found message */
+.no-users-message {
+    text-align: center !important;
+    padding: 40px 20px !important;
+    color: #9ca3af !important;
+}
+
+.no-users-message i {
+    font-size: 48px !important;
+    margin-bottom: 16px !important;
+    color: #6b7280 !important;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .user-card {
+        padding: 10px !important;
+    }
+    
+    .user-avatar {
+        width: 35px !important;
+        height: 35px !important;
+        font-size: 14px !important;
+        margin-right: 10px !important;
+    }
+    
+    .schedule-card {
+        padding: 12px !important;
+    }
+}
+
+/* Animation for user cards */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.user-card {
+    animation: slideInUp 0.3s ease-out !important;
+}
+
+/* Success/Error message styling */
+.alert-custom {
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 12px 16px !important;
+    margin-bottom: 16px !important;
+}
+
+.alert-custom-success {
+    background: rgba(34, 197, 94, 0.1) !important;
+    color: #22c55e !important;
+    border-left: 4px solid #22c55e !important;
+}
+
+.alert-custom-error {
+    background: rgba(239, 68, 68, 0.1) !important;
+    color: #ef4444 !important;
+    border-left: 4px solid #ef4444 !important;
+}
+
+.alert-custom-info {
+    background: rgba(59, 130, 246, 0.1) !important;
+    color: #3b82f6 !important;
+    border-left: 4px solid #3b82f6 !important;
+}
