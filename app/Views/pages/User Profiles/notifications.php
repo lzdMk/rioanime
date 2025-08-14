@@ -111,7 +111,7 @@
                             </div>
                             <div>
                                 <h6 class="mb-1" id="notificationTitleDetail">Title</h6>
-                                <small class="text-muted" id="notificationTimeDetail">Time</small>
+                                <small id="notificationTimeDetail">Time</small>
                             </div>
                         </div>
                     </div>
@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="notification-content notification-clickable" data-notification-id="${notification.id}">
                         <div class="notification-title">${escapeHtml(notification.title)}</div>
-                        <div class="notification-message">${escapeHtml(truncateMessage(notification.message, 80))}</div>
+                        <div class="notification-message">${formatMessageWithLineBreaks(truncateMessage(notification.message, 80))}</div>
                         <div class="notification-time">${timeAgo}</div>
                     </div>
                     ${isUnread ? '<div class="unread-indicator"></div>' : ''}
@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Set content
         titleEl.textContent = notification.title || 'Notification';
-        messageEl.textContent = notification.message || '';
+        messageEl.innerHTML = formatMessageWithLineBreaks(notification.message || '');
         timeEl.textContent = getTimeAgo(notification.created_at);
         
         // Set icon
@@ -474,6 +474,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    function formatMessageWithLineBreaks(message) {
+        if (!message) return '';
+        // First escape HTML to prevent XSS, then convert newlines to <br>
+        return escapeHtml(message).replace(/\n/g, '<br>');
     }
 
     function truncateMessage(message, maxLength = 80) {
