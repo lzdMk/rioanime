@@ -1189,7 +1189,6 @@ function validateForm() {
     const message = document.getElementById('notification_message')?.value.trim();
     const notificationType = document.getElementById('notification_type')?.value;
     const priority = document.getElementById('notification_priority')?.value;
-    const userGroup = document.getElementById('user_group')?.value;
     
     if (!targetType) {
         showAlert('error', 'Please select a target for the notification.');
@@ -1201,8 +1200,8 @@ function validateForm() {
         return false;
     }
     
-    if (targetType === 'group' && !userGroup) {
-        showAlert('error', 'Please select a user group.');
+    if (targetType === 'group' && selectedGroups.length === 0) {
+        showAlert('error', 'Please select at least one user group.');
         return false;
     }
     
