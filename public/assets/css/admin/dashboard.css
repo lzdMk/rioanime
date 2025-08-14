@@ -409,3 +409,46 @@
 #all_users_section .fa-users {
     color: var(--primary-color) !important;
 }
+
+#all_users_section .alert-custom-info {
+    background: rgba(59, 130, 246, 0.15) !important;
+    border: 1px solid rgba(59, 130, 246, 0.3) !important;
+    border-radius: 8px !important;
+    color: #3b82f6 !important;
+}
+
+#all_users_section .text-success {
+    color: #22c55e !important;
+}
+
+#all_users_section .fw-bold.text-success {
+    background: rgba(34, 197, 94, 0.1) !important;
+    padding: 8px 16px !important;
+    border-radius: 6px !important;
+    border: 1px solid rgba(34, 197, 94, 0.3) !important;
+}
+
+#all_users_section .d-flex.justify-content-center {
+    background: rgba(34, 197, 94, 0.05) !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(34, 197, 94, 0.2) !important;
+}
+
+/* Success Confirmation Styling */
+.success-confirmation {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(34, 197, 94, 0.1) !important;
+    color: #22c55e !important;
+    padding: 12px 20px !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(34, 197, 94, 0.3) !important;
+    font-weight: 600 !important;
+}
+
+.success-confirmation .fas {
+    color: #22c55e !important;
+    font-size: 16px !important;
+}

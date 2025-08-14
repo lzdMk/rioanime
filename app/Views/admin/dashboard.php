@@ -119,20 +119,10 @@
                         <!-- Send Notification Card -->
                         <div class="col-12">
                             <div class="admin-card shadow mb-4">
-                                <div class="admin-card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <div class="admin-card-header py-3">
                                     <h6 class="m-0 font-weight-bold admin-text-primary">
                                         <i class="fas fa-bell me-2"></i>Send Notification
                                     </h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Notification Actions:</div>
-                                            <a class="dropdown-item" href="#" onclick="clearForm()">Clear Form</a>
-                                            <a class="dropdown-item" href="#" onclick="previewNotification()">Preview</a>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="admin-card-body">
                                     <form id="notificationForm" action="<?= site_url('admin/send-notification') ?>" method="POST">
@@ -441,7 +431,7 @@
                                                             </h6>
                                                         </div>
                                                         <div class="admin-card-body p-3">
-                                                            <div class="text-center py-5">
+                                                            <div class="text-center py-4">
                                                                 <div class="mb-4">
                                                                     <i class="fas fa-users fa-4x admin-text-primary"></i>
                                                                 </div>
@@ -449,13 +439,13 @@
                                                                 <p class="admin-text-muted mb-4">
                                                                     This notification will be sent to every registered user in the system.
                                                                 </p>
-                                                                <div class="alert alert-custom alert-custom-info">
+                                                                <div class="alert alert-custom alert-custom-info mb-4">
                                                                     <i class="fas fa-info-circle me-2"></i>
                                                                     <small>This includes all user types: Viewers, Moderators, and Admins</small>
                                                                 </div>
-                                                                <div class="d-flex justify-content-center align-items-center mt-4">
-                                                                    <i class="fas fa-check-circle text-success me-2"></i>
-                                                                    <span class="fw-bold text-success">All users will receive this notification</span>
+                                                                <div class="success-confirmation">
+                                                                    <i class="fas fa-check-circle me-2"></i>
+                                                                    <span class="fw-bold">All users will receive this notification</span>
                                                                 </div>
                                                             </div>
                                                         </div>
