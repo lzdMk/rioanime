@@ -552,6 +552,17 @@
     padding-bottom: 1rem;
 }
 
+.notification-header-detail h6 {
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.notification-header-detail small {
+    color: #9ca3af;
+    font-weight: 400;
+}
+
 .notification-icon-detail {
     width: 48px;
     height: 48px;
@@ -600,10 +611,16 @@
 
 .notification-message-detail {
     margin-top: 1rem;
-    padding: 1rem;
+    padding: 1.25rem;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 8px;
     border-left: 3px solid #6366f1;
+    line-height: 1.6;
+}
+
+.notification-message-detail p {
+    margin-bottom: 0;
+    color: #e5e7eb;
 }
 
 .d-none {display:none!important;}

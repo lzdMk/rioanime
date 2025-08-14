@@ -339,6 +339,25 @@ class Account extends BaseController
     }
 
     /**
+     * Get current user profile data for header refresh
+     */
+    public function getProfileData()
+    {
+        if (!session('isLoggedIn')) {
+            return $this->response->setStatusCode(401)->setJSON(['success' => false, 'message' => 'Unauthorized']);
+        }
+        
+        $userId = session('user_id');
+        $user = $this->accountModel->find($userId);
+        
+        return $this->response->setJSON([
+            'success' => true,
+            'user_profile' => $user['user_profile'] ?? null,
+            'username' => $user['username'] ?? null
+        ]);
+    }
+
+    /**
      * Handle user logout
      */
     public function logout()

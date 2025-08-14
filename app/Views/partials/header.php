@@ -82,9 +82,10 @@
  <script>
      window.baseUrl = '<?= base_url() ?>';
      
-     // Load notification count for navbar badge
+     // Load notification count for navbar badge and refresh avatar
      <?php if (session('isLoggedIn')): ?>
      document.addEventListener('DOMContentLoaded', function() {
+         // Load notification count
          fetch('<?= base_url('api/notifications/unread-count') ?>')
              .then(response => response.json())
              .then(data => {
@@ -95,6 +96,24 @@
                  }
              })
              .catch(error => console.error('Error loading notification count:', error));
+         
+         // Refresh avatar from session in case it was updated
+         fetch('<?= base_url('api/user/profile-data') ?>')
+             .then(response => response.json())
+             .then(data => {
+                 if (data.success && data.user_profile) {
+                     const navbarAvatar = document.getElementById('navbarAvatar');
+                     if (navbarAvatar && data.user_profile !== '<?= session('user_profile') ?>') {
+                         if (navbarAvatar.tagName === 'IMG') {
+                             navbarAvatar.src = data.user_profile;
+                         } else {
+                             // Replace letter avatar with image
+                             navbarAvatar.outerHTML = '<img id="navbarAvatar" src="' + data.user_profile + '" alt="User" class="user-avatar rounded-circle border">';
+                         }
+                     }
+                 }
+             })
+             .catch(error => console.error('Error refreshing avatar:', error));
      });
      <?php endif; ?>
  </script>
