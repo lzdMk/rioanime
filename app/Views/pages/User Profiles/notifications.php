@@ -90,7 +90,45 @@
             </div>
         </div>
     </div>
- </div>
+</div>
+
+<!-- Notification Detail Modal -->
+<div class="modal fade" id="notificationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="margin-top: 5vh;">
+        <div class="modal-content" style="background:#1b1b35;color:#fff;border:1px solid rgba(255,255,255,0.08)">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notificationModalTitle">
+                    <i class="fas fa-bell me-2"></i>Notification Details
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="notification-detail">
+                    <div class="notification-header-detail mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="notification-icon-detail me-3" id="notificationIconDetail">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1" id="notificationTitleDetail">Title</h6>
+                                <small class="text-muted" id="notificationTimeDetail">Time</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="notification-message-detail">
+                        <p id="notificationMessageDetail" style="line-height: 1.6; margin-bottom: 0;">Message content</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="markAsReadFromModal" style="display: none;">
+                    <i class="fas fa-check me-1"></i>Mark as Read
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -181,7 +219,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         <i class="${typeIcon}"></i>
                     </div>
                     <div class="notification-content notification-clickable" data-notification-id="${notification.id}">
-                        <div class="notification-message">${escapeHtml(notification.message)}</div>
+                        <div class="notification-title">${escapeHtml(notification.title)}</div>
+                        <div class="notification-message">${escapeHtml(truncateMessage(notification.message, 80))}</div>
                         <div class="notification-time">${timeAgo}</div>
                     </div>
                     ${isUnread ? '<div class="unread-indicator"></div>' : ''}
@@ -194,14 +233,14 @@ document.addEventListener('DOMContentLoaded', function() {
             checkbox.addEventListener('change', handleCheckboxChange);
         });
 
-        // Add click-to-mark-as-read functionality
-    document.querySelectorAll('.notification-clickable').forEach(content => {
-            content.addEventListener('click', async function() {
-        const notificationId = parseInt(this.dataset.notificationId);
-        const notification = notifications.find(n => Number(n.id) === notificationId);
+        // Add click-to-show-detail functionality
+        document.querySelectorAll('.notification-clickable').forEach(content => {
+            content.addEventListener('click', function() {
+                const notificationId = parseInt(this.dataset.notificationId);
+                const notification = notifications.find(n => Number(n.id) === notificationId);
                 
-                if (notification && notification.is_read == 0) {
-                    await markSingleAsRead(notificationId);
+                if (notification) {
+                    showNotificationDetail(notification);
                 }
             });
         });
@@ -231,6 +270,41 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             selectAllBtn.innerHTML = '<i class="fas fa-check-double"></i> Select All';
         }
+    }
+
+    // Show notification detail modal
+    function showNotificationDetail(notification) {
+        const modal = document.getElementById('notificationModal');
+        const titleEl = document.getElementById('notificationTitleDetail');
+        const messageEl = document.getElementById('notificationMessageDetail');
+        const timeEl = document.getElementById('notificationTimeDetail');
+        const iconEl = document.getElementById('notificationIconDetail');
+        const markReadBtn = document.getElementById('markAsReadFromModal');
+        
+        // Set content
+        titleEl.textContent = notification.title || 'Notification';
+        messageEl.textContent = notification.message || '';
+        timeEl.textContent = getTimeAgo(notification.created_at);
+        
+        // Set icon
+        const typeIcon = getTypeIcon(notification.type);
+        iconEl.innerHTML = `<i class="${typeIcon}"></i>`;
+        iconEl.className = `notification-icon-detail me-3 ${notification.type}`;
+        
+        // Show/hide mark as read button
+        const isUnread = notification.is_read == 0;
+        if (isUnread) {
+            markReadBtn.style.display = 'inline-block';
+            markReadBtn.onclick = async () => {
+                await markSingleAsRead(notification.id);
+                bootstrap.Modal.getInstance(modal).hide();
+            };
+        } else {
+            markReadBtn.style.display = 'none';
+        }
+        
+        // Show modal
+        new bootstrap.Modal(modal).show();
     }
 
     // Update notification count
@@ -400,6 +474,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    function truncateMessage(message, maxLength = 80) {
+        if (!message) return '';
+        if (message.length <= maxLength) return message;
+        return message.substring(0, maxLength).trim() + '...';
     }
 
     // Initial load

@@ -491,12 +491,22 @@
     min-width: 0;
 }
 
-.notification-message {
-    font-size: 0.95rem;
-    font-weight: 500;
+.notification-title {
+    font-size: 1rem;
+    font-weight: 600;
     color: #fff;
     margin-bottom: 0.25rem;
+    line-height: 1.3;
+}
+
+.notification-message {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #d1d5db;
+    margin-bottom: 0.375rem;
     line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .notification-time {
@@ -511,6 +521,7 @@
     border-radius: 6px;
     padding: 4px;
     margin: -4px;
+    flex: 1;
 }
 
 .notification-item.unread .notification-clickable:hover {
@@ -518,8 +529,8 @@
     transform: translateX(2px);
 }
 
-.notification-item:not(.unread) .notification-clickable {
-    cursor: default;
+.notification-item:not(.unread) .notification-clickable:hover {
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .unread-indicator {
@@ -529,6 +540,70 @@
     border-radius: 50%;
     flex-shrink: 0;
     box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+/* Notification Detail Modal */
+.notification-detail {
+    padding: 0.5rem 0;
+}
+
+.notification-header-detail {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+}
+
+.notification-icon-detail {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.notification-icon-detail.profile_update {
+    background: rgba(139, 92, 246, 0.15);
+    color: #8b5cf6;
+}
+
+.notification-icon-detail.security {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+}
+
+.notification-icon-detail.warning {
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+}
+
+.notification-icon-detail.error {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.notification-icon-detail.info {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+}
+
+.notification-icon-detail.success {
+    background: rgba(52, 211, 153, 0.15);
+    color: #34d399;
+}
+
+.notification-icon-detail.welcome {
+    background: rgba(244, 114, 182, 0.15);
+    color: #f472b6;
+}
+
+.notification-message-detail {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid #6366f1;
 }
 
 .d-none {display:none!important;}
@@ -558,8 +633,11 @@
         height: 36px;
         font-size: 1rem;
     }
+    .notification-title {
+        font-size: 0.95rem;
+    }
     .notification-message {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
 }
 
