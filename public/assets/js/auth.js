@@ -280,6 +280,47 @@ function getFieldId(fieldName) {
 }
 
 /**
+ * Modal switching functionality
+ */
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle switching from register to login
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('login-link') || e.target.closest('.login-link')) {
+            e.preventDefault();
+            
+            // Hide register modal
+            const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+            if (registerModal) {
+                registerModal.hide();
+            }
+            
+            // Show login modal after a short delay
+            setTimeout(() => {
+                const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+                loginModal.show();
+            }, 300);
+        }
+        
+        // Handle switching from login to register
+        if (e.target.classList.contains('register-link') || e.target.closest('.register-link')) {
+            e.preventDefault();
+            
+            // Hide login modal
+            const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+            if (loginModal) {
+                loginModal.hide();
+            }
+            
+            // Show register modal after a short delay
+            setTimeout(() => {
+                const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+                registerModal.show();
+            }, 300);
+        }
+    });
+});
+
+/**
  * Show success notification
  */
 function showSuccessNotification(message) {

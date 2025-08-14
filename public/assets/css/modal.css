@@ -1,57 +1,294 @@
 /* Registration Modal Custom Styles */
 #registerModal .modal-content {
-  background: #181828;
-  color: #fff;
-  border-radius: 1.5rem;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+  background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+  color: var(--text-primary);
+  border-radius: 1.2rem;
+  box-shadow: 0 20px 60px rgba(139, 92, 246, 0.15), 0 0 0 1px rgba(139, 92, 246, 0.1);
   border: none;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
 }
+
+#registerModal .modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary-purple), var(--accent-color));
+}
+
 #registerModal .modal-header {
   border-bottom: none;
-  padding-bottom: 0;
+  padding: 1.5rem 1.5rem 0;
+  position: relative;
 }
+
 #registerModal .modal-title {
   font-family: 'Lexend Deca', sans-serif;
   font-weight: 700;
-  font-size: 2rem;
-  color: #fff;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--primary-purple), var(--accent-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
 }
+
 #registerModal .form-label {
-  color: #bdbdbd;
+  color: var(--text-secondary);
   letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: uppercase;
 }
+
 #registerModal .form-control {
-  background: #23234a;
-  color: #fff;
-  border: 1px solid #35357a;
-  border-radius: 0.75rem;
-  font-size: 1rem;
+  background: rgba(26, 26, 46, 0.8);
+  color: var(--text-primary);
+  border: 1.5px solid rgba(139, 92, 246, 0.2);
+  border-radius: 0.7rem;
+  font-size: 0.95rem;
   box-shadow: none;
+  padding: 0.75rem 1rem;
+  height: auto;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
 }
+
 #registerModal .form-control:focus {
-  background: #23234a;
-  color: #fff;
-  border-color: #7c3aed;
-  box-shadow: 0 0 0 0.2rem rgba(124,58,237,0.15);
+  background: rgba(26, 26, 46, 0.9);
+  color: var(--text-primary);
+  border-color: var(--primary-purple);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1), 0 4px 20px rgba(139, 92, 246, 0.15);
+  transform: translateY(-1px);
 }
+
+#registerModal .form-control::placeholder {
+  color: rgba(184, 184, 184, 0.6);
+}
+
 #registerModal .btn-primary {
-  background: linear-gradient(90deg, #7c3aed 0%, #a78bfa 100%);
+  background: linear-gradient(135deg, var(--primary-purple), var(--accent-color));
   border: none;
-  color: #fff;
+  color: var(--text-primary);
   font-weight: 700;
-  font-size: 1.1rem;
-  border-radius: 0.75rem;
-  transition: background 0.2s;
+  font-size: 1rem;
+  border-radius: 0.7rem;
+  transition: all 0.3s ease;
+  padding: 0.8rem 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
 }
+
 #registerModal .btn-primary:hover {
-  background: linear-gradient(90deg, #a78bfa 0%, #7c3aed 100%);
+  background: linear-gradient(135deg, var(--accent-color), var(--primary-purple));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
 }
+
+#registerModal .btn-primary:active {
+  transform: translateY(0);
+}
+
 #registerModal .btn-close {
-  filter: invert(1);
+  filter: none;
   opacity: 0.7;
-  transition: opacity 0.2s;
+  transition: all 0.2s ease;
+  padding: 0.3rem;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  border: none;
+  width: 32px;
+  height: 32px;
 }
+
 #registerModal .btn-close:hover {
   opacity: 1;
+  background: rgba(139, 92, 246, 0.2);
+  transform: scale(1.1);
+  color: var(--text-primary);
+}
+
+#registerModal .modal-body {
+  padding: 0.5rem 1.5rem 1.5rem;
+}
+
+#registerModal .modal-dialog {
+  max-width: 420px;
+}
+
+#registerModal .login-link {
+  color: var(--primary-purple);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+#registerModal .login-link:hover {
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+/* Login Modal Custom Styles */
+#loginModal .modal-content {
+  background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+  color: var(--text-primary);
+  border-radius: 1.2rem;
+  box-shadow: 0 20px 60px rgba(139, 92, 246, 0.15), 0 0 0 1px rgba(139, 92, 246, 0.1);
+  border: none;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+#loginModal .modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary-purple), var(--accent-color));
+}
+
+#loginModal .modal-header {
+  border-bottom: none;
+  padding: 1.5rem 1.5rem 0;
+  position: relative;
+}
+
+#loginModal .modal-title {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--primary-purple), var(--accent-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+#loginModal .form-label {
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+#loginModal .form-control {
+  background: rgba(26, 26, 46, 0.8);
+  color: var(--text-primary);
+  border: 1.5px solid rgba(139, 92, 246, 0.2);
+  border-radius: 0.7rem;
+  font-size: 0.95rem;
+  box-shadow: none;
+  padding: 0.75rem 1rem;
+  height: auto;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+#loginModal .form-control:focus {
+  background: rgba(26, 26, 46, 0.9);
+  color: var(--text-primary);
+  border-color: var(--primary-purple);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1), 0 4px 20px rgba(139, 92, 246, 0.15);
+  transform: translateY(-1px);
+}
+
+#loginModal .form-control::placeholder {
+  color: rgba(184, 184, 184, 0.6);
+}
+
+#loginModal .btn-primary {
+  background: linear-gradient(135deg, var(--primary-purple), var(--accent-color));
+  border: none;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1rem;
+  border-radius: 0.7rem;
+  transition: all 0.3s ease;
+  padding: 0.8rem 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+#loginModal .btn-primary:hover {
+  background: linear-gradient(135deg, var(--accent-color), var(--primary-purple));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+}
+
+#loginModal .btn-primary:active {
+  transform: translateY(0);
+}
+
+#loginModal .btn-close {
+  filter: none;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+  padding: 0.3rem;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  border: none;
+  width: 32px;
+  height: 32px;
+}
+
+#loginModal .btn-close:hover {
+  opacity: 1;
+  background: rgba(139, 92, 246, 0.2);
+  transform: scale(1.1);
+  color: var(--text-primary);
+}
+
+#loginModal .modal-body {
+  padding: 0.5rem 1.5rem 1.5rem;
+}
+
+#loginModal .modal-dialog {
+  max-width: 420px;
+}
+
+#loginModal .register-link {
+  color: var(--primary-purple);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+#loginModal .register-link:hover {
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+#loginModal .form-check-input:checked {
+  background-color: var(--primary-purple);
+  border-color: var(--primary-purple);
+}
+
+#loginModal .form-check-input:focus {
+  border-color: var(--primary-purple);
+  box-shadow: 0 0 0 0.2rem rgba(139, 92, 246, 0.25);
+}
+
+#loginModal .text-pink {
+  color: var(--primary-purple) !important;
+}
+
+#loginModal .text-pink:hover {
+  color: var(--accent-color) !important;
 }
 

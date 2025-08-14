@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\AccountModel;
 use App\Models\AnimeModel;
+use Exception;
 
 class Admin extends BaseController
 {
@@ -515,6 +516,243 @@ class Admin extends BaseController
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'An error occurred during import: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Send notification to users
+     */
+    public function sendNotification()
+    {
+        if (!$this->request->isAJAX() && !$this->request->getMethod() === 'POST') {
+            return redirect()->to('admin');
+        }
+
+        try {
+            // Get form data
+            $targetType = $this->request->getPost('target_type');
+            $userIds = $this->request->getPost('user_ids'); // Changed from user_id to user_ids
+            $userGroup = $this->request->getPost('user_group');
+            $title = $this->request->getPost('notification_title');
+            $message = $this->request->getPost('notification_message');
+            $type = $this->request->getPost('notification_type');
+            $priority = $this->request->getPost('notification_priority');
+            $actionUrl = $this->request->getPost('action_url');
+            $sendImmediately = $this->request->getPost('send_immediately') ? true : false;
+            $sendEmail = $this->request->getPost('send_email') ? true : false;
+
+            // Validate required fields
+            if (empty($targetType) || empty($title) || empty($message) || empty($type) || empty($priority)) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Please fill in all required fields.'
+                ]);
+            }
+
+            // Validate target-specific fields
+            if ($targetType === 'specific' && empty($userIds)) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Please select at least one user.'
+                ]);
+            }
+
+            if ($targetType === 'group' && empty($userGroup)) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Please select a user group.'
+                ]);
+            }
+
+            // Get target users based on type
+            $targetUsers = $this->getTargetUsers($targetType, $userIds, $userGroup);
+
+            if (empty($targetUsers)) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'No users found for the selected target.'
+                ]);
+            }
+
+            // Prepare notification data
+            $notificationData = [
+                'title' => $title,
+                'message' => $message,
+                'type' => $type,
+                'priority' => $priority,
+                'action_url' => $actionUrl,
+                'created_at' => date('Y-m-d H:i:s'),
+                'is_read' => 0
+            ];
+
+            $sentCount = 0;
+            $notificationModel = new \App\Models\NotificationModel();
+
+            // Send notifications to target users
+            foreach ($targetUsers as $user) {
+                $notificationData['user_id'] = $user['id'];
+                
+                if ($notificationModel->insert($notificationData)) {
+                    $sentCount++;
+                    
+                    // Send email if requested and user has email
+                    if ($sendEmail && !empty($user['email'])) {
+                        $this->sendNotificationEmail($user, $notificationData);
+                    }
+                }
+            }
+
+            // Log the notification send
+            log_message('info', "Admin sent notification: '$title' to $sentCount users (Target: $targetType)");
+
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => "Notification sent successfully to $sentCount users!",
+                'sent_count' => $sentCount
+            ]);
+
+        } catch (Exception $e) {
+            log_message('error', 'Send notification error: ' . $e->getMessage());
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'An error occurred while sending the notification: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Get target users based on selection type
+     */
+    private function getTargetUsers($targetType, $userIds = null, $userGroup = null)
+    {
+        $users = [];
+
+        switch ($targetType) {
+            case 'all':
+                $users = $this->accountModel->findAll();
+                break;
+
+            case 'specific':
+                if ($userIds) {
+                    // Handle comma-separated user IDs
+                    $userIdArray = explode(',', $userIds);
+                    $userIdArray = array_filter(array_map('trim', $userIdArray));
+                    
+                    if (!empty($userIdArray)) {
+                        $users = $this->accountModel->whereIn('id', $userIdArray)->findAll();
+                    }
+                }
+                break;
+
+            case 'group':
+                $users = $this->getUsersByGroup($userGroup);
+                break;
+        }
+
+        return $users;
+    }
+
+    /**
+     * Get users by group type
+     */
+    private function getUsersByGroup($groupType)
+    {
+        $builder = $this->accountModel->builder();
+
+        switch ($groupType) {
+            case 'premium':
+                // For now, return users with type 'premium' if that field exists
+                return $builder->where('type', 'premium')->get()->getResultArray();
+
+            case 'active':
+                // For now, return all users (can be enhanced later when last_login field is added)
+                $thirtyDaysAgo = date('Y-m-d H:i:s', strtotime('-30 days'));
+                return $builder->where('created_at >=', $thirtyDaysAgo)->get()->getResultArray();
+
+            case 'new':
+                $sevenDaysAgo = date('Y-m-d H:i:s', strtotime('-7 days'));
+                return $builder->where('created_at >=', $sevenDaysAgo)->get()->getResultArray();
+
+            case 'inactive':
+                // For now, return users older than 30 days (can be enhanced later)
+                $thirtyDaysAgo = date('Y-m-d H:i:s', strtotime('-30 days'));
+                return $builder->where('created_at <', $thirtyDaysAgo)->get()->getResultArray();
+
+            default:
+                return [];
+        }
+    }
+
+    /**
+     * Send notification email to user
+     */
+    private function sendNotificationEmail($user, $notificationData)
+    {
+        try {
+            $email = \Config\Services::email();
+            
+            $email->setTo($user['email']);
+            $email->setSubject('[RioAnime] ' . $notificationData['title']);
+            
+            $emailMessage = "
+                <h2>{$notificationData['title']}</h2>
+                <p>{$notificationData['message']}</p>
+                <p><strong>Priority:</strong> " . ucfirst($notificationData['priority']) . "</p>
+            ";
+            
+            if (!empty($notificationData['action_url'])) {
+                $emailMessage .= "<p><a href='{$notificationData['action_url']}' style='background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Take Action</a></p>";
+            }
+            
+            $emailMessage .= "
+                <hr>
+                <p><small>This is an automated notification from RioAnime. If you no longer wish to receive these emails, you can disable email notifications in your account settings.</small></p>
+            ";
+            
+            $email->setMessage($emailMessage);
+            
+            return $email->send();
+            
+        } catch (Exception $e) {
+            log_message('error', 'Email notification error: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Get users for AJAX dropdown
+     */
+    public function getUsers()
+    {
+        // Log the request details
+        log_message('info', 'getUsers called - Method: ' . $this->request->getMethod());
+        log_message('info', 'getUsers called - Is AJAX: ' . ($this->request->isAJAX() ? 'true' : 'false'));
+        log_message('info', 'getUsers called - Headers: ' . json_encode($this->request->getHeaders()));
+        
+        if (!$this->request->isAJAX()) {
+            log_message('error', 'getUsers: Not AJAX request');
+            return $this->response->setStatusCode(403);
+        }
+
+        try {
+            $users = $this->accountModel
+                ->select('id, username, email')
+                ->orderBy('username', 'ASC')
+                ->findAll();
+
+            log_message('info', 'getUsers: Found ' . count($users) . ' users');
+
+            return $this->response->setJSON([
+                'success' => true,
+                'users' => $users
+            ]);
+
+        } catch (Exception $e) {
+            log_message('error', 'Get users error: ' . $e->getMessage());
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Error loading users: ' . $e->getMessage()
             ]);
         }
     }

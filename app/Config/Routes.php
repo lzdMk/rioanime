@@ -42,6 +42,10 @@ $routes->group('admin', function ($routes) {
     $routes->post('updateAnime/(:num)', 'Admin::updateAnime/$1');
     $routes->delete('deleteAnime/(:num)', 'Admin::deleteAnime/$1');
     $routes->post('importAnime', 'Admin::importAnime');
+    
+    // Notification management API
+    $routes->post('send-notification', 'Admin::sendNotification');
+    $routes->get('getUsers', 'Admin::getUsers');
 });
 
 // Random anime route

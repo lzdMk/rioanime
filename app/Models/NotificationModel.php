@@ -12,7 +12,7 @@ class NotificationModel extends Model
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
-    protected $allowedFields = ['user_id', 'type', 'message', 'is_read', 'created_at'];
+    protected $allowedFields = ['user_id', 'title', 'message', 'type', 'priority', 'action_url', 'is_read', 'created_at'];
 
     // Dates
     protected $useTimestamps = false;
@@ -22,7 +22,9 @@ class NotificationModel extends Model
     // Validation
     protected $validationRules = [
         'user_id' => 'required|integer',
+        'title' => 'required|string|max_length[100]',
         'type' => 'required|string|max_length[32]',
+        'priority' => 'required|string|max_length[32]',
         'message' => 'required|string'
     ];
 
