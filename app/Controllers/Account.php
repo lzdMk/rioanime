@@ -175,7 +175,20 @@ class Account extends BaseController
             mkdir($dir, 0755, true);
         }
         $ext = $file->getExtension();
-        $newName = 'avatar_' . $userId . '_' . time() . '.' . $ext;
+
+        // Build filename: avatar_(username)_(generated time data)
+        // Use session username when available, fallback to DB username, then userid.
+        $rawUsername = session('username') ?? ($currentUser['username'] ?? $userId);
+        // Sanitize username for filenames: lowercase, replace non-alphanumeric with underscore, trim
+        $safeUsername = preg_replace('/[^a-z0-9_]/', '_', strtolower((string)$rawUsername));
+        $safeUsername = trim($safeUsername, '_');
+        if ($safeUsername === '') {
+            $safeUsername = 'user' . $userId;
+        }
+
+        // Use formatted timestamp for readability and uniqueness
+        $timestamp = date('YmdHis');
+        $newName = "avatar_{$safeUsername}_{$timestamp}.{$ext}";
         $file->move($dir, $newName, true);
         $fullPath = $dir . $newName;
 
