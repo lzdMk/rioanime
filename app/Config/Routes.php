@@ -50,6 +50,7 @@ $routes->group('admin', function ($routes) {
     // Metrics API
     $routes->get('getMetricsData', 'Admin::getMetricsData');
     $routes->get('getDeviceAnalytics', 'Admin::getDeviceAnalytics');
+    $routes->get('getOnlineUsersList', 'Admin::getOnlineUsersList');
     $routes->post('trackSession', 'Admin::trackSession');
 });
 

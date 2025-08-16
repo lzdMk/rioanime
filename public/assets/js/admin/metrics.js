@@ -21,6 +21,7 @@ class MetricsManager {
         this.loadDeviceAnalytics();
         this.startAutoRefresh();
         this.startSessionTracking();
+        this.setupOnlineUsersModal(); // Setup online users modal
         
         // Bind event listeners
         document.getElementById('chartPeriod')?.addEventListener('change', () => this.updateChart());
@@ -436,6 +437,130 @@ class MetricsManager {
     showError(message) {
         // You can implement a toast notification system here
         console.error(message);
+    }
+    
+    // Online Users Modal Functionality
+    async loadOnlineUsers() {
+        try {
+            const response = await fetch(`${baseUrl}admin/getOnlineUsersList`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                this.renderOnlineUsers(data.data, data.total);
+            } else {
+                this.showOnlineUsersError('Failed to load online users');
+            }
+        } catch (error) {
+            console.error('Error loading online users:', error);
+            this.showOnlineUsersError('Failed to load online users');
+        }
+    }
+    
+    renderOnlineUsers(users, total) {
+        const container = document.getElementById('onlineUsersContent');
+        if (!container) return;
+        
+        if (!users || users.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-4">
+                    <i class="fas fa-user-slash text-muted"></i>
+                    <p class="text-light mt-2">No users currently online</p>
+                </div>
+            `;
+            return;
+        }
+        
+        let html = `
+            <div class="online-users-header">
+                <h6 class="text-light mb-0">
+                    <i class="fas fa-users text-info me-2"></i>Online Users
+                </h6>
+                <span class="users-count">${total} user${total !== 1 ? 's' : ''} online</span>
+            </div>
+        `;
+        
+        users.forEach(user => {
+            const avatarUrl = user.user_profile || `${baseUrl}assets/images/default-avatar.png`;
+            const statusClass = user.user_type === 'admin' ? 'admin' : (user.user_type === 'user' ? 'user' : 'viewer');
+            
+            html += `
+                <div class="user-card">
+                    <div class="d-flex align-items-center">
+                        <img src="${avatarUrl}" alt="${this.escapeHtml(user.display_name)}" class="user-avatar me-3" 
+                             onerror="this.src='${baseUrl}assets/images/default-avatar.png'">
+                        <div class="flex-grow-1">
+                            <div class="d-flex align-items-center mb-1">
+                                <span class="text-light fw-bold me-2">${this.escapeHtml(user.display_name)}</span>
+                                <span class="user-status-badge ${statusClass}">${user.user_type}</span>
+                            </div>
+                            <div class="d-flex align-items-center text-muted small">
+                                <span class="me-3">
+                                    <i class="fas fa-at me-1"></i>${this.escapeHtml(user.username)}
+                                </span>
+                                <span class="me-3">
+                                    <i class="fas fa-desktop me-1"></i>
+                                    <span class="device-badge">${user.device_type}</span>
+                                </span>
+                                <span class="me-3">
+                                    <i class="fas fa-globe me-1"></i>${user.ip_address}
+                                </span>
+                                <span>
+                                    <i class="fas fa-clock me-1"></i>${user.time_ago}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+    }
+    
+    showOnlineUsersError(message) {
+        const container = document.getElementById('onlineUsersContent');
+        if (!container) return;
+        
+        container.innerHTML = `
+            <div class="text-center py-4">
+                <i class="fas fa-exclamation-triangle text-warning"></i>
+                <p class="text-light mt-2">${message}</p>
+                <button class="btn btn-sm btn-outline-info" onclick="window.metricsManager.loadOnlineUsers()">
+                    <i class="fas fa-redo me-1"></i>Retry
+                </button>
+            </div>
+        `;
+    }
+    
+    setupOnlineUsersModal() {
+        const modal = document.getElementById('onlineUsersModal');
+        if (!modal) return;
+        
+        // Load users when modal is shown
+        modal.addEventListener('show.bs.modal', () => {
+            this.loadOnlineUsers();
+        });
+        
+        // Auto-refresh users while modal is open
+        let modalRefreshInterval;
+        modal.addEventListener('shown.bs.modal', () => {
+            modalRefreshInterval = setInterval(() => {
+                this.loadOnlineUsers();
+            }, 30000); // Refresh every 30 seconds
+        });
+        
+        modal.addEventListener('hidden.bs.modal', () => {
+            if (modalRefreshInterval) {
+                clearInterval(modalRefreshInterval);
+                modalRefreshInterval = null;
+            }
+        });
     }
     
     // Cleanup when page unloads

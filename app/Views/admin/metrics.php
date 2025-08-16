@@ -166,12 +166,13 @@
                         
                         <!-- Currently Online -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card metrics-card border-left-info">
+                            <div class="card metrics-card border-left-info clickable-card" data-bs-toggle="modal" data-bs-target="#onlineUsersModal" style="cursor: pointer;">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="metric-label">
                                                 <span class="online-indicator"></span>Currently Online
+                                                <small class="text-muted d-block">Click to view details</small>
                                             </div>
                                             <div class="metric-value text-info" id="currentlyOnline">
                                                 <div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i></div>
@@ -290,6 +291,34 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Online Users Modal -->
+    <div class="modal fade" id="onlineUsersModal" tabindex="-1" aria-labelledby="onlineUsersModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-dark">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title text-light" id="onlineUsersModalLabel">
+                        <i class="fas fa-wifi text-info me-2"></i>Currently Online Users
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="onlineUsersContent">
+                        <div class="text-center py-4">
+                            <i class="fas fa-spinner fa-spin text-info"></i>
+                            <span class="text-light ms-2">Loading online users...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <div class="text-muted small me-auto">
+                        <i class="fas fa-clock me-1"></i>Auto-refreshes every 30 seconds
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
