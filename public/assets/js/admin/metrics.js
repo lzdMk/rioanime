@@ -1,6 +1,6 @@
 /**
  * Admin Metrics JavaScript
- * Handles metrics dashboard functionality
+ * Handles metrics dashboard functionality with enhanced tracking
  */
 
 class MetricsManager {
@@ -9,17 +9,29 @@ class MetricsManager {
         this.deviceChart = null;
         this.metricsData = {};
         this.refreshInterval = null;
+        this.sessionTrackingInterval = null;
+        this.countUpInstances = {};
         
         this.init();
     }
     
     init() {
+        this.trackSession(); // Track current session
         this.loadMetricsData();
         this.loadDeviceAnalytics();
         this.startAutoRefresh();
+        this.startSessionTracking();
         
         // Bind event listeners
         document.getElementById('chartPeriod')?.addEventListener('change', () => this.updateChart());
+        
+        // Track page visibility for better online detection
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                this.trackSession();
+                this.loadMetricsData();
+            }
+        });
     }
     
     startAutoRefresh() {
@@ -30,10 +42,35 @@ class MetricsManager {
         }, 30000);
     }
     
+    startSessionTracking() {
+        // Track session every 2 minutes to maintain online status
+        this.sessionTrackingInterval = setInterval(() => {
+            this.trackSession();
+        }, 120000); // 2 minutes
+    }
+    
     stopAutoRefresh() {
         if (this.refreshInterval) {
             clearInterval(this.refreshInterval);
             this.refreshInterval = null;
+        }
+        if (this.sessionTrackingInterval) {
+            clearInterval(this.sessionTrackingInterval);
+            this.sessionTrackingInterval = null;
+        }
+    }
+    
+    async trackSession() {
+        try {
+            await fetch(`${baseUrl}admin/trackSession`, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.debug('Session tracking unavailable:', error);
         }
     }
     
@@ -81,11 +118,11 @@ class MetricsManager {
     }
     
     updateMetricsDisplay() {
-        // Update main metric cards
-        this.updateElement('totalViews', this.formatNumber(this.metricsData.views.total));
-        this.updateElement('totalAccounts', this.formatNumber(this.metricsData.accounts.total));
-        this.updateElement('currentlyOnline', this.formatNumber(this.metricsData.online.current));
-        this.updateElement('viewsToday', this.formatNumber(this.metricsData.views.today));
+        // Update main metric cards with animation
+        this.animateValue('totalViews', this.metricsData.views.total);
+        this.animateValue('totalAccounts', this.metricsData.accounts.total);
+        this.animateValue('currentlyOnline', this.metricsData.online.current);
+        this.animateValue('viewsToday', this.metricsData.views.today);
         
         // Update change indicators
         const viewsChange = this.calculatePercentageChange(
@@ -99,6 +136,35 @@ class MetricsManager {
         
         this.updateChangeIndicator('viewsChange', viewsChange);
         this.updateChangeIndicator('accountsChange', accountsChange);
+    }
+    
+    animateValue(elementId, endValue) {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+        
+        // Destroy existing countUp instance
+        if (this.countUpInstances[elementId]) {
+            this.countUpInstances[elementId] = null;
+        }
+        
+        const currentValue = parseInt(element.textContent) || 0;
+        
+        // Use CountUp.js for smooth animation
+        if (typeof CountUp !== 'undefined') {
+            this.countUpInstances[elementId] = new CountUp(elementId, endValue, {
+                startVal: currentValue,
+                duration: 1.5,
+                separator: ',',
+                decimal: '.',
+                prefix: '',
+                suffix: ''
+            });
+            
+            this.countUpInstances[elementId].start();
+        } else {
+            // Fallback without animation
+            element.textContent = this.formatNumber(endValue);
+        }
     }
     
     updateChart() {
@@ -144,20 +210,49 @@ class MetricsManager {
                     borderColor: 'rgb(75, 192, 192)',
                     backgroundColor: 'rgba(75, 192, 192, 0.1)',
                     tension: 0.4,
-                    fill: true
+                    fill: true,
+                    pointBackgroundColor: 'rgb(75, 192, 192)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(75, 192, 192)'
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        }
                     }
                 },
                 plugins: {
                     legend: {
                         display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: 'rgb(75, 192, 192)',
+                        borderWidth: 1
                     }
                 }
             }
@@ -184,7 +279,9 @@ class MetricsManager {
                         'rgba(255, 205, 86, 0.8)'
                     ],
                     borderWidth: 2,
-                    borderColor: '#fff'
+                    borderColor: '#2d3748',
+                    hoverBorderWidth: 3,
+                    hoverBorderColor: '#fff'
                 }]
             },
             options: {
@@ -192,7 +289,23 @@ class MetricsManager {
                 maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'bottom'
+                        position: 'bottom',
+                        labels: {
+                            color: 'rgba(255, 255, 255, 0.7)',
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + '%';
+                            }
+                        }
                     }
                 }
             }
@@ -266,7 +379,7 @@ class MetricsManager {
             const data = await response.json();
             
             if (data.success) {
-                this.updateElement('currentlyOnline', this.formatNumber(data.data.online.current));
+                this.animateValue('currentlyOnline', data.data.online.current);
             }
         } catch (error) {
             console.error('Error updating online count:', error);
@@ -279,6 +392,7 @@ class MetricsManager {
             el.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i></div>';
         });
         
+        this.trackSession(); // Track session on manual refresh
         this.loadMetricsData();
         this.loadDeviceAnalytics();
     }
@@ -323,11 +437,25 @@ class MetricsManager {
         // You can implement a toast notification system here
         console.error(message);
     }
+    
+    // Cleanup when page unloads
+    destroy() {
+        this.stopAutoRefresh();
+        if (this.viewsChart) this.viewsChart.destroy();
+        if (this.deviceChart) this.deviceChart.destroy();
+    }
 }
 
 // Initialize metrics manager when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     window.metricsManager = new MetricsManager();
+    
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', function() {
+        if (window.metricsManager) {
+            window.metricsManager.destroy();
+        }
+    });
 });
 
 // Global functions for backward compatibility
