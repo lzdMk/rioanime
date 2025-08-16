@@ -211,7 +211,7 @@
                     <!-- JSON Format Info -->
                     <div class="mb-4">
                         <h6 class="admin-text-primary mb-2">Required JSON Format:</h6>
-                        <div class="bg-light p-3 rounded">
+                        <div class="p-3 rounded">
                             <pre class="mb-0 small"><code>[{
     "title": "Anime Title",
     "language": "sub or dub",
