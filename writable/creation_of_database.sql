@@ -69,3 +69,19 @@ CREATE TABLE `user_notifications` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `fk_user_notifications_user` FOREIGN KEY (`user_id`) REFERENCES `user_accounts`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table: user_sessions (Optional - for enhanced metrics tracking)
+CREATE TABLE `user_sessions` (
+  `session_id` varchar(128) NOT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `user_ip` varchar(45) NOT NULL,
+  `user_agent` text DEFAULT NULL,
+  `device_type` enum('mobile','tablet','desktop') NOT NULL DEFAULT 'desktop',
+  `last_activity` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`session_id`),
+  KEY `user_id` (`user_id`),
+  KEY `last_activity` (`last_activity`),
+  KEY `device_type` (`device_type`),
+  CONSTRAINT `fk_user_sessions_user` FOREIGN KEY (`user_id`) REFERENCES `user_accounts`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

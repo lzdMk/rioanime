@@ -16,8 +16,101 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <!-- Custom Admin CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/css/admin/main.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/content.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/metrics.css') ?>">>
+    
+    <style>
+        .metrics-card {
+            transition: transform 0.2s ease-in-out;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+        
+        .metrics-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+        
+        .metric-label {
+            font-size: 0.875rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .metric-change {
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .metric-change.positive {
+            color: #28a745;
+        }
+        
+        .metric-change.negative {
+            color: #dc3545;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 20px;
+        }
+        
+        .device-progress {
+            margin-bottom: 1rem;
+        }
+        
+        .online-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #28a745;
+            display: inline-block;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .top-anime-item {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .anime-rank {
+            font-weight: bold;
+            color: #007bff;
+            margin-right: 15px;
+            min-width: 30px;
+        }
+        
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+    </style>
 </head>
 <body>
     <div class="admin-container">
@@ -106,19 +199,178 @@
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0">Metrics</h1>
+                        <h1 class="h3 mb-0">Metrics & Analytics</h1>
+                        <div class="d-none d-sm-inline-block">
+                            <button class="btn btn-primary btn-sm" onclick="refreshMetrics()">
+                                <i class="fas fa-sync-alt"></i> Refresh Data
+                            </button>
+                        </div>
                     </div>
                     
-                    <!-- Content Row -->
-                    <div class="row">
-                        <div class="col-12">
-                            <!-- Empty content area as requested -->
+                    <!-- Metrics Overview Row -->
+                    <div class="row mb-4">
+                        <!-- Total Views -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card metrics-card border-left-primary">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="metric-label">Total Views</div>
+                                            <div class="metric-value text-primary" id="totalViews">
+                                                <div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i></div>
+                                            </div>
+                                            <div class="metric-change" id="viewsChange"></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-eye fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Total Accounts -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card metrics-card border-left-success">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="metric-label">Total Accounts</div>
+                                            <div class="metric-value text-success" id="totalAccounts">
+                                                <div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i></div>
+                                            </div>
+                                            <div class="metric-change" id="accountsChange"></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Currently Online -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card metrics-card border-left-info">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="metric-label">
+                                                <span class="online-indicator"></span>Currently Online
+                                            </div>
+                                            <div class="metric-value text-info" id="currentlyOnline">
+                                                <div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-wifi fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Views Today -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card metrics-card border-left-warning">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="metric-label">Views Today</div>
+                                            <div class="metric-value text-warning" id="viewsToday">
+                                                <div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar-day fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Charts Row -->
+                    <div class="row mb-4">
+                        <!-- Views Chart -->
+                        <div class="col-xl-8 col-lg-7">
                             <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold">Metrics Content</h6>
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Views Analytics</h6>
+                                    <div class="dropdown no-arrow">
+                                        <select class="form-select form-select-sm" id="chartPeriod" onchange="updateChart()">
+                                            <option value="hourly">Today (Hourly)</option>
+                                            <option value="daily" selected>Last 30 Days</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="card-body">
-                                    <p>This is the metrics content area. It's currently empty as requested.</p>
+                                    <div class="chart-container">
+                                        <canvas id="viewsChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Device Analytics -->
+                        <div class="col-xl-4 col-lg-5">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Device Analytics</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="deviceChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Data Tables Row -->
+                    <div class="row">
+                        <!-- Period Statistics -->
+                        <div class="col-xl-6 col-lg-6">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Period Statistics</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-dark table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Period</th>
+                                                    <th>Views</th>
+                                                    <th>New Accounts</th>
+                                                    <th>Online Users</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="periodStatsTable">
+                                                <tr>
+                                                    <td colspan="4" class="text-center">
+                                                        <i class="fas fa-spinner fa-spin"></i> Loading...
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Top Viewed Anime -->
+                        <div class="col-xl-6 col-lg-6">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Top Viewed Anime</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div id="topAnimeList">
+                                        <div class="text-center py-4">
+                                            <i class="fas fa-spinner fa-spin"></i> Loading...
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -133,5 +385,11 @@
     
     <!-- Custom Admin JS -->
     <script src="<?= base_url('assets/js/admin/main.js') ?>"></script>
+    <script src="<?= base_url('assets/js/admin/metrics.js') ?>"></script>
+    
+    <script>
+        // Set base URL for AJAX calls
+        const baseUrl = '<?= base_url() ?>';
+    </script>
 </body>
 </html>

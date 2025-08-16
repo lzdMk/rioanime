@@ -46,6 +46,10 @@ $routes->group('admin', function ($routes) {
     // Notification management API
     $routes->post('send-notification', 'Admin::sendNotification');
     $routes->get('getUsers', 'Admin::getUsers');
+    
+    // Metrics API
+    $routes->get('getMetricsData', 'Admin::getMetricsData');
+    $routes->get('getDeviceAnalytics', 'Admin::getDeviceAnalytics');
 });
 
 // Random anime route
