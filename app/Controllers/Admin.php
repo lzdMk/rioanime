@@ -17,13 +17,36 @@ class Admin extends BaseController
         $this->animeModel = new AnimeModel();
     }
 
+    /**
+     * Refresh current user session data to ensure it's up to date
+     */
+    private function refreshSessionData()
+    {
+        if (session('isLoggedIn') && session('user_id')) {
+            $user = $this->accountModel->find(session('user_id'));
+            if ($user) {
+                session()->set([
+                    'user_id' => $user['id'],
+                    'username' => $user['username'],
+                    'display_name' => $user['display_name'],
+                    'type' => $user['type'],
+                    'email' => $user['email'],
+                    'user_profile' => $user['user_profile'],
+                    'isLoggedIn' => true
+                ]);
+            }
+        }
+    }
+
     public function index()
     {
+        $this->refreshSessionData();
         return view('admin/dashboard');
     }
 
     public function metrics()
     {
+        $this->refreshSessionData();
         return view('admin/metrics');
     }
 
@@ -135,29 +158,13 @@ class Admin extends BaseController
             // Fall through to alternative methods
         }
         
-        // Fallback: Use anime_views recent activity
+        // Fallback: Use anime_views recent activity (but be more accurate)
         $result = $db->query("SELECT COUNT(DISTINCT user_ip) as total FROM anime_views WHERE viewed_at >= DATE_SUB(NOW(), INTERVAL 5 MINUTE)")->getRow();
         $fromViews = $result ? (int)$result->total : 0;
         
-        // If still 0, simulate realistic data for demo purposes
-        if ($fromViews === 0) {
-            // Generate realistic online count based on time of day
-            $hour = (int)date('H');
-            $baseOnline = 1; // At least 1 (current admin user)
-            
-            // Peak hours simulation (evening)
-            if ($hour >= 18 && $hour <= 23) {
-                $baseOnline += rand(3, 8);
-            } elseif ($hour >= 12 && $hour <= 17) {
-                $baseOnline += rand(1, 4);
-            } else {
-                $baseOnline += rand(0, 2);
-            }
-            
-            return $baseOnline;
-        }
-        
-        return max(1, $fromViews); // At least 1 (current user)
+        // Only return actual count, no simulation
+        // At minimum, count the current admin session as 1 if no other data
+        return max(1, $fromViews);
     }
 
     /**
@@ -209,19 +216,12 @@ class Admin extends BaseController
         $result = $db->query($query)->getRow();
         $count = $result ? (int)$result->total : 0;
         
-        // If no data, provide realistic estimates
-        if ($count === 0) {
-            switch ($period) {
-                case 'today':
-                    return rand(1, 5);
-                case 'week':
-                    return rand(5, 15);
-                case 'month':
-                    return rand(15, 50);
-            }
+        // Return actual count, minimum 1 for current period if this is "today" or "current"
+        if ($period === 'today') {
+            return max(1, $count); // At least 1 for current admin session today
         }
         
-        return max(1, $count);
+        return $count; // For week/month, return actual count (could be 0)
     }
 
     /**
@@ -444,11 +444,13 @@ class Admin extends BaseController
 
     public function accounts()
     {
+        $this->refreshSessionData();
         return view('admin/accounts');
     }
 
     public function animeManage()
     {
+        $this->refreshSessionData();
         return view('admin/anime_manage');
     }
 
@@ -1170,5 +1172,41 @@ class Admin extends BaseController
                 'message' => 'Error loading users: ' . $e->getMessage()
             ]);
         }
+    }
+
+    public function trackSession() {
+        // Track admin session for online counting
+        if (!session('is_admin')) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Unauthorized']);
+        }
+
+        $userId = session('user_id');
+        if (!$userId) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'No user session']);
+        }
+
+        // Update last activity timestamp in user_sessions table
+        $db = \Config\Database::connect();
+        $builder = $db->table('user_sessions');
+        
+        // Check if session record exists
+        $existingSession = $builder->where('user_id', $userId)->get()->getRow();
+        
+        if ($existingSession) {
+            // Update existing session
+            $builder->where('user_id', $userId)
+                   ->set('last_activity', date('Y-m-d H:i:s'))
+                   ->update();
+        } else {
+            // Create new session record
+            $builder->insert([
+                'user_id' => $userId,
+                'session_id' => session_id(),
+                'last_activity' => date('Y-m-d H:i:s'),
+                'created_at' => date('Y-m-d H:i:s')
+            ]);
+        }
+
+        return $this->response->setJSON(['status' => 'success']);
     }
 }
