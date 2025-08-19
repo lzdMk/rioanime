@@ -21,6 +21,12 @@
     <link rel="stylesheet" href="<?= base_url('assets/css/admin/content.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/admin/pagination.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/admin/anime-modal.css') ?>">
+    
+    <!-- JavaScript (deferred) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script defer src="<?= base_url('assets/js/admin/main.js') ?>"></script>
+    <script defer src="<?= base_url('assets/js/admin/pagination.js') ?>"></script>
+    <script defer src="<?= base_url('assets/js/admin/anime_manage.js') ?>"></script>
 </head>
 <body>
     <div class="admin-container">
@@ -560,12 +566,5 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Custom Admin JS -->
-    <script src="<?= base_url('assets/js/admin/main.js') ?>"></script>
-    <script src="<?= base_url('assets/js/admin/pagination.js') ?>"></script>
-    <script src="<?= base_url('assets/js/admin/anime_manage.js') ?>"></script>
 </body>
 </html>
