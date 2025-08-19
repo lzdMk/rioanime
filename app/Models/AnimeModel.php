@@ -20,7 +20,10 @@ class AnimeModel extends Model
         'studios',
         'urls',
         'backgroundImage',
-        'synopsis'
+        'synopsis',
+        'published',
+        'published_at',
+        'unpublished_at'
     ];
 
     protected $returnType = 'array';
@@ -31,6 +34,7 @@ class AnimeModel extends Model
     public function getRandomAnime()
     {
         return $this->builder()
+            ->where('published', 1)
             ->orderBy('RAND()')
             ->limit(1)
             ->get()
@@ -43,6 +47,8 @@ class AnimeModel extends Model
     public function getRecentlyUpdated($limit = 12, $type = null)
     {
         $builder = $this->builder();
+        
+        $builder->where('published', 1);
         
         if ($type && $type !== 'all') {
             $builder->where('type', $type);
@@ -60,6 +66,7 @@ class AnimeModel extends Model
     public function getAnimeByGenre($genre, $limit = 5)
     {
         return $this->builder()
+                    ->where('published', 1)
                     ->like('genres', $genre)
                     ->limit($limit)
                     ->get()
@@ -72,6 +79,7 @@ class AnimeModel extends Model
     public function getFeaturedAnime($limit = 5)
     {
         return $this->builder()
+                    ->where('published', 1)
                     ->where('ratings >=', 8.0)
                     ->orderBy('ratings', 'DESC')
                     ->limit($limit)
@@ -85,6 +93,7 @@ class AnimeModel extends Model
     public function getAnimeByType($type, $limit = 8)
     {
         return $this->builder()
+                    ->where('published', 1)
                     ->where('type', $type)
                     ->orderBy('anime_id', 'DESC')
                     ->limit($limit)
@@ -98,6 +107,7 @@ class AnimeModel extends Model
     public function getAnimeByStatus($status, $limit = 8)
     {
         return $this->builder()
+                    ->where('published', 1)
                     ->where('status', $status)
                     ->orderBy('anime_id', 'DESC')
                     ->limit($limit)
@@ -112,6 +122,7 @@ class AnimeModel extends Model
     public function getRecommendedAnime($limit = 8)
     {
         return $this->builder()
+                    ->where('published', 1)
                     ->where('ratings >=', 7.5) // Good rating threshold
                     ->whereIn('status', ['Finished Airing', 'Currently Airing']) // Available to watch
                     ->orderBy('ratings', 'DESC')
@@ -138,6 +149,7 @@ class AnimeModel extends Model
         $firstGenre = trim($genres[0]);
 
         return $this->builder()
+                    ->where('published', 1)
                     ->like('genres', $firstGenre)
                     ->where('anime_id !=', $animeId) // Exclude current anime
                     ->where('ratings >=', 7.0)
@@ -153,6 +165,7 @@ class AnimeModel extends Model
     public function getTrendingAnime($limit = 10)
     {
         return $this->builder()
+                    ->where('published', 1)
                     ->where('ratings >=', 8.0)
                     ->where('status', 'Currently Airing')
                     ->orderBy('ratings', 'DESC')
@@ -168,6 +181,7 @@ class AnimeModel extends Model
     public function getAnimeByTitle($title)
     {
         return $this->builder()
+                    ->where('published', 1)
                     ->where('title', $title)
                     ->get()
                     ->getRowArray();
@@ -186,6 +200,7 @@ class AnimeModel extends Model
         
         // Search for exact matches first, then partial matches
         $results = $builder->select('anime_id, title, type, status, ratings, backgroundImage')
+                          ->where('published', 1)
                           ->groupStart()
                               ->like('title', $query, 'both')
                           ->groupEnd()
@@ -215,6 +230,7 @@ class AnimeModel extends Model
     {
         // Get all anime titles and find the one that matches the slug
         $allAnime = $this->builder()
+                         ->where('published', 1)
                          ->select('anime_id, title, backgroundImage, type, status, synopsis, urls, ratings, studios, genres')
                          ->get()
                          ->getResultArray();
@@ -237,6 +253,7 @@ class AnimeModel extends Model
             return [];
         }
         $rows = $this->builder()
+                     ->where('published', 1)
                      ->select('anime_id, title, backgroundImage, type, total_ep, status, ratings')
                      ->whereIn('anime_id', $ids)
                      ->get()

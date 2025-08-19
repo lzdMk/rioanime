@@ -159,6 +159,13 @@
                                             </select>
                                         </div>
                                         <div class="col-md-2">
+                                            <select class="form-select admin-form-control" id="publishedFilter">
+                                                <option value="">All Posts</option>
+                                                <option value="1">Published</option>
+                                                <option value="0">Unpublished</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
                                             <select class="form-select admin-form-control" id="perPageSelect">
                                                 <option value="8" selected>8 per page</option>
                                                 <option value="10">10 per page</option>
@@ -167,9 +174,13 @@
                                                 <option value="custom">Custom...</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-1">
-                                            <input type="number" class="form-control admin-form-control" id="customPerPageInput" placeholder="Min: 5" min="5" style="display: none;">
+                                        <div class="col-md-1" style="display: none;" id="customPerPageCol">
+                                            <input type="number" class="form-control admin-form-control" id="customPerPageInput" placeholder="Min: 5" min="5">
                                         </div>
+                                    </div>
+
+                                    <!-- Second row for refresh button -->
+                                    <div class="row mb-3">
                                         <div class="col-md-2">
                                             <button class="btn admin-btn-outline w-100" id="refreshBtn">
                                                 <i class="fas fa-sync-alt"></i> Refresh
@@ -509,6 +520,30 @@
                     <button type="button" class="btn admin-btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn admin-btn-danger btn-sm" id="confirmDeleteAnime">
                         <i class="fas fa-trash me-1"></i> Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Publish/Unpublish Confirmation Modal -->
+    <div class="modal fade" id="confirmPublishModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content admin-modal">
+                <div class="modal-header admin-modal-header py-2">
+                    <h6 class="modal-title mb-0"><i class="fas fa-exclamation-circle me-2 text-warning"></i>Confirm Action</h6>
+                    <button type="button" class="btn-close admin-btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body admin-modal-body p-3 text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-info-circle fa-3x text-warning mb-3"></i>
+                        <h6 class="admin-text-primary" id="confirmPublishMessage">Are you sure?</h6>
+                    </div>
+                </div>
+                <div class="modal-footer admin-modal-footer py-2 justify-content-center">
+                    <button type="button" class="btn admin-btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn admin-btn-danger btn-sm" id="confirmPublishBtn">
+                        <i class="fas fa-check me-1"></i> Confirm
                     </button>
                 </div>
             </div>

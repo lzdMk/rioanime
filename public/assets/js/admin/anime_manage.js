@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentSearch = '';
     let currentTypeFilter = '';
     let currentStatusFilter = '';
+    let currentPublishedFilter = '';
     let currentPerPage = 8;
     const minPerPage = 5;
 
@@ -15,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('animeSearch');
     const typeFilter = document.getElementById('typeFilter');
     const statusFilter = document.getElementById('statusFilter');
+    const publishedFilter = document.getElementById('publishedFilter');
     const perPageSelect = document.getElementById('perPageSelect');
     const customPerPageInput = document.getElementById('customPerPageInput');
     const refreshBtn = document.getElementById('refreshBtn');
@@ -55,14 +57,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Published filter functionality
+    if (publishedFilter) {
+        publishedFilter.addEventListener('change', function() {
+            currentPublishedFilter = this.value;
+            currentPage = 1;
+            loadAnime();
+        });
+    }
+    
     // Per-page functionality
     if (perPageSelect) {
         perPageSelect.addEventListener('change', function() {
             const value = this.value;
+            const customCol = document.getElementById('customPerPageCol');
             if (value === 'custom') {
+                if (customCol) customCol.style.display = 'block';
                 customPerPageInput.style.display = 'block';
                 customPerPageInput.focus();
             } else {
+                if (customCol) customCol.style.display = 'none';
                 customPerPageInput.style.display = 'none';
                 currentPerPage = parseInt(value);
                 currentPage = 1;
@@ -116,6 +130,10 @@ document.addEventListener('DOMContentLoaded', function() {
             params.append('status', currentStatusFilter);
         }
         
+        if (currentPublishedFilter !== '') {
+            params.append('published', currentPublishedFilter);
+        }
+        
         fetch(`${baseUrl}admin/getAnimeList?${params.toString()}`, {
             method: 'GET',
             headers: {
@@ -160,6 +178,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <th>Type</th>
                             <th>Episodes</th>
                             <th>Status</th>
+                            <th>Published</th>
                             <th>Rating</th>
                             <th>Language</th>
                             <th>Actions</th>
@@ -183,6 +202,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                         ${escapeHtml(anime.status)}
                                     </span>
                                 </td>
+                                <td>
+                                    <span class="badge admin-badge-${anime.published == 1 ? 'success' : 'secondary'}">
+                                        ${anime.published == 1 ? 'Published' : 'Draft'}
+                                    </span>
+                                </td>
                                 <td class="admin-text-muted">${anime.ratings || 'N/A'}</td>
                                 <td class="admin-text-muted">${anime.language || 'N/A'}</td>
                                 <td>
@@ -192,6 +216,9 @@ document.addEventListener('DOMContentLoaded', function() {
                                         </button>
                                         <button class="btn admin-btn-warning btn-sm edit-anime" data-id="${anime.anime_id}" title="Edit">
                                             <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn ${anime.published == 1 ? 'admin-btn-secondary' : 'admin-btn-success'} btn-sm toggle-publish-anime" data-id="${anime.anime_id}" data-published="${anime.published}" title="${anime.published == 1 ? 'Unpublish' : 'Publish'}">
+                                            <i class="fas fa-${anime.published == 1 ? 'eye-slash' : 'globe'}"></i>
                                         </button>
                                         <button class="btn admin-btn-danger btn-sm delete-anime" data-id="${anime.anime_id}" title="Delete">
                                             <i class="fas fa-trash"></i>
@@ -253,6 +280,15 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.addEventListener('click', function() {
                 const animeId = this.getAttribute('data-id');
                 deleteAnime(animeId);
+            });
+        });
+        
+        // Toggle publish anime buttons
+        document.querySelectorAll('.toggle-publish-anime').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const animeId = this.getAttribute('data-id');
+                const isPublished = this.getAttribute('data-published') == '1';
+                showConfirmPublishModal(animeId, isPublished);
             });
         });
     }
@@ -372,6 +408,77 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error:', error);
                 showToast('Error deleting anime', 'error');
             });
+        });
+    }
+    
+    // Show confirmation modal for publish/unpublish
+    function showConfirmPublishModal(animeId, currentlyPublished) {
+        const action = currentlyPublished ? 'unpublish' : 'publish';
+        const message = currentlyPublished
+            ? 'Are you sure you want to unpublish this anime? This will hide it from the public site.'
+            : 'Are you sure you want to publish this anime? This will make it visible on the public site.';
+
+        const modalEl = document.getElementById('confirmPublishModal');
+        if (!modalEl) {
+            // Fallback to previous confirm dialog
+            if (!confirm(message)) return;
+            performTogglePublish(animeId);
+            return;
+        }
+
+        // Set message
+        const msgEl = document.getElementById('confirmPublishMessage');
+        if (msgEl) msgEl.textContent = message;
+
+        // Store data on confirm button element via dataset
+        const confirmBtn = document.getElementById('confirmPublishBtn');
+        const newConfirmBtn = confirmBtn.cloneNode(true);
+        confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+
+        newConfirmBtn.addEventListener('click', function() {
+            // Disable button while processing
+            newConfirmBtn.disabled = true;
+            newConfirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Processing';
+
+            performTogglePublish(animeId)
+                .then(() => {
+                    const bsModal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+                    bsModal.hide();
+                })
+                .finally(() => {
+                    newConfirmBtn.disabled = false;
+                    newConfirmBtn.innerHTML = '<i class="fas fa-check me-1"></i> Confirm';
+                });
+        });
+
+        // Show modal
+        const bsModal = new bootstrap.Modal(modalEl);
+        bsModal.show();
+    }
+
+    // Perform the AJAX call to toggle publish state; returns a Promise
+    function performTogglePublish(animeId) {
+        return fetch(`${baseUrl}admin/togglePublishAnime/${animeId}`, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast(data.message);
+                loadAnime(); // Reload the table to reflect changes
+            } else {
+                showToast(data.message || 'Failed to update publish status', 'error');
+                return Promise.reject(new Error(data.message || 'Failed'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('Error updating publish status', 'error');
+            return Promise.reject(error);
         });
     }
     

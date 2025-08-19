@@ -14,12 +14,15 @@ CREATE TABLE `anime_data` (
   `urls` text DEFAULT NULL,
   `backgroundImage` text DEFAULT NULL,
   `synopsis` text DEFAULT NULL,
+  `published` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1 = published, 0 = unpublished/draft',
+  `published_at` timestamp NULL DEFAULT NULL COMMENT 'When the anime was published',
+  `unpublished_at` timestamp NULL DEFAULT NULL COMMENT 'When the anime was unpublished',
   PRIMARY KEY (`anime_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Sample insert for anime_data
-INSERT INTO `anime_data` (`anime_id`, `title`, `language`, `type`, `total_ep`, `ratings`, `genres`, `status`, `studios`, `urls`, `backgroundImage`, `synopsis`) VALUES
-(100001, 'Sample Anime', 'Japanese', 'TV', 12, '8.5', 'Action, Adventure', 'Completed', 'Sample Studio', 'https://example.com', 'https://example.com/bg.jpg', 'This is a sample synopsis.');
+INSERT INTO `anime_data` (`anime_id`, `title`, `language`, `type`, `total_ep`, `ratings`, `genres`, `status`, `studios`, `urls`, `backgroundImage`, `synopsis`, `published`, `published_at`) VALUES
+(100001, 'Sample Anime', 'Japanese', 'TV', 12, '8.5', 'Action, Adventure', 'Completed', 'Sample Studio', 'https://example.com', 'https://example.com/bg.jpg', 'This is a sample synopsis.', 1, NOW());
 
 -- Table: anime_views
 CREATE TABLE `anime_views` (

@@ -497,7 +497,9 @@ class Admin extends BaseController
             'studios' => $this->request->getPost('studios'),
             'urls' => $this->request->getPost('urls'),
             'backgroundImage' => $this->request->getPost('backgroundImage'),
-            'synopsis' => $this->request->getPost('synopsis')
+            'synopsis' => $this->request->getPost('synopsis'),
+            'published' => 1, // Default to published
+            'published_at' => date('Y-m-d H:i:s')
         ];
 
         // Validate required fields
@@ -573,6 +575,46 @@ class Admin extends BaseController
             return $this->response->setJSON(['success' => true, 'message' => 'Anime deleted successfully']);
         } else {
             return $this->response->setJSON(['success' => false, 'message' => 'Failed to delete anime']);
+        }
+    }
+
+    /**
+     * Toggle anime publish status
+     */
+    public function togglePublishAnime($id)
+    {
+        if (!$this->request->isAJAX()) {
+            return $this->response->setStatusCode(403);
+        }
+
+        $anime = $this->animeModel->find($id);
+        if (!$anime) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Anime not found']);
+        }
+
+        $newStatus = $anime['published'] ? 0 : 1;
+        $updateData = [
+            'published' => $newStatus
+        ];
+
+        // Update timestamps based on new status
+        if ($newStatus === 1) {
+            $updateData['published_at'] = date('Y-m-d H:i:s');
+            $updateData['unpublished_at'] = null;
+        } else {
+            $updateData['unpublished_at'] = date('Y-m-d H:i:s');
+        }
+
+        $result = $this->animeModel->update($id, $updateData);
+        if ($result) {
+            $statusText = $newStatus ? 'published' : 'unpublished';
+            return $this->response->setJSON([
+                'success' => true, 
+                'message' => "Anime {$statusText} successfully",
+                'new_status' => $newStatus
+            ]);
+        } else {
+            return $this->response->setJSON(['success' => false, 'message' => 'Failed to update publish status']);
         }
     }
 
@@ -796,6 +838,7 @@ class Admin extends BaseController
         $search = $this->request->getGet('search') ?? '';
         $type = $this->request->getGet('type') ?? '';
         $status = $this->request->getGet('status') ?? '';
+        $published = $this->request->getGet('published') ?? '';
 
         $builder = $this->animeModel->orderBy('anime_id', 'DESC');
         
@@ -813,6 +856,10 @@ class Admin extends BaseController
 
         if (!empty($status)) {
             $builder->where('status', $status);
+        }
+
+        if ($published !== '') {
+            $builder->where('published', (int)$published);
         }
 
         $totalItems = $builder->countAllResults(false);
@@ -895,7 +942,9 @@ class Admin extends BaseController
                         'synopsis' => $anime['synopsis'] ?? null,
                         'urls' => isset($anime['urls']) && is_array($anime['urls']) 
                                 ? implode("\n", $anime['urls']) 
-                                : (is_string($anime['urls']) ? $anime['urls'] : null)
+                                : (is_string($anime['urls']) ? $anime['urls'] : null),
+                        'published' => 1, // Default to published when importing
+                        'published_at' => date('Y-m-d H:i:s')
                     ];
 
                     // Check if anime with same title already exists
