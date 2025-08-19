@@ -24,6 +24,7 @@ class Account extends BaseController
         if (!session('isLoggedIn')) {
             return redirect()->to(base_url('account/login'));
         }
+
         // Pass user data to the view if needed
         $user_id = session('user_id');
         $user = null;
@@ -38,7 +39,48 @@ class Account extends BaseController
             'user_profile' => $user['user_profile'] ?? null,
             'watchedAnime' => [] // not needed on profile page
         ];
-    return view('pages/User Profiles/profile', $data);
+
+        return view('pages/User Profiles/profile', $data);
+    }
+
+    /**
+     * Refresh session data with current user information
+     */
+    public function refreshSession()
+    {
+        if (!session('isLoggedIn')) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Not logged in'
+            ]);
+        }
+
+        $userId = session('user_id');
+        $user = $this->accountModel->find($userId);
+
+        if ($user) {
+            // Update session with fresh user data
+            session()->set([
+                'user_id' => $user['id'],
+                'username' => $user['username'],
+                'display_name' => $user['display_name'],
+                'type' => $user['type'],
+                'email' => $user['email'],
+                'user_profile' => $user['user_profile'],
+                'isLoggedIn' => true
+            ]);
+
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Session refreshed',
+                'user_profile' => $user['user_profile']
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'User not found'
+            ]);
+        }
     }
 
     /**
@@ -410,8 +452,10 @@ class Account extends BaseController
             session()->set([
                 'user_id' => $user['id'],
                 'username' => $user['username'],
+                'display_name' => $user['display_name'],
                 'type' => $user['type'],
                 'email' => $user['email'],
+                'user_profile' => $user['user_profile'],
                 'isLoggedIn' => true
             ]);
             return $this->response->setJSON([

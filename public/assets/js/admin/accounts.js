@@ -152,9 +152,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         ${accounts.map(account => `
                             <tr data-account-id="${account.id}">
                                 <td class="text-center">
-                                    ${account.user_profile 
-                                        ? `<img src="${escapeHtml(account.user_profile)}" alt="Avatar" class="admin-avatar">`
-                                        : `<div class="admin-avatar-letter">${escapeHtml(account.username.charAt(0).toUpperCase())}</div>`
+                                    ${account.user_profile && account.user_profile.trim() !== '' 
+                                        ? `<img src="${escapeHtml(account.user_profile)}" alt="Avatar" class="admin-avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+                                           <div class="admin-avatar-letter" style="display: none;">${escapeHtml((account.display_name || account.username).charAt(0).toUpperCase())}</div>`
+                                        : `<div class="admin-avatar-letter">${escapeHtml((account.display_name || account.username).charAt(0).toUpperCase())}</div>`
                                     }
                                 </td>
                                 <td class="admin-text-primary fw-bold">${escapeHtml(account.username)}</td>
@@ -396,9 +397,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // Populate avatar
             if (avatar) {
                 if (account.user_profile && account.user_profile.trim() !== '') {
-                    avatar.innerHTML = `<img src="${escapeHtml(account.user_profile)}" alt="Avatar" class="admin-avatar-large">`;
+                    avatar.innerHTML = `<img src="${escapeHtml(account.user_profile)}" alt="Avatar" class="admin-avatar-large" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                      <div class="admin-avatar-letter-large" style="display: none;">${escapeHtml((account.display_name || account.username).charAt(0).toUpperCase())}</div>`;
                 } else {
-                    avatar.innerHTML = `<div class="admin-avatar-letter-large">${escapeHtml(account.username.charAt(0).toUpperCase())}</div>`;
+                    avatar.innerHTML = `<div class="admin-avatar-letter-large">${escapeHtml((account.display_name || account.username).charAt(0).toUpperCase())}</div>`;
                 }
             }
             

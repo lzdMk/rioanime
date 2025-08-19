@@ -11,10 +11,10 @@ class MetricsManager {
         this.refreshInterval = null;
         this.sessionTrackingInterval = null;
         this.countUpInstances = {};
-        
+
         this.init();
     }
-    
+
     init() {
         this.trackSession(); // Track current session
         this.loadMetricsData();
@@ -22,10 +22,10 @@ class MetricsManager {
         this.startAutoRefresh();
         this.startSessionTracking();
         this.setupOnlineUsersModal(); // Setup online users modal
-        
+
         // Bind event listeners
         document.getElementById('chartPeriod')?.addEventListener('change', () => this.updateChart());
-        
+
         // Track page visibility for better online detection
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden) {
@@ -34,7 +34,7 @@ class MetricsManager {
             }
         });
     }
-    
+
     startAutoRefresh() {
         // Auto-refresh every 30 seconds
         this.refreshInterval = setInterval(() => {
@@ -42,14 +42,14 @@ class MetricsManager {
             this.updateOnlineCount();
         }, 30000);
     }
-    
+
     startSessionTracking() {
         // Track session every 2 minutes to maintain online status
         this.sessionTrackingInterval = setInterval(() => {
             this.trackSession();
         }, 120000); // 2 minutes
     }
-    
+
     stopAutoRefresh() {
         if (this.refreshInterval) {
             clearInterval(this.refreshInterval);
@@ -60,7 +60,7 @@ class MetricsManager {
             this.sessionTrackingInterval = null;
         }
     }
-    
+
     async trackSession() {
         try {
             await fetch(`${baseUrl}admin/trackSession`, {
@@ -74,7 +74,7 @@ class MetricsManager {
             console.debug('Session tracking unavailable:', error);
         }
     }
-    
+
     async loadMetricsData() {
         try {
             const response = await fetch(`${baseUrl}admin/getMetricsData`, {
@@ -83,9 +83,9 @@ class MetricsManager {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             });
-            
+
             const data = await response.json();
-            
+
             if (data.success) {
                 this.metricsData = data.data;
                 this.updateMetricsDisplay();
@@ -98,7 +98,7 @@ class MetricsManager {
             this.showError('Failed to load metrics data');
         }
     }
-    
+
     async loadDeviceAnalytics() {
         try {
             const response = await fetch(`${baseUrl}admin/getDeviceAnalytics`, {
@@ -107,9 +107,9 @@ class MetricsManager {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             });
-            
+
             const data = await response.json();
-            
+
             if (data.success) {
                 this.updateDeviceChart(data.data);
             }
@@ -117,39 +117,39 @@ class MetricsManager {
             console.error('Error loading device analytics:', error);
         }
     }
-    
+
     updateMetricsDisplay() {
         // Update main metric cards with animation
         this.animateValue('totalViews', this.metricsData.views.total);
         this.animateValue('totalAccounts', this.metricsData.accounts.total);
         this.animateValue('currentlyOnline', this.metricsData.online.current);
         this.animateValue('viewsToday', this.metricsData.views.today);
-        
+
         // Update change indicators
         const viewsChange = this.calculatePercentageChange(
-            this.metricsData.views.today, 
+            this.metricsData.views.today,
             this.metricsData.views.week / 7
         );
         const accountsChange = this.calculatePercentageChange(
-            this.metricsData.accounts.today, 
+            this.metricsData.accounts.today,
             this.metricsData.accounts.week / 7
         );
-        
+
         this.updateChangeIndicator('viewsChange', viewsChange);
         this.updateChangeIndicator('accountsChange', accountsChange);
     }
-    
+
     animateValue(elementId, endValue) {
         const element = document.getElementById(elementId);
         if (!element) return;
-        
+
         // Destroy existing countUp instance
         if (this.countUpInstances[elementId]) {
             this.countUpInstances[elementId] = null;
         }
-        
+
         const currentValue = parseInt(element.textContent) || 0;
-        
+
         // Use CountUp.js for smooth animation
         if (typeof CountUp !== 'undefined') {
             this.countUpInstances[elementId] = new CountUp(elementId, endValue, {
@@ -160,30 +160,30 @@ class MetricsManager {
                 prefix: '',
                 suffix: ''
             });
-            
+
             this.countUpInstances[elementId].start();
         } else {
             // Fallback without animation
             element.textContent = this.formatNumber(endValue);
         }
     }
-    
+
     updateChart() {
         const ctx = document.getElementById('viewsChart')?.getContext('2d');
         if (!ctx) return;
-        
+
         const period = document.getElementById('chartPeriod')?.value || 'daily';
-        
+
         if (this.viewsChart) {
             this.viewsChart.destroy();
         }
-        
+
         let chartData, labels;
-        
+
         if (period === 'hourly') {
             chartData = new Array(24).fill(0);
-            labels = Array.from({length: 24}, (_, i) => `${i}:00`);
-            
+            labels = Array.from({ length: 24 }, (_, i) => `${i}:00`);
+
             if (this.metricsData.charts?.hourly) {
                 this.metricsData.charts.hourly.forEach(item => {
                     chartData[item.hour] = item.views;
@@ -192,7 +192,7 @@ class MetricsManager {
         } else {
             chartData = [];
             labels = [];
-            
+
             if (this.metricsData.charts?.daily) {
                 this.metricsData.charts.daily.forEach(item => {
                     labels.push(new Date(item.date).toLocaleDateString());
@@ -200,7 +200,7 @@ class MetricsManager {
                 });
             }
         }
-        
+
         this.viewsChart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -259,15 +259,15 @@ class MetricsManager {
             }
         });
     }
-    
+
     updateDeviceChart(deviceData) {
         const ctx = document.getElementById('deviceChart')?.getContext('2d');
         if (!ctx) return;
-        
+
         if (this.deviceChart) {
             this.deviceChart.destroy();
         }
-        
+
         this.deviceChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
@@ -303,7 +303,7 @@ class MetricsManager {
                         titleColor: '#fff',
                         bodyColor: '#fff',
                         callbacks: {
-                            label: function(context) {
+                            label: function (context) {
                                 return context.label + ': ' + context.parsed + '%';
                             }
                         }
@@ -312,11 +312,11 @@ class MetricsManager {
             }
         });
     }
-    
+
     updatePeriodTable() {
         const tableBody = document.getElementById('periodStatsTable');
         if (!tableBody || !this.metricsData.views) return;
-        
+
         tableBody.innerHTML = `
             <tr>
                 <td><strong>Today</strong></td>
@@ -338,16 +338,16 @@ class MetricsManager {
             </tr>
         `;
     }
-    
+
     updateTopAnimeList() {
         const topAnimeContainer = document.getElementById('topAnimeList');
         if (!topAnimeContainer) return;
-        
+
         if (!this.metricsData.topAnime || this.metricsData.topAnime.length === 0) {
             topAnimeContainer.innerHTML = '<p class="text-muted text-center">No data available</p>';
             return;
         }
-        
+
         let html = '';
         this.metricsData.topAnime.forEach((anime, index) => {
             const rankClass = index < 3 ? 'text-warning' : 'text-primary';
@@ -364,10 +364,10 @@ class MetricsManager {
                 </div>
             `;
         });
-        
+
         topAnimeContainer.innerHTML = html;
     }
-    
+
     async updateOnlineCount() {
         try {
             const response = await fetch(`${baseUrl}admin/getMetricsData`, {
@@ -376,9 +376,9 @@ class MetricsManager {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             });
-            
+
             const data = await response.json();
-            
+
             if (data.success) {
                 this.animateValue('currentlyOnline', data.data.online.current);
             }
@@ -386,18 +386,18 @@ class MetricsManager {
             console.error('Error updating online count:', error);
         }
     }
-    
+
     refresh() {
         // Show loading indicators
         document.querySelectorAll('.metric-value').forEach(el => {
             el.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i></div>';
         });
-        
+
         this.trackSession(); // Track session on manual refresh
         this.loadMetricsData();
         this.loadDeviceAnalytics();
     }
-    
+
     formatNumber(num) {
         if (num >= 1000000) {
             return (num / 1000000).toFixed(1) + 'M';
@@ -406,39 +406,39 @@ class MetricsManager {
         }
         return num.toString();
     }
-    
+
     calculatePercentageChange(current, previous) {
         if (previous === 0) return current > 0 ? 100 : 0;
         return ((current - previous) / previous * 100).toFixed(1);
     }
-    
+
     updateChangeIndicator(elementId, change) {
         const element = document.getElementById(elementId);
         if (!element) return;
-        
+
         const isPositive = change >= 0;
         element.className = `metric-change ${isPositive ? 'positive' : 'negative'}`;
         element.innerHTML = `<i class="fas fa-arrow-${isPositive ? 'up' : 'down'}"></i> ${Math.abs(change)}%`;
     }
-    
+
     updateElement(id, content) {
         const element = document.getElementById(id);
         if (element) {
             element.textContent = content;
         }
     }
-    
+
     escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
     }
-    
+
     showError(message) {
         // You can implement a toast notification system here
         console.error(message);
     }
-    
+
     // Online Users Modal Functionality
     async loadOnlineUsers() {
         try {
@@ -448,9 +448,9 @@ class MetricsManager {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             });
-            
+
             const data = await response.json();
-            
+
             if (data.success) {
                 this.renderOnlineUsers(data.data, data.total);
             } else {
@@ -461,11 +461,11 @@ class MetricsManager {
             this.showOnlineUsersError('Failed to load online users');
         }
     }
-    
+
     renderOnlineUsers(users, total) {
         const container = document.getElementById('onlineUsersContent');
         if (!container) return;
-        
+
         if (!users || users.length === 0) {
             container.innerHTML = `
                 <div class="text-center py-4">
@@ -475,7 +475,7 @@ class MetricsManager {
             `;
             return;
         }
-        
+
         let html = `
             <div class="online-users-header">
                 <h6 class="text-light mb-0">
@@ -484,19 +484,34 @@ class MetricsManager {
                 <span class="users-count">${total} user${total !== 1 ? 's' : ''} online</span>
             </div>
         `;
-        
+
         users.forEach(user => {
-            const avatarUrl = user.user_profile || `${baseUrl}assets/images/default-avatar.png`;
+            // Avatar logic: use uploaded avatar if available, otherwise use letter avatar
+            let avatarHtml;
+            if (user.user_profile && user.user_profile.trim() !== '') {
+                // Show only image avatar with fallback
+                avatarHtml = `<div class="avatar-container me-3" style="width: 40px; height: 40px;">
+                                <img src="${user.user_profile}" alt="${this.escapeHtml(user.display_name || user.username)}" 
+                                     class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color);"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                              </div>`;
+            } else {
+                // Show only letter avatar
+                avatarHtml = `<div class="user-avatar-letter me-3 rounded-circle d-flex align-items-center justify-content-center fw-bold" 
+                                   style="width: 40px; height: 40px; background: linear-gradient(45deg, #8B5CF6, #A855F7); color: white; font-size: 16px;">
+                                ${this.escapeHtml((user.display_name || user.username).charAt(0).toUpperCase())}
+                              </div>`;
+            }
+
             const statusClass = user.user_type === 'admin' ? 'admin' : (user.user_type === 'user' ? 'user' : 'viewer');
-            
+
             html += `
                 <div class="user-card">
                     <div class="d-flex align-items-center">
-                        <img src="${avatarUrl}" alt="${this.escapeHtml(user.display_name)}" class="user-avatar me-3" 
-                             onerror="this.src='${baseUrl}assets/images/default-avatar.png'">
+                        ${avatarHtml}
                         <div class="flex-grow-1">
                             <div class="d-flex align-items-center mb-1">
-                                <span class="text-light fw-bold me-2">${this.escapeHtml(user.display_name)}</span>
+                                <span class="text-light fw-bold me-2">${this.escapeHtml(user.display_name || user.username)}</span>
                                 <span class="user-status-badge ${statusClass}">${user.user_type}</span>
                             </div>
                             <div class="d-flex align-items-center text-muted small">
@@ -519,14 +534,14 @@ class MetricsManager {
                 </div>
             `;
         });
-        
+
         container.innerHTML = html;
     }
-    
+
     showOnlineUsersError(message) {
         const container = document.getElementById('onlineUsersContent');
         if (!container) return;
-        
+
         container.innerHTML = `
             <div class="text-center py-4">
                 <i class="fas fa-exclamation-triangle text-warning"></i>
@@ -537,16 +552,16 @@ class MetricsManager {
             </div>
         `;
     }
-    
+
     setupOnlineUsersModal() {
         const modal = document.getElementById('onlineUsersModal');
         if (!modal) return;
-        
+
         // Load users when modal is shown
         modal.addEventListener('show.bs.modal', () => {
             this.loadOnlineUsers();
         });
-        
+
         // Auto-refresh users while modal is open
         let modalRefreshInterval;
         modal.addEventListener('shown.bs.modal', () => {
@@ -554,7 +569,7 @@ class MetricsManager {
                 this.loadOnlineUsers();
             }, 30000); // Refresh every 30 seconds
         });
-        
+
         modal.addEventListener('hidden.bs.modal', () => {
             if (modalRefreshInterval) {
                 clearInterval(modalRefreshInterval);
@@ -562,7 +577,7 @@ class MetricsManager {
             }
         });
     }
-    
+
     // Cleanup when page unloads
     destroy() {
         this.stopAutoRefresh();
@@ -572,11 +587,11 @@ class MetricsManager {
 }
 
 // Initialize metrics manager when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     window.metricsManager = new MetricsManager();
-    
+
     // Cleanup on page unload
-    window.addEventListener('beforeunload', function() {
+    window.addEventListener('beforeunload', function () {
         if (window.metricsManager) {
             window.metricsManager.destroy();
         }

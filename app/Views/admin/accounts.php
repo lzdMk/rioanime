@@ -89,8 +89,15 @@
                     
                     <div class="navbar-nav ms-auto">
                         <div class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user-circle"></i> Admin
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <?php if (!empty(session('user_profile'))): ?>
+                                    <img src="<?= esc(session('user_profile')) ?>" alt="Admin" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover; border: 2px solid #fff;">
+                                <?php else: ?>
+                                    <div class="rounded-circle me-2 d-flex align-items-center justify-content-center fw-bold" style="width: 32px; height: 32px; background: linear-gradient(45deg, #8B5CF6, #A855F7); color: white; font-size: 14px; border: 2px solid #fff;">
+                                        <?= strtoupper(substr(session('username') ?? 'A', 0, 1)) ?>
+                                    </div>
+                                <?php endif; ?>
+                                <span><?= esc(session('display_name') ?? session('username') ?? 'Admin') ?></span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>

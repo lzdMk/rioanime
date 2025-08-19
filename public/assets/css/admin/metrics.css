@@ -378,6 +378,20 @@
     border: 2px solid var(--border-color);
 }
 
+.user-avatar-letter {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    background: linear-gradient(45deg, #8B5CF6, #A855F7);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .user-status-badge {
     font-size: 0.75rem;
     padding: 3px 8px;

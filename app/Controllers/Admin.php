@@ -265,7 +265,8 @@ class Admin extends BaseController
                             'user_profile' => $user['user_profile'] ?? null,
                             'user_type' => $user['user_type'] ?? 'viewer',
                             'device_type' => ucfirst($user['device_type'] ?? 'desktop'),
-                            'ip_address' => $this->maskIpAddress($user['user_ip']),
+                            // Send full IP address (revealed) as requested
+                            'ip_address' => $user['user_ip'],
                             'last_activity' => $user['last_activity'],
                             'time_ago' => $this->timeAgo($user['last_activity'])
                         ];
@@ -302,7 +303,8 @@ class Admin extends BaseController
                             'user_profile' => $user['user_profile'] ?? null,
                             'user_type' => $user['user_type'] ?? 'viewer',
                             'device_type' => 'Desktop',
-                            'ip_address' => $this->maskIpAddress($user['user_ip']),
+                            // Send full IP address (revealed) as requested
+                            'ip_address' => $user['user_ip'],
                             'last_activity' => $user['viewed_at'],
                             'time_ago' => $this->timeAgo($user['viewed_at'])
                         ];
@@ -319,7 +321,8 @@ class Admin extends BaseController
                     'user_profile' => session('user_profile') ?? null,
                     'user_type' => 'admin',
                     'device_type' => 'Desktop',
-                    'ip_address' => $this->maskIpAddress($this->request->getIPAddress()),
+                    // Send full IP address (revealed) for current admin session
+                    'ip_address' => $this->request->getIPAddress(),
                     'last_activity' => date('Y-m-d H:i:s'),
                     'time_ago' => 'Just now'
                 ];

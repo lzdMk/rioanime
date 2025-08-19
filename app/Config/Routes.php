@@ -73,6 +73,7 @@ $routes->post('account/updateProfile', 'Account::updateProfile');
 $routes->post('account/changePassword', 'Account::changePassword');
 $routes->post('account/uploadAvatar', 'Account::uploadAvatar');
 $routes->get('api/user/profile-data', 'Account::getProfileData');
+$routes->post('api/user/refresh-session', 'Account::refreshSession');
 
 // Notification routes
 $routes->get('api/notifications', 'Notification::getNotifications');
