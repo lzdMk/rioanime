@@ -114,6 +114,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
+            // Validate terms agreement
+            const agreeTerms = document.getElementById('agreeTerms');
+            if (!agreeTerms.checked) {
+                const errorAlert = document.getElementById('registerFormErrors');
+                errorAlert.textContent = 'You must agree to the Terms of Service and Privacy Policy to continue.';
+                errorAlert.classList.remove('d-none', 'alert-success');
+                errorAlert.classList.add('alert-danger');
+                agreeTerms.focus();
+                return;
+            }
+            
             // Submit form via AJAX
             const baseUrl = window.baseUrl || '/rioanime/';
             // Ensure proper URL construction
