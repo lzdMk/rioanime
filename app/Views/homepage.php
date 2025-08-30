@@ -39,7 +39,6 @@ helper(['url','anime']);
                                             <i class="fas fa-play"></i>
                                             Watch Now
                                         </a>
-                                        <a href="<?= base_url('watch/' . createSlug($anime['title'])) ?>" class="btn-more">More</a>
                                     </div>
                                 </div>
                             </div>
@@ -58,7 +57,6 @@ helper(['url','anime']);
                                         <i class="fas fa-play"></i>
                                         Watch Now
                                     </a>
-                                    <a href="#" class="btn-more">More</a>
                                 </div>
                             </div>
                         </div>
